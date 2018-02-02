@@ -36,11 +36,11 @@ Stage1.Isp_vac = 437;
 Stage2.A = 461; %Reference Area in m² 
 Stage2.mStruct = 12800;
 
-Stage2.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
-Stage2.Isp_SL = 363;
+Stage1.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
+Stage1.Isp_SL = 363;
 
-Stage2.T_vac = 2268*2*1e3;
-Stage2.Isp_vac = 449;
+Stage1.T_vac = 2268*2*1e3;
+Stage1.Isp_vac = 449;
 
 auxdata.Stage1 = Stage1;
 auxdata.Stage2 = Stage2;
@@ -128,30 +128,30 @@ lonMin = -pi;         lonMax = -lonMin;
 latMin = -70*pi/180;  latMax = -latMin;
 lat0 = -0.264;
 lon0 = deg2rad(145);
-aoaMin = 0;  aoaMax = 20*pi/180;
-bankMin1 = -50*pi/180; bankMax1 =   50*pi/180;
+aoaMin = 0;  aoaMax = 9*pi/180;
+bankMin1 = -1*pi/180; bankMax1 =   50*pi/180;
 
 % Primal Bounds
-bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -2*pi, 0, aoaMin];
-bounds.phase(1).state.upper = [100000, lonMax, latMax, 10000, deg2rad(89.9), 2*pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -2*pi, 0, aoaMin, bankMin1];
+bounds.phase(1).state.upper = [100000, lonMax, latMax, 10000, deg2rad(89.9), 2*pi, 1.6038e+06, aoaMax, bankMax1];
 
 % Initial States
-bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(89), deg2rad(60), 1.6038e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1000,lon0, lat0, 100, deg2rad(89), deg2rad(60), 1.6038e+06, aoaMax];
+bounds.phase(1).initialstate.lower = [30000,lon0, lat0, Stage2.Initial.v, Stage2.Bounds.gamma(1), Stage2.Bounds.zeta(1), Stage2.Initial.mFuel, aoaMin, bankMin1] ;
+bounds.phase(1).initialstate.upper = [30000,lon0, lat0, Stage2.Initial.v, Stage2.Bounds.gamma(2), Stage2.Bounds.zeta(2), Stage2.Initial.mFuel, aoaMax, bankMax1];
 
 % End States
-bounds.phase(1).finalstate.lower = [80000, lonMin, latMin, 0, -deg2rad(70), -2*pi, 0, aoaMin];
-bounds.phase(1).finalstate.upper = [80000, lonMax, latMax, 10000, deg2rad(70), 2*pi,1.6038e+06, aoaMax];
+bounds.phase(1).finalstate.lower = [40000, lonMin, latMin, 0, Stage2.End.gammaOpt(1), Stage2.End.Zeta, Stage2.End.mFuel, aoaMin, 0];
+bounds.phase(1).finalstate.upper = [40000, lonMax, latMax, 10000, Stage2.End.gammaOpt(2), Stage2.End.Zeta, Stage2.Initial.mFuel, aoaMax, 0];
 
 % Control Bounds
-bounds.phase(1).control.lower = [deg2rad(-.1)];
-bounds.phase(1).control.upper = [deg2rad(.1)];
+bounds.phase(1).control.lower = [deg2rad(-.1), deg2rad(-1)];
+bounds.phase(1).control.upper = [deg2rad(.1), deg2rad(1)];
 
 % Time Bounds
 bounds.phase(1).initialtime.lower = 0;
 bounds.phase(1).initialtime.upper = 0;
-bounds.phase(1).finaltime.lower = 100;
-bounds.phase(1).finaltime.upper = 5000;
+bounds.phase(1).finaltime.lower = Stage2.Bounds.time(1);
+bounds.phase(1).finaltime.upper = Stage2.Bounds.time(2);
 
 %% Define Path Constraints
 % Path bounds, defined in Continuous function.
@@ -164,23 +164,23 @@ bounds.phase(1).path.upper = [60000];
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
 % solution, even for a well defined problem. 
-guess.phase(1).state(:,1)   = [2000;70000];
+guess.phase(1).state(:,1)   = [22000;35000];
 guess.phase(1).state(:,2)   = [0;0];
 guess.phase(1).state(:,3)   = [-0.269;-0.13];
-guess.phase(1).state(:,4)   = [100,10000];
-guess.phase(1).state(:,5)   = [deg2rad(80),0];
-guess.phase(1).state(:,6)   = [deg2rad(60),deg2rad(60)];
-guess.phase(1).state(:,7) 	= [1.6038e+06, 100];
-guess.phase(1).state(:,8)   = [15*pi/180; 15*pi/180];
-% guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
+guess.phase(1).state(:,4)   = Stage2.Guess.v.';
+guess.phase(1).state(:,5)   = Stage2.Guess.gamma.';
+guess.phase(1).state(:,6)   = Stage2.Guess.zeta.';
+guess.phase(1).state(:,7) 	= [Stage2.Initial.mFuel, 100];
+guess.phase(1).state(:,8)   = [2*pi/180; 2*pi/180];
+guess.phase(1).state(:,9)   = [deg2rad(10);deg2rad(10)];
 
 
-guess.phase(1).control      = [[0;0]];
+guess.phase(1).control      = [[0;0],[0;0]];
 guess.phase(1).time          = [0;650];
 
 % Tire stages together
-% bounds.eventgroup(1).lower = [zeros(1,10)];
-% bounds.eventgroup(1).upper = [zeros(1,10)]; 
+bounds.eventgroup(1).lower = [zeros(1,10)];
+bounds.eventgroup(1).upper = [zeros(1,10)]; 
 
 %%
 %-------------------------------------------------------------------------%
@@ -197,8 +197,8 @@ mesh.tolerance    = 1e-5;
 %---------- Configure Setup Using the information provided ---------%
 %-------------------------------------------------------------------%
 setup.name                           = 'Reusable-Launch-Vehicle-Entry-Problem';
-setup.functions.continuous           = @SpaceLinerContinuous;
-setup.functions.endpoint             = @SpaceLinerEndpoint;
+setup.functions.continuous           = @CombinedContinuous;
+setup.functions.endpoint             = @CombinedEndpoint;
 setup.auxdata                        = auxdata;
 setup.bounds                         = bounds;
 setup.guess                          = guess;
@@ -238,13 +238,11 @@ gamma = output.result.solution.phase(1).state(:,5).';
 
 zeta = output.result.solution.phase(1).state(:,6).';
 
-mFuel = output.result.solution.phase(1).state(:,7).'; 
+Alpha = output.result.solution.phase(1).state(:,7).';
 
-Alpha = output.result.solution.phase(1).state(:,8).';
+eta = output.result.solution.phase(1).state(:,8).';
 
-eta = output.result.solution.phase(1).state(:,9).';
-
-
+mFuel = output.result.solution.phase(1).state(:,9).'; 
 
 
 
@@ -255,31 +253,37 @@ figure(201)
 subplot(9,1,1)
 hold on
 plot(time,alt)
+plot(time2,alt2)
 subplot(9,1,2)
 hold on
 plot(time,v)
+plot(time2,v2)
 subplot(9,1,3)
 hold on
 plot(time,lon)
+plot(time2,lon2)
 subplot(9,1,4)
 hold on
 plot(time,lat)
+plot(time2,lat2)
 subplot(9,1,5)
 hold on
 plot(time,v)
+plot(time2,v2)
 subplot(9,1,6)
 hold on
 plot(time,gamma)
+plot(time2,gamma2)
 subplot(9,1,7)
 hold on
 plot(time,ones(1,length(time)))
-
+plot(time2,throttle2)
 
 
 figure(230)
 hold on
 plot3(lon,lat,alt)
-
+plot3(lon2,lat2,alt2)
 
 % =========================================================================
 

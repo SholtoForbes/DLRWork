@@ -11,7 +11,7 @@ zeta = states.zeta;
 mFuel = states.mFuel;
 
 Alpha = controls.Alpha;
-% eta = controls.eta;
+eta = controls.eta;
 
 Stage1 = auxdata.Stage1;
 Stage2 = auxdata.Stage2;
@@ -28,7 +28,7 @@ throttle(time>time(end)/7*4) = .6545;
 
 throttle(time>time(end)/7*5) = .5757;
 
-throttle(time>time(end)/7*6) = 0.496;
+throttle(time>time(end)/7*6) = 
 
 Stage = 1;
 
@@ -92,9 +92,7 @@ if Stage == 1
     Isp1 = rho./rho_SL.*Stage1.Isp_SL + (1-rho./rho_SL).*Stage1.Isp_vac;
     Isp2 = rho./rho_SL.*Stage2.Isp_SL + (1-rho./rho_SL).*Stage2.Isp_vac;
 
-    Fueldt = (T1./Isp1/g + T2./Isp2/g).*throttle;
-    
-    
+    Fueldt = T1./Isp1/g + T2./Isp2/g;
 else
     T1 = rho./rho_SL.*Stage1.T_SL + (1-rho./rho_SL).*Stage1.T_vac; % Thrust from stage 1
     T2 = 0;
@@ -108,7 +106,7 @@ else
 end
 
 %Motion in Geodetic Rotational Coordinates =================================================
-eta = 0;
+
 [altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt+auxdata.Re,lon,lat,gamma,v,zeta,L,D,T,m,Alpha,eta);
 
 % Aero Data =============================================================

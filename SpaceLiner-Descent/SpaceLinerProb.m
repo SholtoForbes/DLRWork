@@ -25,8 +25,13 @@ auxdata.interp.P0_spline = spline( interp.Atmosphere(:,1),  interp.Atmosphere(:,
 %% Import Vehicle Config Data %%============================
 
 Stage2.A = 461; %Reference Area in m² 
+
+
 Stage2.mStruct = 134361.1;
-Stage2.mFuel = 5384.7;
+% Stage2.mFuel = 5384.7;
+
+% Japan-germany
+Stage2.mFuel = 172586-Stage2.mStruct;
 
 Stage2.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
 Stage2.Isp_SL = 363;
@@ -99,6 +104,13 @@ load PopInterp
 auxdata.PopInterp = PopInterp;
 
 %% Set Bounds %%========================================================
+
+%% If initial heading angle is bounded
+
+zeta0 = deg2rad(70.18);
+
+%%
+
 altMin = 1;
 altMax = 90000;
 
@@ -116,7 +128,9 @@ zetaMax = 2*pi;
 lonMin = -2*pi;         
 lonMax = 2*pi;
 
-latMin = -pi/2+0.0000001;  
+% latMin = -pi/2+0.0000001;  
+latMin = 0;  %for japan-germany actual
+
 latMax = pi/2-0.0000001;
 % latMax = pi;
 
@@ -130,7 +144,7 @@ bankMax =   deg2rad(50);
 % bankMax =   deg2rad(60);
 
 % Initial Conditions
-alt0 = 70000;
+
 % lat0 = deg2rad(-23.3791); % Rockhampton
 % lon0 = deg2rad(150.5100); % Rockhampton
 
@@ -152,21 +166,42 @@ alt0 = 70000;
 % lat0 = deg2rad(28.469159); %Cape Canaveral
 % lon0 = deg2rad(-80.509981);
 
-lat0 = deg2rad(45.522630); %Cape Soya, Hokkaido, northernmost tip of Japan
-lon0 = deg2rad(141.937105);
+% lat0 = deg2rad(45.522630); %Cape Soya, Hokkaido, northernmost tip of Japan
+% lon0 = deg2rad(141.937105);
+
+% lat0 = deg2rad(38.745095); %north korea
+% lon0 = deg2rad(128.272375);
+
+% lat0 = deg2rad(37.235705); %south korea
+% lon0 = deg2rad(129.356220);
 
 % lat0 = deg2rad(-32.711986); % Close to cape town 
 % lon0 = deg2rad(17.927735);
 
+% lat0 = deg2rad(35.49196); % South of south korea
+% lon0 = deg2rad(129.444331);
+
+
+% lat0 = deg2rad(35.528217); %South Japan
+% lon0 = deg2rad(133.569646);
+
+lat0 = deg2rad(45.37); %South Japan after true launch
+lon0 = deg2rad(137.71);
+
 auxdata.lon0 = lon0;
 
-% lon0 = 0 ;
-v0 = 7000;
-gamma0 = 0;
-zeta0 = 0;
+% alt0 = 70000;
+% v0 = 7000;
+% gamma0 = 0;
+
+%japan-germany
+alt0 = 73235;
+v0 = 6523;
+gamma0 = deg2rad(0.128);
 
 % End conditions
-altF = 100;
+altFMin = 100;
+altFMax = 1000;
 
 latF = deg2rad(53.77); % Germany
 lonF = deg2rad(8.6359);% Germany
@@ -202,14 +237,18 @@ bounds.phase(1).state.upper = [altMax, lonMax, latMax, vMax, gammaMax, zetaMax, 
 % bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0, gamma0, zetaMin, aoaMin, bankMin] ;
 % bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zetaMax, aoaMax, bankMax];
 
-bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0-1000, gamma0, zetaMin, aoaMin, bankMin] ;
-bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zetaMax, aoaMax, bankMax];
+% bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0-1000, gamma0, zetaMin, aoaMin, bankMin] ;
+% bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zetaMax, aoaMax, bankMax];
+
+bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0, gamma0, zeta0, aoaMin, bankMin] ;
+bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zeta0, aoaMax, bankMax];
+
 
 % End States
 %Starting East heading east
 % For aus-germany, japan-germany
-bounds.phase(1).finalstate.lower = [altF, lonF-lon0+2*pi, latF, vMin, -0.05, zetaMin, aoaMin, 0];
-bounds.phase(1).finalstate.upper = [altF, lonF-lon0+2*pi, latF, 50, 0.05, zetaMax, aoaMax, 0];
+bounds.phase(1).finalstate.lower = [altFMin, lonF-lon0+2*pi, latF, vMin, deg2rad(-20), zetaMin, aoaMin, 0];
+bounds.phase(1).finalstate.upper = [altFMax, lonF-lon0+2*pi, latF, 150, deg2rad(20), zetaMax, aoaMax, 0];
 
 %Starting West heading west
 % for germany-japan
@@ -268,7 +307,7 @@ guess.phase(1).state(:,5)   = [0;0]; %
 % guess.phase(1).state(:,6)   = [deg2rad(180);deg2rad(180)];
 % guess.phase(1).state(:,6)   = [0;0]; % For eastward
 % guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(-45)]; % Aus-Germany
-guess.phase(1).state(:,6)   = [deg2rad(60);deg2rad(-40)]; % Japan-Germany
+% guess.phase(1).state(:,6)   = [deg2rad(60);deg2rad(-40)]; % Japan-Germany
 % guess.phase(1).state(:,6)   = [deg2rad(-10);deg2rad(90)]; %Aus-Canaveral
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(270)]; %Japan-Florida
 % guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(270)]; %Aus-Canaveral west test
@@ -277,8 +316,8 @@ guess.phase(1).state(:,6)   = [deg2rad(60);deg2rad(-40)]; % Japan-Germany
 % guess.phase(1).state(:,6)   = [deg2rad(-10);deg2rad(-10)]; %Canaveral - cape town
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(110)]; %cape town-canaveral
 % guess.phase(1).state(:,6)   = [deg2rad(-90);deg2rad(100)]; % Aus-Brazil
-
-
+% guess.phase(1).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % Korea-Germany
+guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-60)]; % japan-Germany actual
 
 
  guess.phase(1).state(:,7)   = [10*pi/180; 10*pi/180];
