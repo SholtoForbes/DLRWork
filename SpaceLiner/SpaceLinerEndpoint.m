@@ -1,11 +1,16 @@
 function output = SpaceLinerEndpoint(input)
 auxdata = input.auxdata;
 
-vF = input.phase(1).finalstate(4);
+% vF = input.phase(1).finalstate(4);
+% 
+% output.objective = -vF;
 
-output.objective = -vF;
+output.objective = input.phase.integral;
 
 
+% gammaF = input.phase(1).finalstate(5);
+% 
+% output.objective = gammaF^2*1000;
 
 %%
 % t01 = input.phase(1).initialtime;
