@@ -229,10 +229,10 @@ bounds.eventgroup(8).upper = 1000*ones(1,8);
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
 % solution, even for a well defined problem. 
-guess.phase(1).state(:,1)   = [2000;10000];
-guess.phase(1).state(:,2)   = [2.5;2.51];
-guess.phase(1).state(:,3)   = [0.7;.8];
-guess.phase(1).state(:,4)   = [100,1000];
+guess.phase(1).state(:,1)   = [2000;7000];
+guess.phase(1).state(:,2)   = [2.5;2.55];
+guess.phase(1).state(:,3)   = [0.7;.75];
+guess.phase(1).state(:,4)   = [100,1100];
 guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
 guess.phase(1).state(:,6)   = [deg2rad(70),deg2rad(70)];
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
@@ -249,13 +249,13 @@ guess.phase(1).integral = 0;
 % bounds.eventgroup(1).lower = [zeros(1,10)];
 % bounds.eventgroup(1).upper = [zeros(1,10)]; 
 
-guess.phase(2).state = guess.phase(1).state + [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
-guess.phase(3).state = guess.phase(2).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
-guess.phase(4).state = guess.phase(3).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
-guess.phase(5).state = guess.phase(4).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
-guess.phase(6).state = guess.phase(5).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
-guess.phase(7).state = guess.phase(6).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
-guess.phase(8).state = guess.phase(7).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(2).state = guess.phase(1).state + [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(3).state = guess.phase(2).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(4).state = guess.phase(3).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
 
 guess.phase(2).control = guess.phase(1).control;
 guess.phase(3).control = guess.phase(2).control;
@@ -285,8 +285,8 @@ guess.phase(8).integral = guess.phase(7).integral;
 %-------------------------------------------------------------------------%
 %----------Provide Mesh Refinement Method and Initial Mesh ---------------%
 %-------------------------------------------------------------------------%
-% mesh.method       = 'hp-LiuRao-Legendre';
-mesh.maxiterations = 3;
+mesh.method       = 'hp-LiuRao-Legendre';
+mesh.maxiterations = 4;
 mesh.colpointsmin = 2;
 mesh.colpointsmax = 50;
 mesh.tolerance    = 1e-5;
@@ -305,7 +305,7 @@ setup.mesh                           = mesh;
 setup.displaylevel                   = 2;
 setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
-setup.nlp.ipoptoptions.maxiterations = 200;
+setup.nlp.ipoptoptions.maxiterations = 800;
 setup.derivatives.supplier           = 'sparseCD';
 setup.derivatives.derivativelevel    = 'second';
 setup.scales.method                  = 'automatic-bounds';
@@ -486,7 +486,7 @@ throttle_forward(time_diff==0) = [];
 % stage = 1; %will be wrong for orbiter
 
 stage = ones(1,length(time_forward));
-stage(time>=output.result.solution.phase(7).time(end)) = 2;
+stage(time_forward>=output.result.solution.phase(7).time(end)) = 2;
 
 
 [f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage,f_t)),0:time(end),forward0);
