@@ -1,4 +1,4 @@
-function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m] = SpaceLinerVehicleModel(t,states,controls,throttle,auxdata,timeF)
+function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate] = SpaceLinerVehicleModel(t,states,controls,throttle,auxdata,timeF)
 
 STF = 0.6; %Staging Time Fraction
 
@@ -97,10 +97,11 @@ Cl(t>=timeF*STF) = auxdata.interp.Stage2.Cl_spline(mach(t>=timeF*STF),rad2deg(Al
 %%%% Compute the drag and lift:
 D(t<timeF*STF) = 0.5*Cd(t<timeF*STF)'.*A1.*rho(t<timeF*STF).*v(t<timeF*STF).^2;
 D(t>=timeF*STF) = 0.5*Cd(t>=timeF*STF)'.*A2.*rho(t>=timeF*STF).*v(t>=timeF*STF).^2;
+D = D';
 
 L(t<timeF*STF) = 0.5*Cl(t<timeF*STF)'.*A1.*rho(t<timeF*STF).*v(t<timeF*STF).^2;
 L(t>=timeF*STF) = 0.5*Cl(t>=timeF*STF)'.*A2.*rho(t>=timeF*STF).*v(t>=timeF*STF).^2;
-L=
+L = L';
 
 %% Thrust 
 
@@ -168,6 +169,16 @@ M = v./c; % Calculating Mach No (Descaled)
 
 v_H = v.*cos(gamma);
 
+%Heating model used in Tosca
+
+R_N = 0.205; %effective nose radius (m) 
+
+C = 20254.4;
+rho_r = 1.225;
+v_r = 10000;
+R_Nr = 1;
+
+heating_rate = C*sqrt(rho/rho_r*R_Nr/R_N).*(v/v_r).^3.05*1e4;
 % =========================================================================
 end
 

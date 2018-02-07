@@ -10,7 +10,7 @@ states.gamma   = input.phase(1).state(:,5);
 states.zeta    = input.phase(1).state(:,6);
 
 controls.Alpha = input.phase(1).state(:,7); % Note the 'controls' class here is not the same as the 'control' defined for GPOPS (these are the vehicle controls, not the control theory controls)
-% controls.eta   = input.phase(1).state(:,8);
+controls.eta   = input.phase(1).state(:,8);
 
 controls.throttle  = 1;
 
@@ -23,7 +23,7 @@ auxdata = input.auxdata;
 
 [altdot,londot,latdot,gammadot,vdot,zetadot, q1, M, D, rho,L,Fueldt,heating_rate] = SpaceLinerVehicleModel(states,controls,auxdata);
 
-phaseout(1).dynamics  = [altdot, londot, latdot, vdot, gammadot, zetadot, Alphadot1];
+phaseout(1).dynamics  = [altdot, londot, latdot, vdot, gammadot, zetadot, Alphadot1, etadot1];
 
 
 total_acceleration = sqrt(vdot.^2 + (states.v.*gammadot).^2 + (states.v.*zetadot).^2)/9.81;

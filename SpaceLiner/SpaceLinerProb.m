@@ -133,23 +133,20 @@ aoaMin = 0;  aoaMax = 20*pi/180;
 
 % Primal Bounds
 bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
-bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(87), pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(83), pi, 1.6038e+06, aoaMax];
 
 % Initial States
 % bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.5038e+06, aoaMin] ;
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 105, deg2rad(89), deg2rad(80), 1.6038e+06, aoaMax];
 
-bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.28e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 105, deg2rad(87), deg2rad(80), 1.32e+06, aoaMax];
+bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(70), 1.28e+06, aoaMin] ;
+bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(83), deg2rad(80), 1.32e+06, aoaMax];
 
-% End States
+bounds.phase(1).finalstate.lower = bounds.phase(1).state.lower;
+bounds.phase(1).finalstate.upper = bounds.phase(1).state.upper;
 
-% bounds.phase(1).finalstate.lower = [70000, lonMin, latMin, 0, -deg2rad(60), -2*pi, 0, aoaMin];
-% bounds.phase(1).finalstate.upper = [70000, lonMax, latMax, 10000, deg2rad(60), 2*pi,1.6038e+06, aoaMax];
-% 
-bounds.phase(1).finalstate.lower = [70000, lonMin, latMin, 0, 0, -2*pi, 0, aoaMin];
-bounds.phase(1).finalstate.upper = [70000, lonMax, latMax, 10000, 0, 2*pi,1.6038e+06, aoaMax];
-
+bounds.phase(2).initialstate.lower = bounds.phase(1).state.lower;
+bounds.phase(2).initialstate.upper = bounds.phase(1).state.upper;
 
 % Control Bounds
 bounds.phase(1).control.lower = [deg2rad(-.5)];
@@ -158,7 +155,7 @@ bounds.phase(1).control.upper = [deg2rad(.5)];
 % Time Bounds
 bounds.phase(1).initialtime.lower = 0;
 bounds.phase(1).initialtime.upper = 0;
-bounds.phase(1).finaltime.lower = 100;
+bounds.phase(1).finaltime.lower = 50;
 bounds.phase(1).finaltime.upper = 5000;
 
 %% Define Path Constraints
@@ -169,40 +166,129 @@ bounds.phase(1).path.lower = [0];
 bounds.phase(1).path.upper = [40000];
 
 %% Bound integral if necessary
-bounds.phase.integral.lower = 0;
-bounds.phase.integral.upper = 1e9;
+bounds.phase(1).integral.lower = 0;
+bounds.phase(1).integral.upper = 1e9;
+
+
+%% Set all phase bounds
+bounds.phase(2).state = bounds.phase(1).state;
+bounds.phase(2).finalstate = bounds.phase(1).finalstate;
+
+bounds.phase(2).initialtime.lower = 0;
+bounds.phase(2).initialtime.upper = 5000;
+
+bounds.phase(2).finaltime = bounds.phase(1).finaltime;
+
+bounds.phase(2).control = bounds.phase(1).control;
+
+bounds.phase(3) = bounds.phase(2);
+bounds.phase(4) = bounds.phase(2);
+bounds.phase(5) = bounds.phase(2);
+bounds.phase(6) = bounds.phase(2);
+bounds.phase(7) = bounds.phase(2);
+
+bounds.phase(8).initialtime = bounds.phase(2).initialtime;
+bounds.phase(8).finaltime = bounds.phase(2).finaltime;
+bounds.phase(8).state = bounds.phase(2).state;
+bounds.phase(8).initialstate = bounds.phase(2).initialstate;
+bounds.phase(8).control = bounds.phase(2).control;
+% End States
+
+% bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 0, 0, -2*pi, 0, aoaMin];
+% bounds.phase(8).finalstate.upper = [150000, lonMax, latMax, 15000, deg2rad(80), 2*pi,1.6038e+06, aoaMax];
+% 
+bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 0, 0, -2*pi, 0, aoaMin];
+bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 15000, deg2rad(0), 2*pi,1.6038e+06, aoaMax];
+
+
+%% Event bounds
+bounds.eventgroup(1).lower = zeros(1,9);
+bounds.eventgroup(1).upper = zeros(1,9);
+
+bounds.eventgroup(2).lower = zeros(1,9);
+bounds.eventgroup(2).upper = zeros(1,9);
+
+bounds.eventgroup(3).lower = zeros(1,9);
+bounds.eventgroup(3).upper = zeros(1,9);
+
+bounds.eventgroup(4).lower = zeros(1,9);
+bounds.eventgroup(4).upper = zeros(1,9);
+
+bounds.eventgroup(5).lower = zeros(1,9);
+bounds.eventgroup(5).upper = zeros(1,9);
+
+bounds.eventgroup(6).lower = zeros(1,9);
+bounds.eventgroup(6).upper = zeros(1,9);
+
+bounds.eventgroup(7).lower = zeros(1,9);
+bounds.eventgroup(7).upper = zeros(1,9);
+
+bounds.eventgroup(8).lower = ones(1,8);
+bounds.eventgroup(8).upper = 1000*ones(1,8);
 
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
 % solution, even for a well defined problem. 
-guess.phase(1).state(:,1)   = [2000;70000];
-guess.phase(1).state(:,2)   = [2.5;2.7];
-guess.phase(1).state(:,3)   = [0.7;1];
-guess.phase(1).state(:,4)   = [100,10000];
-guess.phase(1).state(:,5)   = [deg2rad(80),0];
+guess.phase(1).state(:,1)   = [2000;10000];
+guess.phase(1).state(:,2)   = [2.5;2.51];
+guess.phase(1).state(:,3)   = [0.7;.8];
+guess.phase(1).state(:,4)   = [100,1000];
+guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
 guess.phase(1).state(:,6)   = [deg2rad(70),deg2rad(70)];
-guess.phase(1).state(:,7) 	= [1.6038e+06, 1e5];
+guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
 % guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
 
 
 guess.phase(1).control      = [[0;0]];
-guess.phase(1).time          = [0;450];
+guess.phase(1).time          = [0;50];
 
 
-guess.phase.integral = 0;
+guess.phase(1).integral = 0;
 % Tire stages together
 % bounds.eventgroup(1).lower = [zeros(1,10)];
 % bounds.eventgroup(1).upper = [zeros(1,10)]; 
+
+guess.phase(2).state = guess.phase(1).state + [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(3).state = guess.phase(2).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(4).state = guess.phase(3).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(5).state = guess.phase(4).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(6).state = guess.phase(5).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(7).state = guess.phase(6).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+guess.phase(8).state = guess.phase(7).state+ [0 5000; 0 0.01;0 .1; 0 1000; 0 -deg2rad(10);0 0;0 -100000;0 0]';
+
+guess.phase(2).control = guess.phase(1).control;
+guess.phase(3).control = guess.phase(2).control;
+guess.phase(4).control = guess.phase(3).control;
+guess.phase(5).control = guess.phase(4).control;
+guess.phase(6).control = guess.phase(5).control;
+guess.phase(7).control = guess.phase(6).control;
+guess.phase(8).control = guess.phase(7).control;
+
+guess.phase(2).time = guess.phase(1).time + 50;
+guess.phase(3).time = guess.phase(2).time + 50;
+guess.phase(4).time = guess.phase(3).time + 50;
+guess.phase(5).time = guess.phase(4).time + 50;
+guess.phase(6).time = guess.phase(5).time + 50;
+guess.phase(7).time = guess.phase(6).time + 50;
+guess.phase(8).time = guess.phase(7).time + 50;
+
+guess.phase(2).integral = guess.phase(1).integral;
+guess.phase(3).integral = guess.phase(2).integral;
+guess.phase(4).integral = guess.phase(3).integral;
+guess.phase(5).integral = guess.phase(4).integral;
+guess.phase(6).integral = guess.phase(5).integral;
+guess.phase(7).integral = guess.phase(6).integral;
+guess.phase(8).integral = guess.phase(7).integral;
 
 %%
 %-------------------------------------------------------------------------%
 %----------Provide Mesh Refinement Method and Initial Mesh ---------------%
 %-------------------------------------------------------------------------%
 % mesh.method       = 'hp-LiuRao-Legendre';
-mesh.maxiterations = 10;
-mesh.colpointsmin = 3;
-mesh.colpointsmax = 100;
+mesh.maxiterations = 3;
+mesh.colpointsmin = 2;
+mesh.colpointsmax = 50;
 mesh.tolerance    = 1e-5;
 
 
@@ -219,12 +305,12 @@ setup.mesh                           = mesh;
 setup.displaylevel                   = 2;
 setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
-setup.nlp.ipoptoptions.maxiterations = 1000;
+setup.nlp.ipoptoptions.maxiterations = 200;
 setup.derivatives.supplier           = 'sparseCD';
 setup.derivatives.derivativelevel    = 'second';
 setup.scales.method                  = 'automatic-bounds';
 setup.method                         = 'RPM-Differentiation';
-% setup.scales.method                  = 'automatic-guessUpdate';
+setup.scales.method                  = 'automatic-guessUpdate';
 
 %-------------------------------------------------------------------%
 %------------------- Solve Problem Using GPOPS2 --------------------%
@@ -238,22 +324,71 @@ output = gpops2(setup);
 EndTime = datestr(now,30) % Display the ending time
 
 % =========================================================================
-% Assign the primal variables
-alt = output.result.solution.phase(1).state(:,1).';
 
-lon = output.result.solution.phase(1).state(:,2).';
-
-lat = output.result.solution.phase(1).state(:,3).';
-
-v = output.result.solution.phase(1).state(:,4).'; 
-
-gamma = output.result.solution.phase(1).state(:,5).'; 
-
-zeta = output.result.solution.phase(1).state(:,6).';
-
-mFuel = output.result.solution.phase(1).state(:,7).'; 
-
-Alpha = output.result.solution.phase(1).state(:,8).';
+alt = [output.result.solution.phase(1).state(:,1).' ...
+    output.result.solution.phase(2).state(:,1).' ...
+    output.result.solution.phase(3).state(:,1).' ...
+    output.result.solution.phase(4).state(:,1).' ...
+    output.result.solution.phase(5).state(:,1).' ...
+    output.result.solution.phase(6).state(:,1).' ...
+    output.result.solution.phase(7).state(:,1).' ...
+    output.result.solution.phase(8).state(:,1).'];
+lon = [output.result.solution.phase(1).state(:,2).' ...
+    output.result.solution.phase(2).state(:,2).' ...
+    output.result.solution.phase(3).state(:,2).' ...
+    output.result.solution.phase(4).state(:,2).' ...
+    output.result.solution.phase(5).state(:,2).' ...
+    output.result.solution.phase(6).state(:,2).' ...
+    output.result.solution.phase(7).state(:,2).' ...
+    output.result.solution.phase(8).state(:,2).'];
+lat = [output.result.solution.phase(1).state(:,3).' ...
+    output.result.solution.phase(2).state(:,3).' ...
+    output.result.solution.phase(3).state(:,3).' ...
+    output.result.solution.phase(4).state(:,3).' ...
+    output.result.solution.phase(5).state(:,3).' ...
+    output.result.solution.phase(6).state(:,3).' ...
+    output.result.solution.phase(7).state(:,3).' ...
+    output.result.solution.phase(8).state(:,3).'];
+v = [output.result.solution.phase(1).state(:,4).' ...
+    output.result.solution.phase(2).state(:,4).' ...
+    output.result.solution.phase(3).state(:,4).' ...
+    output.result.solution.phase(4).state(:,4).' ...
+    output.result.solution.phase(5).state(:,4).' ...
+    output.result.solution.phase(6).state(:,4).' ...
+    output.result.solution.phase(7).state(:,4).' ...
+    output.result.solution.phase(8).state(:,4).'];
+gamma = [output.result.solution.phase(1).state(:,5).' ...
+    output.result.solution.phase(2).state(:,5).' ...
+    output.result.solution.phase(3).state(:,5).' ...
+    output.result.solution.phase(4).state(:,5).' ...
+    output.result.solution.phase(5).state(:,5).' ...
+    output.result.solution.phase(6).state(:,5).' ...
+    output.result.solution.phase(7).state(:,5).' ...
+    output.result.solution.phase(8).state(:,5).'];
+zeta = [output.result.solution.phase(1).state(:,6).' ...
+    output.result.solution.phase(2).state(:,6).' ...
+    output.result.solution.phase(3).state(:,6).' ...
+    output.result.solution.phase(4).state(:,6).' ...
+    output.result.solution.phase(5).state(:,6).' ...
+    output.result.solution.phase(6).state(:,6).' ...
+    output.result.solution.phase(7).state(:,6).' ...
+    output.result.solution.phase(8).state(:,6).'];
+mFuel = [output.result.solution.phase(1).state(:,7).' ...
+    output.result.solution.phase(2).state(:,7).' ...
+    output.result.solution.phase(3).state(:,7).' ...
+    output.result.solution.phase(4).state(:,7).' ...
+    output.result.solution.phase(5).state(:,7).' ...
+    output.result.solution.phase(6).state(:,7).' ...
+    output.result.solution.phase(7).state(:,7).' ...
+    output.result.solution.phase(8).state(:,7).']; 
+Alpha = [output.result.solution.phase(1).state(:,8).' ...
+    output.result.solution.phase(2).state(:,8).' ...
+    output.result.solution.phase(3).state(:,8).' ...
+    output.result.solution.phase(4).state(:,8).' ...
+    output.result.solution.phase(5).state(:,8).' ...
+    output.result.solution.phase(6).state(:,8).' ...
+    output.result.solution.phase(7).state(:,8).' ...
+    output.result.solution.phase(8).state(:,8).'];
 
 % eta = output.result.solution.phase(1).state(:,9).';
 
@@ -267,7 +402,14 @@ states.mFuel   = output.result.solution.phase(1).state(:,7);
 
 
 
-time = output.result.solution.phase(1).time.';
+time = [output.result.solution.phase(1).time.' ...
+    output.result.solution.phase(2).time.' ...
+    output.result.solution.phase(3).time.' ...
+    output.result.solution.phase(4).time.' ...
+    output.result.solution.phase(5).time.' ...
+    output.result.solution.phase(6).time.' ...
+    output.result.solution.phase(7).time.' ...
+    output.result.solution.phase(8).time.'];
 
 controls.Alpha = Alpha';
 
@@ -314,23 +456,56 @@ plot3(lon,lat,alt)
 
 throttle = ones(length(alt),1);
 
-throttle(time>time(end)/20*5) = 0.891;
+throttle(time>output.result.solution.phase(1).time(end)) = 0.891;
 
-throttle(time>time(end)/20*6) = 0.812;
+throttle(time>output.result.solution.phase(2).time(end)) = 0.812;
 
-throttle(time>time(end)/20*7) = .7333;
+throttle(time>output.result.solution.phase(3).time(end)) = .7333;
 
-throttle(time>time(end)/20*8) = .6545;
+throttle(time>output.result.solution.phase(4).time(end)) = .6545;
 
-throttle(time>time(end)/20*9) = .5757;
+throttle(time>output.result.solution.phase(5).time(end)) = .5757;
 
-throttle(time>time(end)/20*10) = 0.496;
+throttle(time>output.result.solution.phase(6).time(end)) = 0.496;
 
-throttle(time>=time(end)*0.6) = 1; %after separation
+throttle(time>=output.result.solution.phase(7).time(end)) = 1; %after separation
 
 forward0 = [alt(1),gamma(1),v(1),zeta(1),lat(1),lon(1), mFuel(1)];
 
-[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time,Alpha,f_t),ControlInterp(time,throttle,f_t),time(end)),time(1:end),forward0);
+
+time_diff = [1 diff(time)];
+
+time_forward = time;
+Alpha_forward = Alpha;
+throttle_forward = throttle;
+
+time_forward(time_diff==0) = [];
+Alpha_forward(time_diff==0) = [];
+throttle_forward(time_diff==0) = [];
+
+% stage = 1; %will be wrong for orbiter
+
+stage = ones(1,length(time_forward));
+stage(time>=output.result.solution.phase(7).time(end)) = 2;
+
+
+[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage,f_t)),0:time(end),forward0);
+% [f_t, f_y] = ode23(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time,Alpha,f_t),ControlInterp(time,throttle,f_t),time(end)),time(1:end),forward0);
+
+
+% dt = 1;
+% f_y = forward0;
+% temp = 1;
+% for t_temp = 0:dt:time(end)
+%     
+%     df_y = VehicleModel_forward(t_temp, f_y(temp,:),auxdata,ControlInterp(time,Alpha,t_temp),ControlInterp(time,throttle,t_temp),time(end));
+%   
+%     
+%     f_y(temp+1,:) = f_y(temp,:) + dt*df_y';  
+%     temp = temp+1;
+% end
+% f_t = 0:dt:time(end);
+
 
 figure(212)
 subplot(7,1,[1 2])
