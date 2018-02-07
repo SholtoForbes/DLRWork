@@ -43,14 +43,15 @@ A2 = auxdata.Stage2.A; % reference area (m^2)
 g = 9.81;
 
 % Change mass dependent on stage. 
-% if Stage == 1
-%     m = auxdata.Stage1.mStruct+mFuel+auxdata.Stage2.mStruct; 
-% else
-%     m = auxdata.Stage2.mStruct+mFuel;
-% end
+if Stage == 1
+    m = auxdata.Stage1.mStruct+mFuel+auxdata.Stage2.mStruct; 
+else
+    m = auxdata.Stage2.mStruct+mFuel;
+end
 
-m  = auxdata.Stage1.mStruct+mFuel +auxdata.Stage2.mStruct; 
-m  = auxdata.Stage2.mStruct+mFuel ;
+% m  = auxdata.Stage1.mStruct+mFuel +auxdata.Stage2.mStruct;
+% 
+% m  = auxdata.Stage2.mStruct+mFuel ;
 
 %======================================================
 

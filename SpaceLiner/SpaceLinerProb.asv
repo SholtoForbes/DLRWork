@@ -525,15 +525,9 @@ phase.state(:,8) = Alpha;
 stage = ones(1,length(time));
 stage(time>=output.result.solution.phase(7).time(end)) = 2;
 
-T = [];
-M = [];
-Fd = [];
-L = [];
-q1 = [];
-m = [];
 for i = 1:length(alt)
-    phase_temp.state = phase.state(i,:);
-[altdot1,londot1,latdot1,gammadot1,vdot1,azidot1, q1(i), M(i), Fd(i), rho,L(i),Fueldt1,T(i),Isp1,Isp2,m(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
+    phase.state_temp = 
+[altdot1,londot1,latdot1,gammadot1,vdot1,azidot1, q1, M, Fd, rho,L,Fueldt1,T,Isp1,Isp2,m] = SpaceLinerVehicleModel(time(i),,throttle(i),auxdata,stage(i));
 
 end
 
@@ -553,27 +547,10 @@ ylabel('altitude')
 
 subplot(5,2,3)
 hold on
-plot(time,rad2deg(Alpha))
-plot(time,rad2deg(gamma))
+plot(time,gamma)
 
-subplot(5,2,4)
-hold on
-plot(time,T)
-plot(time,Fd)
-plot(time,L)
-xlabel('time')
 
-subplot(5,2,6)
-hold on
-plot(time,m)
 
-subplot(5,2,7)
-hold on
-plot(time,M)
-
-subplot(5,2,8)
-hold on
-plot(time,q1)
 
 figure(230)
 hold on
