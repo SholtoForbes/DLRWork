@@ -122,25 +122,81 @@ auxdata.interp.Stage1.Cd_spline = griddedInterpolant(Stage1_MGrid',Stage1_aoaGri
 auxdata.interp.Stage2.Cl_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cl_Grid','spline');
 auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cd_Grid','spline');
 
+%% Get population interpolation
+load PopInterp
+
+auxdata.PopInterp = PopInterp;
 
 %% Import Bounds %%========================================================
-lonMin = -pi;         lonMax = -lonMin;
-latMin = -70*pi/180;  latMax = -latMin;
-lat0 = deg2rad(45);
-lon0 = deg2rad(145);
+lonMin = -2*pi;         
+lonMax = 2*pi;
+
+latMin = -pi/2+0.0000001;  
+% latMin = 0; 
+latMax = pi/2-0.0000001;
+
+
+%% Initial Geo
+
+lat0 = deg2rad(-23.3791); % Rockhampton
+lon0 = deg2rad(150.5100); % Rockhampton
+
+% lat0 = deg2rad(30.373796); % South Japan
+% lon0 = deg2rad(130.95852);
+
+% lat0 = deg2rad(37.533151); % Close to Suzu, middle north Japan
+% lon0 = deg2rad(137.276039);
+
+% lat0 = deg2rad(38.849086); % Taiyuan Satellite Launch Center
+% lon0 = deg2rad(111.608497);
+
+% lat0 = deg2rad(40.9675); % Jiuquan Satellite Launch Center (Szechuan)
+% lon0 = deg2rad(100.278611); 
+
+% lat0 = deg2rad(53.77); % Germany
+% lon0 = deg2rad(8.6359);% Germany
+
+% lat0 = deg2rad(28.469159); %Cape Canaveral
+% lon0 = deg2rad(-80.509981);
+
+% lat0 = deg2rad(45.522630); %Cape Soya, Hokkaido, northernmost tip of Japan
+% lon0 = deg2rad(141.937105);
+
+% lat0 = deg2rad(38.745095); %north korea
+% lon0 = deg2rad(128.272375);
+
+% lat0 = deg2rad(37.235705); %south korea
+% lon0 = deg2rad(129.356220);
+
+% lat0 = deg2rad(-32.711986); % Close to cape town 
+% lon0 = deg2rad(17.927735);
+
+% lat0 = deg2rad(35.49196); % South of south korea
+% lon0 = deg2rad(129.444331);
+
+
+% lat0 = deg2rad(35.528217); %South Japan
+% lon0 = deg2rad(133.569646);
+
+% lat0 = deg2rad(45.37); %South Japan after true launch
+% lon0 = deg2rad(137.71);
+
+auxdata.lon0 = lon0;
+%%
+
 aoaMin = 0;  aoaMax = 20*pi/180;
 % bankMin1 = -50*pi/180; bankMax1 =   50*pi/180;
 
 % Primal Bounds
 bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
-bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(83), pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax];
 
 % Initial States
 % bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.5038e+06, aoaMin] ;
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 105, deg2rad(89), deg2rad(80), 1.6038e+06, aoaMax];
 
-bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(70), 1.28e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(83), deg2rad(80), 1.32e+06, aoaMax];
+bounds.phase(1).initialstate.lower = [1000,0, lat0, 100, deg2rad(80), -2*pi, 1.28e+06, aoaMin] ;
+bounds.phase(1).initialstate.upper = [1200,0, lat0, 120, deg2rad(85), 2*pi, 1.32e+06, aoaMax];
 
 bounds.phase(1).finalstate.lower = bounds.phase(1).state.lower;
 bounds.phase(1).finalstate.upper = bounds.phase(1).state.upper;
@@ -162,8 +218,8 @@ bounds.phase(1).finaltime.upper = 5000;
 % Path bounds, defined in Continuous function.
 % These limit the dynamic pressure.
 
-bounds.phase(1).path.lower = [0];
-bounds.phase(1).path.upper = [40000];
+% bounds.phase(1).path.lower = [0];
+% bounds.phase(1).path.upper = [60000];
 
 %% Bound integral if necessary
 bounds.phase(1).integral.lower = 0;
@@ -186,19 +242,20 @@ bounds.phase(4) = bounds.phase(2);
 bounds.phase(5) = bounds.phase(2);
 bounds.phase(6) = bounds.phase(2);
 bounds.phase(7) = bounds.phase(2);
+bounds.phase(8) = bounds.phase(2);
 
-bounds.phase(8).initialtime = bounds.phase(2).initialtime;
-bounds.phase(8).finaltime = bounds.phase(2).finaltime;
-bounds.phase(8).state = bounds.phase(2).state;
-bounds.phase(8).initialstate = bounds.phase(2).initialstate;
-bounds.phase(8).control = bounds.phase(2).control;
+% bounds.phase(8).initialtime = bounds.phase(2).initialtime;
+% bounds.phase(8).finaltime = bounds.phase(2).finaltime;
+% bounds.phase(8).state = bounds.phase(2).state;
+% bounds.phase(8).initialstate = bounds.phase(2).initialstate;
+% bounds.phase(8).control = bounds.phase(2).control;
 % End States
 
 % bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 0, 0, -2*pi, 0, aoaMin];
 % bounds.phase(8).finalstate.upper = [150000, lonMax, latMax, 15000, deg2rad(80), 2*pi,1.6038e+06, aoaMax];
 % 
-bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 0, 0, -2*pi, 0, aoaMin];
-bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 15000, deg2rad(0), 2*pi,1.6038e+06, aoaMax];
+% bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 0, 0, -2*pi, 0, aoaMin];
+% bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 15000, deg2rad(0), 2*pi,1.6038e+06, aoaMax];
 
 
 %% Event bounds
@@ -223,18 +280,22 @@ bounds.eventgroup(6).upper = zeros(1,9);
 bounds.eventgroup(7).lower = zeros(1,9);
 bounds.eventgroup(7).upper = zeros(1,9);
 
-bounds.eventgroup(8).lower = ones(1,8);
-bounds.eventgroup(8).upper = 1000*ones(1,8);
+bounds.eventgroup(8).lower = zeros(1,8);
+bounds.eventgroup(8).upper = zeros(1,8);
+
+bounds.eventgroup(9).lower = ones(1,9);
+bounds.eventgroup(9).upper = [500*ones(1,8) 10000];
 
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
 % solution, even for a well defined problem. 
 guess.phase(1).state(:,1)   = [2000;7000];
-guess.phase(1).state(:,2)   = [2.5;2.55];
-guess.phase(1).state(:,3)   = [0.7;.75];
+% guess.phase(1).state(:,2)   = [2.5;2.55];
+guess.phase(1).state(:,2)   = [0;0.05];
+guess.phase(1).state(:,3)   = [lat0;lat0+0.05];
 guess.phase(1).state(:,4)   = [100,1100];
 guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
-guess.phase(1).state(:,6)   = [deg2rad(70),deg2rad(70)];
+guess.phase(1).state(:,6)   = [deg2rad(0),deg2rad(0)];
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
 % guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
@@ -281,23 +342,188 @@ guess.phase(6).integral = guess.phase(5).integral;
 guess.phase(7).integral = guess.phase(6).integral;
 guess.phase(8).integral = guess.phase(7).integral;
 
+
+
+%% DESCENT BOUNDS
+
+altMin = 1;
+altMax = 90000;
+
+
+vMin = 1;
+vMax = 10000;
+
+gammaMin = -80;
+gammaMax = 80;
+
+zetaMin = -2*pi;
+% zetaMin = 0;
+zetaMax = 2*pi;
+
+
+% latMax = pi;
+
+aoaMin = 0;  
+aoaMax = deg2rad(25);
+
+bankMin = deg2rad(-50); 
+bankMax =   deg2rad(50);
+
+% bankMin = deg2rad(-60); 
+% bankMax =   deg2rad(60);
+
+
+% alt0 = 70000;
+% v0 = 7000;
+% gamma0 = 0;
+
+%japan-germany
+alt0 = 73235;
+v0 = 6523;
+gamma0 = deg2rad(0.128);
+
+%% End Geo
+altFMin = 100;
+altFMax = 1000;
+
+latF = deg2rad(53.77); % Germany
+lonF = deg2rad(8.6359);% Germany
+
+% latF = deg2rad(45.522630); %Cape Soya, Hokkaido, northernmost tip of Japan
+% lonF = deg2rad(141.937105);
+
+
+% latF = deg2rad(28.469159); %Cape Canaveral
+% lonF = deg2rad(-80.509981);
+
+% latF = deg2rad(-23.962496); % Brazil
+% lonF = deg2rad(-45.237146);
+
+% latF = deg2rad(40); %Test
+% lonF = deg2rad(-30);
+
+% latF = deg2rad(-23.3791); % Rockhampton
+%  lonF = deg2rad(150.5100); % Rockhampton
+
+% latF = deg2rad(37.533151); % Close to Suzu, middle north Japan
+% lonF = deg2rad(137.276039);
+
+% latF = deg2rad(-32.711986); % Close to cape town 
+% lonF = deg2rad(17.927735);
+
+% lonF = deg2rad(218);
+%%
+
+% Primal Bounds
+bounds.phase(9).state.lower = [altMin, lonMin, latMin, vMin, gammaMin, zetaMin, aoaMin, bankMin];
+bounds.phase(9).state.upper = [altMax, lonMax, latMax, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+
+% Initial States
+% bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0, gamma0, zetaMin, aoaMin, bankMin] ;
+% bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zetaMax, aoaMax, bankMax];
+
+% bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0-1000, gamma0, zetaMin, aoaMin, bankMin] ;
+% bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zetaMax, aoaMax, bankMax];
+
+bounds.phase(9).initialstate.lower = [altMin,lonMin, latMin, vMin, gammaMin, zetaMin, aoaMin, bankMin] ;
+bounds.phase(9).initialstate.upper = [altMax,lonMax, latMax, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+
+
+% End States
+
+%Starting East heading east
+% For aus-germany, japan-germany
+% bounds.phase(9).finalstate.lower = [altFMin, lonF-lon0+2*pi, latF, vMin, deg2rad(-20), zetaMin, aoaMin, 0];
+% bounds.phase(9).finalstate.upper = [altFMax, lonF-lon0+2*pi, latF, 150, deg2rad(20), zetaMax, aoaMax, 0];
+
+bounds.phase(9).finalstate.lower = [altMin, lonF-lon0+2*pi, latF, vMin, gammaMin, zetaMin, aoaMin, bankMin] ;
+bounds.phase(9).finalstate.upper = [altMax, lonF-lon0+2*pi, latF, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+
+%Starting West heading west
+% for germany-japan
+% bounds.phase(1).finalstate.lower = [altF, lonF-lon0-2*pi, latF, vMin, -0.05, zetaMin, aoaMin, 0];
+% bounds.phase(1).finalstate.upper = [altF, lonF-lon0-2*pi, latF, 50, 0.05, zetaMax, aoaMax, 0];
+
+% If not going outside of degree bounds
+% for japan-florida, florida-japan
+% bounds.phase(1).finalstate.lower = [altF, lonF-lon0, latF, vMin, -0.05, zetaMin, aoaMin, 0];
+% bounds.phase(1).finalstate.upper = [altF, lonF-lon0, latF, 50, 0.05, zetaMax, aoaMax, 0];
+
+% Control Bounds
+bounds.phase(9).control.lower = [deg2rad(-.1), deg2rad(-1)];
+bounds.phase(9).control.upper = [deg2rad(.1), deg2rad(1)];
+
+% Time Bounds
+bounds.phase(9).initialtime.lower = 0;
+bounds.phase(9).initialtime.upper = 10000;
+bounds.phase(9).finaltime.lower =0;
+bounds.phase(9).finaltime.upper = 10000;
+
+%Integral Bounds
+
+bounds.phase(9).integral.lower = 0;
+bounds.phase(9).integral.upper = 1e9;
+
+
+%%  Guess =================================================================
+% Set the initial guess. This can have a significant effect on the final
+% solution, even for a well defined problem. 
+guess.phase(9).state(:,1)   = [alt0;alt0];
+guess.phase(9).state(:,2)   = [0.4;lonF-lon0+2*pi]; 
+% guess.phase(1).state(:,2)   = [0;lonF-lon0-2*pi];
+% guess.phase(1).state(:,2)   = [0;lonF-lon0];
+guess.phase(9).state(:,3)   = [lat0+0.5;latF];
+% guess.phase(1).state(:,3)   = [lat0;latF-0.5];
+guess.phase(9).state(:,4)   = [v0;vMin];
+
+% This is gamma
+guess.phase(9).state(:,5)   = [0;0]; %
+
+% guess.phase(1).state(:,6)   = [deg2rad(180);deg2rad(180)];
+% guess.phase(1).state(:,6)   = [0;0]; % For eastward
+% guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(-45)]; % Aus-Germany
+% guess.phase(1).state(:,6)   = [deg2rad(60);deg2rad(-40)]; % Japan-Germany
+% guess.phase(1).state(:,6)   = [deg2rad(-10);deg2rad(90)]; %Aus-Canaveral
+% guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(270)]; %Japan-Florida
+% guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(270)]; %Aus-Canaveral west test
+% guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-80)];%Canaveral-Japan
+% guess.phase(1).state(:,6)   = [deg2rad(100);deg2rad(180)]; % Germany-Japan
+% guess.phase(1).state(:,6)   = [deg2rad(-10);deg2rad(-10)]; %Canaveral - cape town
+% guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(110)]; %cape town-canaveral
+% guess.phase(1).state(:,6)   = [deg2rad(-90);deg2rad(100)]; % Aus-Brazil
+% guess.phase(1).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % Korea-Germany
+% guess.phase(9).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % japan-Germany actual
+
+guess.phase(1).state(:,6)   = [deg2rad(0);deg2rad(0)];
+
+ guess.phase(9).state(:,7)   = [1*pi/180; 1*pi/180];
+guess.phase(9).state(:,8)   = [0;0];
+% guess.phase(1).state(:,8)   = [deg2rad(50);deg2rad(50)];
+
+guess.phase(9).control      = [[0;0],[0;0]];
+guess.phase(9).time          = [400;4000];
+
+guess.phase(9).integral = 0;
+
+
+
 %%
 %-------------------------------------------------------------------------%
 %----------Provide Mesh Refinement Method and Initial Mesh ---------------%
 %-------------------------------------------------------------------------%
 mesh.method       = 'hp-LiuRao-Legendre';
-mesh.maxiterations = 4;
+mesh.maxiterations = 5;
 mesh.colpointsmin = 2;
-mesh.colpointsmax = 50;
+mesh.colpointsmax = 20;
 mesh.tolerance    = 1e-5;
 
 
 %-------------------------------------------------------------------%
 %---------- Configure Setup Using the information provided ---------%
 %-------------------------------------------------------------------%
-setup.name                           = 'Reusable-Launch-Vehicle-Entry-Problem';
-setup.functions.continuous           = @SpaceLinerContinuous;
-setup.functions.endpoint             = @SpaceLinerEndpoint;
+setup.name                           = 'SpaceLinerCombined';
+setup.functions.continuous           = @SpaceLinerContinuousCombined;
+setup.functions.endpoint             = @SpaceLinerEndpointCombined;
 setup.auxdata                        = auxdata;
 setup.bounds                         = bounds;
 setup.guess                          = guess;
@@ -305,11 +531,9 @@ setup.mesh                           = mesh;
 setup.displaylevel                   = 2;
 setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
-setup.nlp.ipoptoptions.maxiterations = 800;
-% setup.derivatives.supplier           = 'sparseCD';
-% setup.derivatives.derivativelevel    = 'second';
-setup.derivatives.supplier           = 'sparseFD';
-setup.derivatives.derivativelevel    = 'first';
+setup.nlp.ipoptoptions.maxiterations = 300;
+setup.derivatives.supplier           = 'sparseCD';
+setup.derivatives.derivativelevel    = 'second';
 setup.scales.method                  = 'automatic-bounds';
 setup.method                         = 'RPM-Differentiation';
 setup.scales.method                  = 'automatic-guessUpdate';
@@ -334,7 +558,8 @@ alt = [output.result.solution.phase(1).state(:,1).' ...
     output.result.solution.phase(5).state(:,1).' ...
     output.result.solution.phase(6).state(:,1).' ...
     output.result.solution.phase(7).state(:,1).' ...
-    output.result.solution.phase(8).state(:,1).'];
+    output.result.solution.phase(8).state(:,1).' ...
+    output.result.solution.phase(9).state(:,1).'];
 lon = [output.result.solution.phase(1).state(:,2).' ...
     output.result.solution.phase(2).state(:,2).' ...
     output.result.solution.phase(3).state(:,2).' ...
@@ -342,7 +567,8 @@ lon = [output.result.solution.phase(1).state(:,2).' ...
     output.result.solution.phase(5).state(:,2).' ...
     output.result.solution.phase(6).state(:,2).' ...
     output.result.solution.phase(7).state(:,2).' ...
-    output.result.solution.phase(8).state(:,2).'];
+    output.result.solution.phase(8).state(:,2).' ...
+    output.result.solution.phase(9).state(:,2).'];
 lat = [output.result.solution.phase(1).state(:,3).' ...
     output.result.solution.phase(2).state(:,3).' ...
     output.result.solution.phase(3).state(:,3).' ...
@@ -350,7 +576,8 @@ lat = [output.result.solution.phase(1).state(:,3).' ...
     output.result.solution.phase(5).state(:,3).' ...
     output.result.solution.phase(6).state(:,3).' ...
     output.result.solution.phase(7).state(:,3).' ...
-    output.result.solution.phase(8).state(:,3).'];
+    output.result.solution.phase(8).state(:,3).' ...
+    output.result.solution.phase(9).state(:,3).'];
 v = [output.result.solution.phase(1).state(:,4).' ...
     output.result.solution.phase(2).state(:,4).' ...
     output.result.solution.phase(3).state(:,4).' ...
@@ -358,7 +585,8 @@ v = [output.result.solution.phase(1).state(:,4).' ...
     output.result.solution.phase(5).state(:,4).' ...
     output.result.solution.phase(6).state(:,4).' ...
     output.result.solution.phase(7).state(:,4).' ...
-    output.result.solution.phase(8).state(:,4).'];
+    output.result.solution.phase(8).state(:,4).' ...
+    output.result.solution.phase(9).state(:,4).'];
 gamma = [output.result.solution.phase(1).state(:,5).' ...
     output.result.solution.phase(2).state(:,5).' ...
     output.result.solution.phase(3).state(:,5).' ...
@@ -366,7 +594,8 @@ gamma = [output.result.solution.phase(1).state(:,5).' ...
     output.result.solution.phase(5).state(:,5).' ...
     output.result.solution.phase(6).state(:,5).' ...
     output.result.solution.phase(7).state(:,5).' ...
-    output.result.solution.phase(8).state(:,5).'];
+    output.result.solution.phase(8).state(:,5).' ...
+    output.result.solution.phase(9).state(:,5).'];
 zeta = [output.result.solution.phase(1).state(:,6).' ...
     output.result.solution.phase(2).state(:,6).' ...
     output.result.solution.phase(3).state(:,6).' ...
@@ -374,7 +603,8 @@ zeta = [output.result.solution.phase(1).state(:,6).' ...
     output.result.solution.phase(5).state(:,6).' ...
     output.result.solution.phase(6).state(:,6).' ...
     output.result.solution.phase(7).state(:,6).' ...
-    output.result.solution.phase(8).state(:,6).'];
+    output.result.solution.phase(8).state(:,6).' ...
+    output.result.solution.phase(9).state(:,6).'];
 mFuel = [output.result.solution.phase(1).state(:,7).' ...
     output.result.solution.phase(2).state(:,7).' ...
     output.result.solution.phase(3).state(:,7).' ...
@@ -382,7 +612,8 @@ mFuel = [output.result.solution.phase(1).state(:,7).' ...
     output.result.solution.phase(5).state(:,7).' ...
     output.result.solution.phase(6).state(:,7).' ...
     output.result.solution.phase(7).state(:,7).' ...
-    output.result.solution.phase(8).state(:,7).']; 
+    output.result.solution.phase(8).state(:,7).' ...
+    zeros(1,length(output.result.solution.phase(9).state(:,7)))]; 
 Alpha = [output.result.solution.phase(1).state(:,8).' ...
     output.result.solution.phase(2).state(:,8).' ...
     output.result.solution.phase(3).state(:,8).' ...
@@ -390,7 +621,12 @@ Alpha = [output.result.solution.phase(1).state(:,8).' ...
     output.result.solution.phase(5).state(:,8).' ...
     output.result.solution.phase(6).state(:,8).' ...
     output.result.solution.phase(7).state(:,8).' ...
-    output.result.solution.phase(8).state(:,8).'];
+    output.result.solution.phase(8).state(:,8).' ...
+    output.result.solution.phase(9).state(:,7).'];
+
+
+
+
 
 % eta = output.result.solution.phase(1).state(:,9).';
 
@@ -411,7 +647,21 @@ time = [output.result.solution.phase(1).time.' ...
     output.result.solution.phase(5).time.' ...
     output.result.solution.phase(6).time.' ...
     output.result.solution.phase(7).time.' ...
+    output.result.solution.phase(8).time.' ...
+    output.result.solution.phase(9).time.'];
+
+time_ascent = [output.result.solution.phase(1).time.' ...
+    output.result.solution.phase(2).time.' ...
+    output.result.solution.phase(3).time.' ...
+    output.result.solution.phase(4).time.' ...
+    output.result.solution.phase(5).time.' ...
+    output.result.solution.phase(6).time.' ...
+    output.result.solution.phase(7).time.' ...
     output.result.solution.phase(8).time.'];
+
+eta = [zeros(1,length(time_ascent)) output.result.solution.phase(9).state(:,8).' ];
+
+
 
 controls.Alpha = Alpha';
 
@@ -445,6 +695,11 @@ throttle(time>output.result.solution.phase(6).time(end)) = 0.496;
 
 throttle(time>=output.result.solution.phase(7).time(end)) = 1; %after separation
 
+throttle(time>=output.result.solution.phase(8).time(end)) = 0; %after separation
+
+ 
+auxdata.mFuel_descent = output.result.solution.phase(8).state(end,7);
+
 forward0 = [alt(1),gamma(1),v(1),zeta(1),lat(1),lon(1), mFuel(1)];
 
 
@@ -452,28 +707,36 @@ time_diff = [1 diff(time)];
 
 time_forward = time;
 Alpha_forward = Alpha;
+eta_forward = eta;
 throttle_forward = throttle;
 
 time_forward(time_diff==0) = [];
 Alpha_forward(time_diff==0) = [];
+eta_forward(time_diff==0) = [];
 throttle_forward(time_diff==0) = [];
-
-% stage = 1; %will be wrong for orbiter
 
 stage_forward = ones(1,length(time_forward));
 stage_forward(time_forward>=output.result.solution.phase(7).time(end)) = 2;
+% stage_forward(time_forward>=output.result.solution.phase(8).time(end)) = 3;
 
 
-[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time(end),forward0);
+[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,eta_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time_ascent(end),forward0);
+
+
+forward0_descent = y(end,1:6);
+[f_t2, f_y2] = ode45(@(f_t2,f_y2) VehicleModel_forward(f_t2, f_y2,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,eta_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time_ascent(end),forward0);
+
+
+
 % [f_t, f_y] = ode23(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time,Alpha,f_t),ControlInterp(time,throttle,f_t),time(end)),time(1:end),forward0);
 
-
+% 
 % dt = 1;
 % f_y = forward0;
 % temp = 1;
 % for t_temp = 0:dt:time(end)
 %     
-%     df_y = VehicleModel_forward(t_temp, f_y(temp,:),auxdata,ControlInterp(time,Alpha,t_temp),ControlInterp(time,throttle,t_temp),time(end));
+%     df_y = VehicleModel_forward(t_temp, f_y(temp,:),auxdata,ControlInterp(time,Alpha,t_temp),ControlInterp(time,eta,t_temp),ControlInterp(time,throttle,t_temp),ControlInterp(time_forward,stage_forward,f_t));
 %   
 %     
 %     f_y(temp+1,:) = f_y(temp,:) + dt*df_y';  

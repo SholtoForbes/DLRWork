@@ -118,8 +118,8 @@ altMax = 90000;
 vMin = 1;
 vMax = 10000;
 
-gammaMin = -80;
-gammaMax = 80;
+gammaMin = -deg2rad(80);
+gammaMax = deg2rad(80);
 
 zetaMin = -2*pi;
 % zetaMin = 0;

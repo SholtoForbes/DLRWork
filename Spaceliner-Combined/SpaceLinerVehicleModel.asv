@@ -2,7 +2,7 @@ function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,I
 
 % STF = 0.6; %Staging Time Fraction
 
-
+if stage == 1 || stage == 2
 alt     = phase.state(:,1);
 lon     = phase.state(:,2);
 lat     = phase.state(:,3);
@@ -11,6 +11,20 @@ gamma   = phase.state(:,5);
 zeta    = phase.state(:,6);
 mFuel   = phase.state(:,7);
 Alpha = phase.state(:,8);
+elseif stage == 3
+    
+alt     = phase.state(:,1);
+lon     = phase.state(:,2);
+lat     = phase.state(:,3);
+v       = phase.state(:,4);
+gamma   = phase.state(:,5);
+zeta    = phase.state(:,6);
+Alpha = phase.state(:,7);
+eta = phase.state(:,8);
+mFuel = auxdata.mFuel_descent;
+end
+
+
 
 interp = auxdata.interp;
 
@@ -45,7 +59,7 @@ g = 9.81;
 % Change mass dependent on stage. 
 if stage == 1
     m = auxdata.Stage1.mStruct+mFuel+auxdata.Stage2.mStruct; 
-elseif stage == 2
+elseif stage == 2 || stage == 3
     m = auxdata.Stage2.mStruct+mFuel;
 end
 
@@ -59,6 +73,7 @@ end
 c(alt<84000) = ppval(interp.c_spline,alt(alt<84000)); % Calculate speed of sound using atmospheric data
 c(alt>=84000) = ppval(interp.c_spline,84000*ones(1,length(alt(alt>=84000))));
 c = c';
+stage
 
 mach(alt<84000) = v(alt<84000)./c(alt<84000);
 mach(alt>=84000) = v(alt>=84000)./c(alt>=84000);
@@ -98,7 +113,7 @@ L  = 0.5*Cl.*A1.*rho.*v.^2;
   Fueldt  = (T1 ./Isp1 /g + T2 ./Isp2 /g).*throttle;
 
 
-elseif stage == 2
+elseif stage == 2 
     Cd  = auxdata.interp.Stage2.Cd_spline(mach ,rad2deg(Alpha ));
 Cl  = auxdata.interp.Stage2.Cl_spline(mach ,rad2deg(Alpha ));
 D  = 0.5*Cd.*A2.*rho.*v.^2;
@@ -112,6 +127,22 @@ L  = 0.5*Cl.*A2.*rho.*v.^2;
     Isp1  = 0;
     Isp2  = rho ./rho_SL.*Stage2.Isp_SL + (1-rho ./rho_SL).*Stage2.Isp_vac; 
      Fueldt  = (T2 ./Isp2 /g).*throttle;
+
+
+elseif stage == 3 
+    Cd  = auxdata.interp.Stage2.Cd_spline(mach ,rad2deg(Alpha ));
+Cl  = auxdata.interp.Stage2.Cl_spline(mach ,rad2deg(Alpha ));
+D  = 0.5*Cd.*A2.*rho.*v.^2;
+L  = 0.5*Cl.*A2.*rho.*v.^2;
+
+  
+    T1  = 0; % Thrust from stage 1
+    T2  = 0;
+    
+
+    Isp1  = 0;
+    Isp2  = 0; 
+     Fueldt  = 0;
 
 
 end
@@ -128,8 +159,11 @@ end
     T = T1 + T2;
 
 %Motion in Geodetic Rotational Coordinates =================================================
+if stage ==1 || stage ==2
 eta = 0;
-[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta);
+end
+
+[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta');
 
 % Aero Data =============================================================
 
