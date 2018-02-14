@@ -145,8 +145,8 @@ bankMax =   deg2rad(50);
 
 % Initial Conditions
 
-% lat0 = deg2rad(-23.3791); % Rockhampton
-% lon0 = deg2rad(150.5100); % Rockhampton
+lat0 = deg2rad(-23.3791); % Rockhampton
+lon0 = deg2rad(150.5100); % Rockhampton
 
 % lat0 = deg2rad(30.373796); % South Japan
 % lon0 = deg2rad(130.95852);
@@ -185,8 +185,8 @@ bankMax =   deg2rad(50);
 % lat0 = deg2rad(35.528217); %South Japan
 % lon0 = deg2rad(133.569646);
 
-lat0 = deg2rad(45.37); %South Japan after true launch
-lon0 = deg2rad(137.71);
+% lat0 = deg2rad(45.37); %South Japan after true launch
+% lon0 = deg2rad(137.71);
 
 auxdata.lon0 = lon0;
 
@@ -360,7 +360,8 @@ setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
 setup.nlp.ipoptoptions.maxiterations = 1000;
 setup.derivatives.supplier           = 'sparseCD';
-setup.derivatives.derivativelevel    = 'second';
+% setup.derivatives.derivativelevel    = 'second';
+setup.derivatives.derivativelevel    = 'first';
 setup.scales.method                  = 'automatic-bounds';
 setup.method                         = 'RPM-Differentiation';
 % setup.scales.method                  = 'automatic-guessUpdate';

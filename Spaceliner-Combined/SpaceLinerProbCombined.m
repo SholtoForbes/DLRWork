@@ -116,11 +116,11 @@ end
 
 %% Create Gridded Interpolants
 
-auxdata.interp.Stage1.Cl_spline = griddedInterpolant(Stage1_MGrid',Stage1_aoaGrid',Stage1_Cl_Grid','spline');
-auxdata.interp.Stage1.Cd_spline = griddedInterpolant(Stage1_MGrid',Stage1_aoaGrid',Stage1_Cd_Grid','spline');
+auxdata.interp.Stage1.Cl_spline = griddedInterpolant(Stage1_MGrid',Stage1_aoaGrid',Stage1_Cl_Grid','linear', 'linear');
+auxdata.interp.Stage1.Cd_spline = griddedInterpolant(Stage1_MGrid',Stage1_aoaGrid',Stage1_Cd_Grid','linear', 'linear');
 
-auxdata.interp.Stage2.Cl_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cl_Grid','spline');
-auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cd_Grid','spline');
+auxdata.interp.Stage2.Cl_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cl_Grid','linear', 'linear');
+auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cd_Grid','linear', 'linear');
 
 %% Get population interpolation
 load PopInterp
@@ -183,20 +183,25 @@ lon0 = deg2rad(150.5100); % Rockhampton
 
 auxdata.lon0 = lon0;
 %%
+aoaMin = 0;  
+aoaMax = deg2rad(25);
 
-aoaMin = 0;  aoaMax = 20*pi/180;
+bankMin = deg2rad(-50); 
+bankMax =   deg2rad(50);
+
+% aoaMin = 0;  aoaMax = 20*pi/180;
 % bankMin1 = -50*pi/180; bankMax1 =   50*pi/180;
 
 % Primal Bounds
-bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
-bounds.phase(1).state.upper = [150000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin, bankMin];
+bounds.phase(1).state.upper = [150000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax, bankMax];
 
 % Initial States
 % bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.5038e+06, aoaMin] ;
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 105, deg2rad(89), deg2rad(80), 1.6038e+06, aoaMax];
 
-bounds.phase(1).initialstate.lower = [1000,0, lat0, 100, deg2rad(80), -2*pi, 1.28e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1200,0, lat0, 120, deg2rad(85), 2*pi, 1.32e+06, aoaMax];
+bounds.phase(1).initialstate.lower = [1000,0, lat0, 100, deg2rad(80), 0, 1.28e+06, aoaMin, bankMin] ;
+bounds.phase(1).initialstate.upper = [1200,0, lat0, 120, deg2rad(85), 0, 1.32e+06, aoaMax, bankMax];
 
 bounds.phase(1).finalstate.lower = bounds.phase(1).state.lower;
 bounds.phase(1).finalstate.upper = bounds.phase(1).state.upper;
@@ -205,8 +210,12 @@ bounds.phase(2).initialstate.lower = bounds.phase(1).state.lower;
 bounds.phase(2).initialstate.upper = bounds.phase(1).state.upper;
 
 % Control Bounds
-bounds.phase(1).control.lower = [deg2rad(-.5)];
-bounds.phase(1).control.upper = [deg2rad(.5)];
+% bounds.phase(1).control.lower = [deg2rad(-.5)];
+% bounds.phase(1).control.upper = [deg2rad(.5)];
+
+bounds.phase(1).control.lower = [deg2rad(-.5), deg2rad(-1)];
+bounds.phase(1).control.upper = [deg2rad(.5), deg2rad(1)];
+
 
 % Time Bounds
 bounds.phase(1).initialtime.lower = 0;
@@ -218,12 +227,12 @@ bounds.phase(1).finaltime.upper = 5000;
 % Path bounds, defined in Continuous function.
 % These limit the dynamic pressure.
 
-% bounds.phase(1).path.lower = [0];
-% bounds.phase(1).path.upper = [60000];
+bounds.phase(1).path.lower = [0, -2*9.81];
+bounds.phase(1).path.upper = [60000, 2*9.81];
 
 %% Bound integral if necessary
-bounds.phase(1).integral.lower = 0;
-bounds.phase(1).integral.upper = 1e9;
+% bounds.phase(1).integral.lower = 0;
+% bounds.phase(1).integral.upper = 1e50;
 
 
 %% Set all phase bounds
@@ -244,6 +253,11 @@ bounds.phase(6) = bounds.phase(2);
 bounds.phase(7) = bounds.phase(2);
 bounds.phase(8) = bounds.phase(2);
 
+bounds.phase(8).finalstate.lower =  [70000, lonMin, latMin, 0, 0, -pi, 0, aoaMin, bankMin];
+bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 15000, 0, pi, 1.6038e+06, aoaMax, bankMax];
+
+
+
 % bounds.phase(8).initialtime = bounds.phase(2).initialtime;
 % bounds.phase(8).finaltime = bounds.phase(2).finaltime;
 % bounds.phase(8).state = bounds.phase(2).state;
@@ -259,29 +273,29 @@ bounds.phase(8) = bounds.phase(2);
 
 
 %% Event bounds
-bounds.eventgroup(1).lower = zeros(1,9);
-bounds.eventgroup(1).upper = zeros(1,9);
+bounds.eventgroup(1).lower = zeros(1,10);
+bounds.eventgroup(1).upper = zeros(1,10);
 
-bounds.eventgroup(2).lower = zeros(1,9);
-bounds.eventgroup(2).upper = zeros(1,9);
+bounds.eventgroup(2).lower = zeros(1,10);
+bounds.eventgroup(2).upper = zeros(1,10);
 
-bounds.eventgroup(3).lower = zeros(1,9);
-bounds.eventgroup(3).upper = zeros(1,9);
+bounds.eventgroup(3).lower = zeros(1,10);
+bounds.eventgroup(3).upper = zeros(1,10);
 
-bounds.eventgroup(4).lower = zeros(1,9);
-bounds.eventgroup(4).upper = zeros(1,9);
+bounds.eventgroup(4).lower = zeros(1,10);
+bounds.eventgroup(4).upper = zeros(1,10);
 
-bounds.eventgroup(5).lower = zeros(1,9);
-bounds.eventgroup(5).upper = zeros(1,9);
+bounds.eventgroup(5).lower = zeros(1,10);
+bounds.eventgroup(5).upper = zeros(1,10);
 
-bounds.eventgroup(6).lower = zeros(1,9);
-bounds.eventgroup(6).upper = zeros(1,9);
+bounds.eventgroup(6).lower = zeros(1,10);
+bounds.eventgroup(6).upper = zeros(1,10);
 
-bounds.eventgroup(7).lower = zeros(1,9);
-bounds.eventgroup(7).upper = zeros(1,9);
+bounds.eventgroup(7).lower = zeros(1,10);
+bounds.eventgroup(7).upper = zeros(1,10);
 
-bounds.eventgroup(8).lower = zeros(1,8);
-bounds.eventgroup(8).upper = zeros(1,8);
+bounds.eventgroup(8).lower = zeros(1,10);
+bounds.eventgroup(8).upper = zeros(1,10);
 
 bounds.eventgroup(9).lower = ones(1,9);
 bounds.eventgroup(9).upper = [500*ones(1,8) 10000];
@@ -298,25 +312,25 @@ guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
 guess.phase(1).state(:,6)   = [deg2rad(0),deg2rad(0)];
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
-% guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
+guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
 
 
-guess.phase(1).control      = [[0;0]];
+guess.phase(1).control     = [[0;0],[0;0]];
 guess.phase(1).time          = [0;50];
 
 
-guess.phase(1).integral = 0;
+% guess.phase(1).integral = 0;
 % Tire stages together
 % bounds.eventgroup(1).lower = [zeros(1,10)];
 % bounds.eventgroup(1).upper = [zeros(1,10)]; 
 
-guess.phase(2).state = guess.phase(1).state + [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(3).state = guess.phase(2).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(4).state = guess.phase(3).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(2).state = guess.phase(1).state + [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(3).state = guess.phase(2).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(4).state = guess.phase(3).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
 
 guess.phase(2).control = guess.phase(1).control;
 guess.phase(3).control = guess.phase(2).control;
@@ -334,13 +348,13 @@ guess.phase(6).time = guess.phase(5).time + 50;
 guess.phase(7).time = guess.phase(6).time + 50;
 guess.phase(8).time = guess.phase(7).time + 50;
 
-guess.phase(2).integral = guess.phase(1).integral;
-guess.phase(3).integral = guess.phase(2).integral;
-guess.phase(4).integral = guess.phase(3).integral;
-guess.phase(5).integral = guess.phase(4).integral;
-guess.phase(6).integral = guess.phase(5).integral;
-guess.phase(7).integral = guess.phase(6).integral;
-guess.phase(8).integral = guess.phase(7).integral;
+% guess.phase(2).integral = guess.phase(1).integral;
+% guess.phase(3).integral = guess.phase(2).integral;
+% guess.phase(4).integral = guess.phase(3).integral;
+% guess.phase(5).integral = guess.phase(4).integral;
+% guess.phase(6).integral = guess.phase(5).integral;
+% guess.phase(7).integral = guess.phase(6).integral;
+% guess.phase(8).integral = guess.phase(7).integral;
 
 
 
@@ -363,11 +377,6 @@ zetaMax = 2*pi;
 
 % latMax = pi;
 
-aoaMin = 0;  
-aoaMax = deg2rad(25);
-
-bankMin = deg2rad(-50); 
-bankMax =   deg2rad(50);
 
 % bankMin = deg2rad(-60); 
 % bankMax =   deg2rad(60);
@@ -415,8 +424,8 @@ lonF = deg2rad(8.6359);% Germany
 %%
 
 % Primal Bounds
-bounds.phase(9).state.lower = [altMin, lonMin, latMin, vMin, gammaMin, zetaMin, aoaMin, bankMin];
-bounds.phase(9).state.upper = [altMax, lonMax, latMax, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+bounds.phase(9).state.lower = [altMin, lonMin, latMin, vMin, gammaMin, zetaMin, 0, aoaMin, bankMin];
+bounds.phase(9).state.upper = [altMax, lonMax, latMax, vMax, gammaMax, zetaMax, 1.6038e+06, aoaMax, bankMax];
 
 % Initial States
 % bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0, gamma0, zetaMin, aoaMin, bankMin] ;
@@ -425,8 +434,8 @@ bounds.phase(9).state.upper = [altMax, lonMax, latMax, vMax, gammaMax, zetaMax, 
 % bounds.phase(1).initialstate.lower = [alt0,0, lat0, v0-1000, gamma0, zetaMin, aoaMin, bankMin] ;
 % bounds.phase(1).initialstate.upper = [alt0,0, lat0, v0, gamma0, zetaMax, aoaMax, bankMax];
 
-bounds.phase(9).initialstate.lower = [altMin,lonMin, latMin, vMin, gammaMin, zetaMin, aoaMin, bankMin] ;
-bounds.phase(9).initialstate.upper = [altMax,lonMax, latMax, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+bounds.phase(9).initialstate.lower = [altMin,lonMin, latMin, vMin, gammaMin, zetaMin, 0, aoaMin, bankMin] ;
+bounds.phase(9).initialstate.upper = [altMax,lonMax, latMax, vMax, gammaMax, zetaMax, 1.6038e+06, aoaMax, bankMax];
 
 
 % End States
@@ -436,8 +445,14 @@ bounds.phase(9).initialstate.upper = [altMax,lonMax, latMax, vMax, gammaMax, zet
 % bounds.phase(9).finalstate.lower = [altFMin, lonF-lon0+2*pi, latF, vMin, deg2rad(-20), zetaMin, aoaMin, 0];
 % bounds.phase(9).finalstate.upper = [altFMax, lonF-lon0+2*pi, latF, 150, deg2rad(20), zetaMax, aoaMax, 0];
 
-bounds.phase(9).finalstate.lower = [altMin, lonF-lon0+2*pi, latF, vMin, gammaMin, zetaMin, aoaMin, bankMin] ;
-bounds.phase(9).finalstate.upper = [altMax, lonF-lon0+2*pi, latF, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+% bounds.phase(9).finalstate.lower = [altMin, lonF-lon0+2*pi, latF, vMin, gammaMin, zetaMin, aoaMin, bankMin] ;
+% bounds.phase(9).finalstate.upper = [altMax, lonF-lon0+2*pi, latF, vMax, gammaMax, zetaMax, aoaMax, bankMax];
+
+%  bounds.phase(9).finalstate.lower = [altMin, lonMin, latMin, vMin, gammaMin, zetaMin, 0, aoaMin, bankMin] ;
+% bounds.phase(9).finalstate.upper = [altMax, lonMax, latMax, vMax, gammaMax, zetaMax, 1.6038e+06, aoaMax, bankMax];
+ bounds.phase(9).finalstate.lower = [altMin, lonMin, latMin, vMin, -0.01, zetaMin, 0, aoaMin, bankMin] ;
+bounds.phase(9).finalstate.upper = [3000, lonMax, latMax, 300, 0.01, zetaMax, 1.6038e+06, aoaMax, bankMax];
+
 
 %Starting West heading west
 % for germany-japan
@@ -461,9 +476,12 @@ bounds.phase(9).finaltime.upper = 10000;
 
 %Integral Bounds
 
-bounds.phase(9).integral.lower = 0;
-bounds.phase(9).integral.upper = 1e9;
+% bounds.phase(9).integral.lower = 0;
+% bounds.phase(9).integral.upper = 1e50;
 
+% path bounds
+bounds.phase(1).path.lower = [0, -2*9.81];
+bounds.phase(1).path.upper = [60000, 2*9.81];
 
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
@@ -494,16 +512,19 @@ guess.phase(9).state(:,5)   = [guess.phase(8).state(2,5);0]; %
 % guess.phase(1).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % Korea-Germany
 % guess.phase(9).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % japan-Germany actual
 
-guess.phase(1).state(:,6)   = [deg2rad(0);deg2rad(0)];
+guess.phase(9).state(:,6)   = [deg2rad(0);deg2rad(0)];
 
- guess.phase(9).state(:,7)   = [1*pi/180; 1*pi/180];
+guess.phase(9).state(:,7)   = [deg2rad(0);deg2rad(0)];
+
+
+ guess.phase(9).state(:,8)   = [1*pi/180; 1*pi/180];
 % guess.phase(9).state(:,8)   = [0;0];
-guess.phase(9).state(:,8)   = [deg2rad(50);deg2rad(50)];
+guess.phase(9).state(:,9)   = [deg2rad(50);deg2rad(50)];
 
 guess.phase(9).control      = [[0;0],[0;0]];
 guess.phase(9).time          = [400;4000];
 
-guess.phase(9).integral = 0;
+% guess.phase(9).integral = 0;
 
 
 
@@ -512,9 +533,9 @@ guess.phase(9).integral = 0;
 %----------Provide Mesh Refinement Method and Initial Mesh ---------------%
 %-------------------------------------------------------------------------%
 % mesh.method       = 'hp-LiuRao-Legendre';
-mesh.maxiterations = 4;
+mesh.maxiterations = 3;
 mesh.colpointsmin = 3;
-mesh.colpointsmax = 20;
+mesh.colpointsmax = 50;
 mesh.tolerance    = 1e-5;
 
 
@@ -531,7 +552,7 @@ setup.mesh                           = mesh;
 setup.displaylevel                   = 2;
 setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
-setup.nlp.ipoptoptions.maxiterations = 400;
+setup.nlp.ipoptoptions.maxiterations = 1000;
 setup.derivatives.supplier           = 'sparseFD';
 setup.derivatives.derivativelevel    = 'first';
 setup.scales.method                  = 'automatic-bounds';
@@ -613,7 +634,7 @@ mFuel = [output.result.solution.phase(1).state(:,7).' ...
     output.result.solution.phase(6).state(:,7).' ...
     output.result.solution.phase(7).state(:,7).' ...
     output.result.solution.phase(8).state(:,7).' ...
-    zeros(1,length(output.result.solution.phase(9).state(:,7)))]; 
+    output.result.solution.phase(9).state(:,7).']; 
 Alpha = [output.result.solution.phase(1).state(:,8).' ...
     output.result.solution.phase(2).state(:,8).' ...
     output.result.solution.phase(3).state(:,8).' ...
@@ -622,9 +643,17 @@ Alpha = [output.result.solution.phase(1).state(:,8).' ...
     output.result.solution.phase(6).state(:,8).' ...
     output.result.solution.phase(7).state(:,8).' ...
     output.result.solution.phase(8).state(:,8).' ...
-    output.result.solution.phase(9).state(:,7).'];
+    output.result.solution.phase(9).state(:,8).'];
 
-
+eta = [output.result.solution.phase(1).state(:,9).' ...
+    output.result.solution.phase(2).state(:,9).' ...
+    output.result.solution.phase(3).state(:,9).' ...
+    output.result.solution.phase(4).state(:,9).' ...
+    output.result.solution.phase(5).state(:,9).' ...
+    output.result.solution.phase(6).state(:,9).' ...
+    output.result.solution.phase(7).state(:,9).' ...
+    output.result.solution.phase(8).state(:,9).' ...
+    output.result.solution.phase(9).state(:,9).'];
 
 
 
@@ -661,7 +690,7 @@ time_ascent = [output.result.solution.phase(1).time.' ...
 
 time_descent = output.result.solution.phase(9).time.';
 
-eta = [zeros(1,length(time_ascent)) output.result.solution.phase(9).state(:,8).' ];
+% eta = [zeros(1,length(time_ascent)) output.result.solution.phase(9).state(:,8).' ];
 
 
 
@@ -794,6 +823,7 @@ phase.state(:,5) = gamma;
 phase.state(:,6) = zeta;
 phase.state(:,7) = mFuel;
 phase.state(:,8) = Alpha;
+phase.state(:,9) = eta;
 
 stage = ones(1,length(time));
 stage(time>=output.result.solution.phase(7).time(end)) = 2;

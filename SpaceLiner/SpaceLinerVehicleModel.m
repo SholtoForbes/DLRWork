@@ -1,4 +1,4 @@
-function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate] = SpaceLinerVehicleModel(t,phase,throttle,auxdata,stage)
+function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate,total_acceleration] = SpaceLinerVehicleModel(t,phase,throttle,auxdata,stage)
 
 % STF = 0.6; %Staging Time Fraction
 
@@ -150,6 +150,10 @@ R_Nr = 1;
 
 heating_rate = C*sqrt(rho/rho_r*R_Nr/R_N).*(v/v_r).^3.05*1e4;
 % =========================================================================
+
+total_acceleration = sqrt(a.^2 + (v'.*gammadot).^2 + (v'.*zetadot).^2)/9.81;
+
+
 end
 
 

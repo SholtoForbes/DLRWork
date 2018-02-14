@@ -1,4 +1,4 @@
-function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate] = SpaceLinerVehicleModel(t,phase,throttle,auxdata,stage)
+function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate,total_acceleration] = SpaceLinerVehicleModel(t,phase,throttle,auxdata,stage)
 
 % STF = 0.6; %Staging Time Fraction
 
@@ -11,6 +11,8 @@ gamma   = phase.state(:,5);
 zeta    = phase.state(:,6);
 mFuel   = phase.state(:,7);
 Alpha = phase.state(:,8);
+eta = phase.state(:,9);
+
 elseif stage == 3
     
 alt     = phase.state(:,1);
@@ -19,9 +21,10 @@ lat     = phase.state(:,3);
 v       = phase.state(:,4);
 gamma   = phase.state(:,5);
 zeta    = phase.state(:,6);
-Alpha = phase.state(:,7);
-eta = phase.state(:,8);
-mFuel = auxdata.mFuel_descent;
+mFuel =  phase.state(:,7);
+Alpha = phase.state(:,8);
+eta = phase.state(:,9);
+% mFuel = auxdata.mFuel_descent;
 end
 
 
@@ -146,7 +149,7 @@ L  = 0.5*Cl.*A2.*rho.*v.^2;
 
     Isp1  = 0;
     Isp2  = 0; 
-     Fueldt  = 0;
+     Fueldt  = zeros(1,length(t));
 
 
 end
@@ -163,9 +166,9 @@ end
     T = T1 + T2;
 
 %Motion in Geodetic Rotational Coordinates =================================================
-if stage ==1 || stage ==2
-eta = 0;
-end
+% if stage ==1 || stage ==2
+% eta = 0;
+% end
 
 [altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta');
 
@@ -188,6 +191,10 @@ R_Nr = 1;
 
 heating_rate = C*sqrt(rho/rho_r*R_Nr/R_N).*(v/v_r).^3.05*1e4;
 % =========================================================================
+
+total_acceleration = sqrt(a.^2 + (v'.*gammadot).^2 + (v'.*zetadot).^2)/9.81;
+
+
 end
 
 

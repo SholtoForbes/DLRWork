@@ -1,11 +1,57 @@
 function output = SpaceLinerEndpoint(input)
 auxdata = input.auxdata;
 
-vF = input.phase(8).finalstate(4);
+% vF = input.phase(8).finalstate(4);
+% 
+% output.objective = -vF;
 
-output.objective = -vF;
+
+
+
+if isempty(input.phase(1).integral)
+    input.phase(1).integral = 0;
+end
+
+if isempty(input.phase(2).integral)
+    input.phase(2).integral = 0;
+end
+
+if isempty(input.phase(3).integral)
+    input.phase(3).integral = 0;
+end
+
+if isempty(input.phase(4).integral)
+    input.phase(4).integral = 0;
+end
+
+if isempty(input.phase(5).integral)
+    input.phase(5).integral = 0;
+end
+
+if isempty(input.phase(6).integral)
+    input.phase(6).integral = 0;
+end
+
+if isempty(input.phase(7).integral)
+    input.phase(7).integral = 0;
+end
+
+if isempty(input.phase(8).integral)
+    input.phase(8).integral = 0;
+end
+
+
+% input
 % input.phase
-% output.objective = input.phase(1).integral;
+output.objective = input.phase(1).integral+...
+    input.phase(2).integral+...
+    input.phase(3).integral+...
+    input.phase(4).integral+...
+    input.phase(5).integral+...
+    input.phase(6).integral+...
+    input.phase(7).integral+...
+    input.phase(8).integral;
+    
 
 
 % gammaF = input.phase(1).finalstate(5);

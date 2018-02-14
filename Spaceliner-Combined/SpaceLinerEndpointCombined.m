@@ -1,53 +1,55 @@
 function output = SpaceLinerEndpointCombined(input)
 auxdata = input.auxdata;
+output.objective = -input.phase(9).finalstate(2);
 
 % output.objective = input.phase(9).integral;
 
-if isempty(input.phase(1).integral)
-    input.phase(1).integral = 0;
-end
+% 
+% if isempty(input.phase(1).integral)
+%     input.phase(1).integral = 0;
+% end
+% 
+% if isempty(input.phase(2).integral)
+%     input.phase(2).integral = 0;
+% end
+% 
+% if isempty(input.phase(3).integral)
+%     input.phase(3).integral = 0;
+% end
+% 
+% if isempty(input.phase(4).integral)
+%     input.phase(4).integral = 0;
+% end
+% 
+% if isempty(input.phase(5).integral)
+%     input.phase(5).integral = 0;
+% end
+% 
+% if isempty(input.phase(6).integral)
+%     input.phase(6).integral = 0;
+% end
+% 
+% if isempty(input.phase(7).integral)
+%     input.phase(7).integral = 0;
+% end
+% 
+% if isempty(input.phase(8).integral)
+%     input.phase(8).integral = 0;
+% end
+% 
+% if isempty(input.phase(9).integral)
+%     input.phase(9).integral = 0;
+% end
 
-if isempty(input.phase(2).integral)
-    input.phase(2).integral = 0;
-end
-
-if isempty(input.phase(3).integral)
-    input.phase(3).integral = 0;
-end
-
-if isempty(input.phase(4).integral)
-    input.phase(4).integral = 0;
-end
-
-if isempty(input.phase(5).integral)
-    input.phase(5).integral = 0;
-end
-
-if isempty(input.phase(6).integral)
-    input.phase(6).integral = 0;
-end
-
-if isempty(input.phase(7).integral)
-    input.phase(7).integral = 0;
-end
-
-if isempty(input.phase(8).integral)
-    input.phase(8).integral = 0;
-end
-
-if isempty(input.phase(9).integral)
-    input.phase(9).integral = 0;
-end
-
-output.objective =    input.phase(1).integral+...
-    input.phase(2).integral+...
-    input.phase(3).integral+...
-    input.phase(4).integral+...
-    input.phase(5).integral+...
-    input.phase(6).integral+...
-    input.phase(7).integral+...
-    input.phase(8).integral+...
-    input.phase(9).integral;
+% output.objective =    input.phase(1).integral+...
+%     input.phase(2).integral+...
+%     input.phase(3).integral+...
+%     input.phase(4).integral+...
+%     input.phase(5).integral+...
+%     input.phase(6).integral+...
+%     input.phase(7).integral+...
+%     input.phase(8).integral+...
+%     input.phase(9).integral;
 
 %%
 t01 = input.phase(1).initialtime;
@@ -103,7 +105,8 @@ output.eventgroup(5).event = [x06-xf5 t06-tf5];
 output.eventgroup(6).event = [x07-xf6 t07-tf6];
 output.eventgroup(7).event = [x08-xf7 t08-tf7];
 
-output.eventgroup(8).event = [x09(1:6)-xf8(1:6) x09(7)-xf8(8)  t09-tf8];
+% output.eventgroup(8).event = [x09(1:6)-xf8(1:6) x09(7)-xf8(8)  t09-tf8];
+output.eventgroup(8).event = [x09-xf8  t09-tf8];
 
 output.eventgroup(9).event = [tf1-t01,tf2-t02,tf3-t03,tf4-t04,tf5-t05,tf6-t06,tf7-t07,tf8-t08,tf9-t09];
 end
