@@ -126,21 +126,26 @@ auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGri
 %% Import Bounds %%========================================================
 lonMin = -pi;         lonMax = -lonMin;
 latMin = -70*pi/180;  latMax = -latMin;
-lat0 = deg2rad(45);
-lon0 = deg2rad(145);
+% lat0 = deg2rad(45);
+% lon0 = deg2rad(145);
+
+lat0 = deg2rad(-23.3791); % Rockhampton
+lon0 = deg2rad(150.5100); % Rockhampton
+
+
 aoaMin = 0;  aoaMax = 20*pi/180;
 % bankMin1 = -50*pi/180; bankMax1 =   50*pi/180;
 
 % Primal Bounds
 bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
-bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(83), pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax];
 
 % Initial States
 % bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.5038e+06, aoaMin] ;
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 105, deg2rad(89), deg2rad(80), 1.6038e+06, aoaMax];
 
 bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(70), 1.28e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(83), deg2rad(80), 1.32e+06, aoaMax];
+bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(80), 1.32e+06, aoaMax];
 
 bounds.phase(1).finalstate.lower = bounds.phase(1).state.lower;
 bounds.phase(1).finalstate.upper = bounds.phase(1).state.upper;
@@ -163,8 +168,8 @@ bounds.phase(1).finaltime.upper = 5000;
 % Path bounds, defined in Continuous function.
 % These limit the dynamic pressure.
 
-bounds.phase(1).path.lower = [0, -2*9.81];
-bounds.phase(1).path.upper = [40000, 2*9.81];
+bounds.phase(1).path.lower = [0, -2.5*9.81];
+bounds.phase(1).path.upper = [60000, 2.5*9.81];
 
 %% Bound integral if necessary
 bounds.phase(1).integral.lower = 0;
@@ -182,16 +187,28 @@ bounds.phase(2).finaltime = bounds.phase(1).finaltime;
 
 bounds.phase(2).control = bounds.phase(1).control;
 
+bounds.phase(2).path = bounds.phase(1).path;
+
+bounds.phase(2).integral = bounds.phase(1).integral;
+
 bounds.phase(3) = bounds.phase(2);
 bounds.phase(4) = bounds.phase(2);
 bounds.phase(5) = bounds.phase(2);
 bounds.phase(6) = bounds.phase(2);
 bounds.phase(7) = bounds.phase(2);
 
+
+
+
 bounds.phase(8).initialtime = bounds.phase(2).initialtime;
 bounds.phase(8).finaltime = bounds.phase(2).finaltime;
 bounds.phase(8).state = bounds.phase(2).state;
 bounds.phase(8).initialstate = bounds.phase(2).initialstate;
+bounds.phase(8).path = bounds.phase(2).path;
+bounds.phase(8).integral = bounds.phase(2).integral;
+bounds.phase(8).initialstate.upper(7) = 213213; %set max propellant of orbiter at separation 
+
+
 bounds.phase(8).control = bounds.phase(2).control;
 % End States
 
@@ -201,9 +218,13 @@ bounds.phase(8).control = bounds.phase(2).control;
 % bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 5000, 0, -2*pi, 0, aoaMin];
 % bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 15000, deg2rad(0), 2*pi,1.6038e+06, aoaMax];
 
-bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 7000, 0, -2*pi, 0, aoaMin];
-bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 7000, deg2rad(0), 2*pi,1.6038e+06, aoaMax];
+% bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 7000, 0,
+% -2*pi, 0, aoaMin]; % worked 
+% bounds.phase(8).finalstate.upper = [70000, lonMax, latMax, 7000, deg2rad(0), 2*pi,1.6038e+06, aoaMax];
 
+
+bounds.phase(8).finalstate.lower = [69000, lonMin, latMin, 6900, deg2rad(-1), deg2rad(75), 0, aoaMin];
+bounds.phase(8).finalstate.upper = [71000, lonMax, latMax, 7100, deg2rad(1), deg2rad(75),1.6038e+06, aoaMax];
 %% Event bounds
 bounds.eventgroup(1).lower = zeros(1,9);
 bounds.eventgroup(1).upper = zeros(1,9);
@@ -237,7 +258,7 @@ guess.phase(1).state(:,2)   = [2.5;2.55];
 guess.phase(1).state(:,3)   = [0.7;.75];
 guess.phase(1).state(:,4)   = [100,1100];
 guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
-guess.phase(1).state(:,6)   = [deg2rad(70),deg2rad(70)];
+guess.phase(1).state(:,6)   = [deg2rad(80),deg2rad(80)];
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
 % guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
@@ -268,13 +289,13 @@ guess.phase(6).control = guess.phase(5).control;
 guess.phase(7).control = guess.phase(6).control;
 guess.phase(8).control = guess.phase(7).control;
 
-guess.phase(2).time = guess.phase(1).time + 50;
-guess.phase(3).time = guess.phase(2).time + 50;
-guess.phase(4).time = guess.phase(3).time + 50;
-guess.phase(5).time = guess.phase(4).time + 50;
-guess.phase(6).time = guess.phase(5).time + 50;
-guess.phase(7).time = guess.phase(6).time + 50;
-guess.phase(8).time = guess.phase(7).time + 50;
+guess.phase(2).time = guess.phase(1).time + 5; 
+guess.phase(3).time = guess.phase(2).time + 5;
+guess.phase(4).time = guess.phase(3).time + 5;
+guess.phase(5).time = guess.phase(4).time + 5;
+guess.phase(6).time = guess.phase(5).time + 5;
+guess.phase(7).time = guess.phase(6).time + 5;
+guess.phase(8).time = guess.phase(7).time + 5;
 
 guess.phase(2).integral = guess.phase(1).integral;
 guess.phase(3).integral = guess.phase(2).integral;
@@ -289,10 +310,10 @@ guess.phase(8).integral = guess.phase(7).integral;
 %----------Provide Mesh Refinement Method and Initial Mesh ---------------%
 %-------------------------------------------------------------------------%
 mesh.method       = 'hp-LiuRao-Legendre';
-mesh.maxiterations = 2;
+mesh.maxiterations = 3;
 mesh.colpointsmin = 2;
 mesh.colpointsmax = 50;
-mesh.tolerance    = 1e-5;
+mesh.tolerance    = 1e-4;
 
 
 %-------------------------------------------------------------------%
@@ -308,7 +329,7 @@ setup.mesh                           = mesh;
 setup.displaylevel                   = 2;
 setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
-setup.nlp.ipoptoptions.maxiterations = 1800;
+setup.nlp.ipoptoptions.maxiterations = 1000;
 % setup.derivatives.supplier           = 'sparseCD';
 % setup.derivatives.derivativelevel    = 'second';
 setup.derivatives.supplier           = 'sparseFD';
@@ -538,7 +559,7 @@ q1 = [];
 m = [];
 for i = 1:length(alt)
     phase_temp.state = phase.state(i,:);
-[altdot1,londot1,latdot1,gammadot1,vdot1,azidot1, q1(i), M(i), Fd(i), rho,L(i),Fueldt1,T(i),Isp1,Isp2,m(i),heating_rate(i),total_acceleration(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
+[altdot1,londot1,latdot1,gammadot1,vdot1(i),azidot1, q1(i), M(i), Fd(i), rho,L(i),Fueldt1,T(i),Isp1,Isp2,m(i),heating_rate(i),total_acceleration(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
 
 end
 
@@ -567,6 +588,10 @@ plot(time,T)
 plot(time,Fd)
 plot(time,L)
 xlabel('time')
+
+subplot(5,2,5)
+hold on
+plot(time,total_acceleration/9.81)
 
 subplot(5,2,6)
 hold on

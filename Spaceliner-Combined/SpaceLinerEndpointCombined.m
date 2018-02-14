@@ -1,55 +1,55 @@
 function output = SpaceLinerEndpointCombined(input)
 auxdata = input.auxdata;
-output.objective = -input.phase(9).finalstate(2);
+% output.objective = -input.phase(9).finalstate(2);
 
 % output.objective = input.phase(9).integral;
 
-% 
-% if isempty(input.phase(1).integral)
-%     input.phase(1).integral = 0;
-% end
-% 
-% if isempty(input.phase(2).integral)
-%     input.phase(2).integral = 0;
-% end
-% 
-% if isempty(input.phase(3).integral)
-%     input.phase(3).integral = 0;
-% end
-% 
-% if isempty(input.phase(4).integral)
-%     input.phase(4).integral = 0;
-% end
-% 
-% if isempty(input.phase(5).integral)
-%     input.phase(5).integral = 0;
-% end
-% 
-% if isempty(input.phase(6).integral)
-%     input.phase(6).integral = 0;
-% end
-% 
-% if isempty(input.phase(7).integral)
-%     input.phase(7).integral = 0;
-% end
-% 
-% if isempty(input.phase(8).integral)
-%     input.phase(8).integral = 0;
-% end
-% 
-% if isempty(input.phase(9).integral)
-%     input.phase(9).integral = 0;
-% end
 
-% output.objective =    input.phase(1).integral+...
-%     input.phase(2).integral+...
-%     input.phase(3).integral+...
-%     input.phase(4).integral+...
-%     input.phase(5).integral+...
-%     input.phase(6).integral+...
-%     input.phase(7).integral+...
-%     input.phase(8).integral+...
-%     input.phase(9).integral;
+if isempty(input.phase(1).integral)
+    input.phase(1).integral = 0;
+end
+
+if isempty(input.phase(2).integral)
+    input.phase(2).integral = 0;
+end
+
+if isempty(input.phase(3).integral)
+    input.phase(3).integral = 0;
+end
+
+if isempty(input.phase(4).integral)
+    input.phase(4).integral = 0;
+end
+
+if isempty(input.phase(5).integral)
+    input.phase(5).integral = 0;
+end
+
+if isempty(input.phase(6).integral)
+    input.phase(6).integral = 0;
+end
+
+if isempty(input.phase(7).integral)
+    input.phase(7).integral = 0;
+end
+
+if isempty(input.phase(8).integral)
+    input.phase(8).integral = 0;
+end
+
+if isempty(input.phase(9).integral)
+    input.phase(9).integral = 0;
+end
+
+output.objective =    input.phase(1).integral+...
+    input.phase(2).integral+...
+    input.phase(3).integral+...
+    input.phase(4).integral+...
+    input.phase(5).integral+...
+    input.phase(6).integral+...
+    input.phase(7).integral+...
+    input.phase(8).integral+...
+    input.phase(9).integral;
 
 %%
 t01 = input.phase(1).initialtime;

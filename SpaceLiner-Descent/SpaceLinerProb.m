@@ -30,8 +30,11 @@ Stage2.A = 461; %Reference Area in m²
 Stage2.mStruct = 134361.1;
 % Stage2.mFuel = 5384.7;
 
-% Japan-germany
-Stage2.mFuel = 172586-Stage2.mStruct;
+% % Japan-germany
+% Stage2.mFuel = 172586-Stage2.mStruct;
+
+% SLEG
+Stage2.mFuel = 151119.6-Stage2.mStruct;
 
 Stage2.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
 Stage2.Isp_SL = 363;
@@ -107,7 +110,9 @@ auxdata.PopInterp = PopInterp;
 
 %% If initial heading angle is bounded
 
-zeta0 = deg2rad(70.18);
+% zeta0 = deg2rad(70.18);
+zeta0 = 1.208572; %SLEG comparison
+
 
 %%
 
@@ -145,8 +150,8 @@ bankMax =   deg2rad(50);
 
 % Initial Conditions
 
-lat0 = deg2rad(-23.3791); % Rockhampton
-lon0 = deg2rad(150.5100); % Rockhampton
+% lat0 = deg2rad(-23.3791); % Rockhampton
+% lon0 = deg2rad(150.5100); % Rockhampton
 
 % lat0 = deg2rad(30.373796); % South Japan
 % lon0 = deg2rad(130.95852);
@@ -188,20 +193,29 @@ lon0 = deg2rad(150.5100); % Rockhampton
 % lat0 = deg2rad(45.37); %South Japan after true launch
 % lon0 = deg2rad(137.71);
 
+lat0 = -0.2121191; % SLEG
+lon0 = 2.7096137; % SLEG
+
+
 auxdata.lon0 = lon0;
 
 % alt0 = 70000;
 % v0 = 7000;
 % gamma0 = 0;
 
-%japan-germany
-alt0 = 73235;
-v0 = 6523;
-gamma0 = deg2rad(0.128);
+% %japan-germany
+% alt0 = 73235;
+% v0 = 6523;
+% gamma0 = deg2rad(0.128);
+
+%SLEG
+alt0 = 76087.115;
+v0 = 7303.313;
+gamma0 = -0.0000097;
 
 % End conditions
 altFMin = 100;
-altFMax = 1000;
+altFMax = 2000;
 
 latF = deg2rad(53.77); % Germany
 lonF = deg2rad(8.6359);% Germany
@@ -297,7 +311,7 @@ guess.phase(1).state(:,1)   = [alt0;alt0];
 guess.phase(1).state(:,2)   = [0;lonF-lon0+2*pi]; 
 % guess.phase(1).state(:,2)   = [0;lonF-lon0-2*pi];
 % guess.phase(1).state(:,2)   = [0;lonF-lon0];
-guess.phase(1).state(:,3)   = [lat0;latF];
+guess.phase(1).state(:,3)   = [lat0;1.5];
 % guess.phase(1).state(:,3)   = [lat0;latF-0.5];
 guess.phase(1).state(:,4)   = [v0;vMin];
 
@@ -317,8 +331,9 @@ guess.phase(1).state(:,5)   = [0;0]; %
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(110)]; %cape town-canaveral
 % guess.phase(1).state(:,6)   = [deg2rad(-90);deg2rad(100)]; % Aus-Brazil
 % guess.phase(1).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % Korea-Germany
-guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-60)]; % japan-Germany actual
+% guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-60)]; % japan-Germany actual
 
+guess.phase(1).state(:,6)   = [1.2;deg2rad(-80)]; % SLEG
 
  guess.phase(1).state(:,7)   = [10*pi/180; 10*pi/180];
 guess.phase(1).state(:,8)   = [0;0];
@@ -364,7 +379,7 @@ setup.derivatives.supplier           = 'sparseCD';
 setup.derivatives.derivativelevel    = 'first';
 setup.scales.method                  = 'automatic-bounds';
 setup.method                         = 'RPM-Differentiation';
-% setup.scales.method                  = 'automatic-guessUpdate';
+setup.scales.method                  = 'automatic-guessUpdate';
 
 %-------------------------------------------------------------------%
 %------------------- Solve Problem Using GPOPS2 --------------------%
