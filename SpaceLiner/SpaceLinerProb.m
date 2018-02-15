@@ -168,8 +168,8 @@ bounds.phase(1).finaltime.upper = 5000;
 % Path bounds, defined in Continuous function.
 % These limit the dynamic pressure.
 
-bounds.phase(1).path.lower = [0, -2.5*9.81];
-bounds.phase(1).path.upper = [60000, 2.5*9.81];
+bounds.phase(1).path.lower = [0, -2.5*9.81]; % if using total acceleration, this might nee dto be in gs
+bounds.phase(1).path.upper = [40000, 2.5*9.81];
 
 %% Bound integral if necessary
 bounds.phase(1).integral.lower = 0;

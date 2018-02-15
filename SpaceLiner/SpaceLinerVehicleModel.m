@@ -151,8 +151,7 @@ R_Nr = 1;
 heating_rate = C*sqrt(rho/rho_r*R_Nr/R_N).*(v/v_r).^3.05*1e4;
 % =========================================================================
 
-% total_acceleration = sqrt(a.^2 + (v'.*gammadot).^2 +
-% (v'.*zetadot).^2)/9.81; % this is wrong somehow
+% total_acceleration = sqrt(a.^2 + (v'.*gammadot).^2 + (v'.*zetadot).^2)/9.81; % remember that this is in gs
 
 total_acceleration = a;
 end

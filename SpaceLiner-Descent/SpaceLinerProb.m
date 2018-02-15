@@ -33,8 +33,11 @@ Stage2.mStruct = 134361.1;
 % % Japan-germany
 % Stage2.mFuel = 172586-Stage2.mStruct;
 
-% SLEG
+% SLEG / TOSCA
 Stage2.mFuel = 151119.6-Stage2.mStruct;
+
+
+
 
 Stage2.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
 Stage2.Isp_SL = 363;
@@ -91,8 +94,8 @@ end
 
 %% Create Gridded Interpolants
 
-auxdata.interp.Stage2.Cl_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cl_Grid','spline');
-auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cd_Grid','spline');
+auxdata.interp.Stage2.Cl_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cl_Grid','linear');
+auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGrid',Stage2_Cd_Grid','linear');
 
 
 %% Get land interpolants to determine if over land
@@ -112,8 +115,6 @@ auxdata.PopInterp = PopInterp;
 
 % zeta0 = deg2rad(70.18);
 zeta0 = 1.208572; %SLEG comparison
-
-
 %%
 
 altMin = 1;
@@ -133,8 +134,8 @@ zetaMax = 2*pi;
 lonMin = -2*pi;         
 lonMax = 2*pi;
 
-% latMin = -pi/2+0.0000001;  
-latMin = 0;  %for japan-germany actual
+latMin = -pi/2+0.0000001;  
+% latMin = 0;  %for japan-germany actual
 
 latMax = pi/2-0.0000001;
 % latMax = pi;
@@ -199,11 +200,11 @@ lon0 = 2.7096137; % SLEG
 
 auxdata.lon0 = lon0;
 
-% alt0 = 70000;
+% alt0 = 80000;
 % v0 = 7000;
 % gamma0 = 0;
 
-% %japan-germany
+%japan-germany
 % alt0 = 73235;
 % v0 = 6523;
 % gamma0 = deg2rad(0.128);
@@ -215,7 +216,7 @@ gamma0 = -0.0000097;
 
 % End conditions
 altFMin = 100;
-altFMax = 2000;
+altFMax = 1000;
 
 latF = deg2rad(53.77); % Germany
 lonF = deg2rad(8.6359);% Germany
@@ -301,8 +302,11 @@ bounds.phase.integral.upper = 1e9;
 % bounds.phase(1).path.lower = [0, 0, -2.5];
 % bounds.phase(1).path.upper = [60000, 2e6, 2.5];
 
-bounds.phase(1).path.lower = [0, 0, -2.5]; 
-bounds.phase(1).path.upper = [60000, 1.5e6, 2.5];
+% bounds.phase(1).path.lower = [0, 0, -2.5]; 
+% bounds.phase(1).path.upper = [60000, 1.5e6, 2.5];
+
+bounds.phase(1).path.lower = [0, 0, -1]; 
+bounds.phase(1).path.upper = [40000, 1.5e6, 1];
 
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
@@ -311,7 +315,7 @@ guess.phase(1).state(:,1)   = [alt0;alt0];
 guess.phase(1).state(:,2)   = [0;lonF-lon0+2*pi]; 
 % guess.phase(1).state(:,2)   = [0;lonF-lon0-2*pi];
 % guess.phase(1).state(:,2)   = [0;lonF-lon0];
-guess.phase(1).state(:,3)   = [lat0;1.5];
+guess.phase(1).state(:,3)   = [lat0;latF];
 % guess.phase(1).state(:,3)   = [lat0;latF-0.5];
 guess.phase(1).state(:,4)   = [v0;vMin];
 
@@ -331,9 +335,8 @@ guess.phase(1).state(:,5)   = [0;0]; %
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(110)]; %cape town-canaveral
 % guess.phase(1).state(:,6)   = [deg2rad(-90);deg2rad(100)]; % Aus-Brazil
 % guess.phase(1).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % Korea-Germany
-% guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-60)]; % japan-Germany actual
+guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-60)]; % japan-Germany actual
 
-guess.phase(1).state(:,6)   = [1.2;deg2rad(-80)]; % SLEG
 
  guess.phase(1).state(:,7)   = [10*pi/180; 10*pi/180];
 guess.phase(1).state(:,8)   = [0;0];
@@ -379,7 +382,7 @@ setup.derivatives.supplier           = 'sparseCD';
 setup.derivatives.derivativelevel    = 'first';
 setup.scales.method                  = 'automatic-bounds';
 setup.method                         = 'RPM-Differentiation';
-setup.scales.method                  = 'automatic-guessUpdate';
+% setup.scales.method                  = 'automatic-guessUpdate';
 
 %-------------------------------------------------------------------%
 %------------------- Solve Problem Using GPOPS2 --------------------%
@@ -424,59 +427,64 @@ controls.eta   = output.result.solution.phase(1).state(:,8);
 [altdot,londot,latdot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,heating_rate] = SpaceLinerVehicleModel(states,controls,auxdata);
 
 total_acceleration = sqrt(a.^2 + (states.v.*gammadot).^2 + (states.v.*zetadot).^2)/9.81;
+% total_acceleration = a/9.81;
 
 pop = auxdata.PopInterp(rad2deg(states.lon),rad2deg(states.lat));
 
+
 figure(201)
-subplot(10,1,1)
+subplot(5,2,1)
 hold on
 plot(time,alt)
-title('alt')
-subplot(10,1,2)
+xlabel('time')
+ylabel('altitude')
+
+subplot(5,2,2)
 hold on
-plot(time,v)
-title('v')
+plot(v,alt)
+xlabel('velocity')
+ylabel('altitude')
 
-subplot(10,1,3)
-hold on
-plot(time,lon)
-title('lon')
 
-subplot(10,1,4)
-
-hold on
-plot(time,lat)
-title('lat')
-
-subplot(10,1,5)
-hold on
-plot(time,rad2deg(gamma))
-title('gamma')
-
-subplot(10,1,6)
-hold on
-plot(time,a/9.81)
-title('acceleration (g)')
-
-subplot(10,1,7)
+subplot(5,2,3)
 hold on
 plot(time,rad2deg(Alpha))
-title('alpha')
-
-subplot(10,1,8)
-hold on
+plot(time,rad2deg(gamma))
 plot(time,rad2deg(eta))
-title('eta')
+xlabel('time')
+legend('Angle of Attack' ,'Trajectory Angle', 'Bank Angle')
 
-subplot(10,1,9)
+subplot(5,2,4)
 hold on
-plot(time,heating_rate)
-title('heat rate')
+plot(time,D)
+plot(time,L)
+legend('Drag', 'Lift')
+xlabel('time')
 
-subplot(10,1,10)
+subplot(5,2,5)
 hold on
-plot(time,total_acceleration)
-title('Acceleration, Experienced (g)')
+plot(time,abs(total_acceleration))
+xlabel('time')
+ylabel('Acceleration (g)')
+
+subplot(5,2,6)
+hold on
+plot(time,heating_rate/1e6)
+xlabel('time')
+ylabel('Heating Rate (MW/m^2')
+
+
+subplot(5,2,7)
+hold on
+plot(time,M)
+xlabel('time')
+ylabel('Mach no.')
+
+subplot(5,2,8)
+hold on
+plot(time,q)
+xlabel('time')
+ylabel('Dynamic Pressure (kPa)')
 
 figure(230)
 hold on
@@ -514,6 +522,46 @@ geoshow(lats, lons,...
         'MarkerEdgeColor', 'y',...
         'MarkerFaceColor', 'y',...
         'MarkerSize', 2)
+    
+    
+%% save file
+contents = {'time', 'v', 'gamma', 'zeta', 'alt', 'lon', 'lat', 'q', 'heating_rate', 'L', 'D', 'M', 'Alpha' ,'eta'};
+units = {'s', 'm/s', 'rad', 'rad', 'm', 'rad', 'rad', 'pa', 'W/m^2', 'N', 'N', 'Mach', 'rad', 'rad'};
+
+result = [time' v' gamma' zeta' alt' lon' lat' total_acceleration q heating_rate L D M Alpha' eta' ];
+    delete('out')
+    
+fid=fopen('out','wt');
+
+for i=1:length(contents)
+      fprintf(fid,'%s\t',contents{i})
+
+end
+
+for i=1:length(units)
+    if i == 1
+      fprintf(fid,'\n%s\t',units{i})
+    else
+        fprintf(fid,'%s\t',units{i})
+    end
+
+end
+
+    
+dlmwrite('out', result, '-append','delimiter', '\t','roffset',1);
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 % =========================================================================
 % 
 % 

@@ -27,7 +27,7 @@ phaseout(1).dynamics  = [altdot, londot, latdot, vdot, gammadot, zetadot, Alphad
 
 
 total_acceleration = sqrt(vdot.^2 + (states.v.*gammadot).^2 + (states.v.*zetadot).^2)/9.81;
-
+% total_acceleration = vdot/9.81;
     
 % phaseout(1).path = [q1];
 
@@ -60,10 +60,10 @@ AltCost = (80000-states.alt)/80000;
 
 pop = auxdata.PopInterp(rad2deg(states.lon),rad2deg(states.lat));
 
-% popCost = pop.*AltCost; % for flights which go over large amounts of
+popCost = pop.*AltCost; % for flights which go over large amounts of
 % population
 
-popCost = pop;
+% popCost = pop;
 
 % phaseout(1).integrand = pop;
 
@@ -71,7 +71,8 @@ popCost = pop;
 % is used, because population density is per cell, which will change in magnitude.
 % phaseout(1).integrand = pop + heating_rate/1e6;
 % phaseout(1).integrand = pop + heating_rate/1e5;
-phaseout(1).integrand = popCost + heating_rate/1e5;
+% phaseout(1).integrand = popCost + heating_rate/1e5;
+phaseout(1).integrand = popCost + heating_rate/1e2;
 end
 
 %======================================================

@@ -32,7 +32,7 @@ phaseout(1).dynamics  = [altdot1', londot1', latdot1', vdot1', gammadot1', azido
 
 phaseout(1).path = [q1,total_acceleration1'];
 % phaseout(1).integrand = heating_rate1;
-phaseout(1).integrand = total_acceleration1';
+phaseout(1).integrand = q1/1e5;
 %% 2
 Alphadot2  = input.phase(2).control(:,1)';
 time2 = input.phase(2).time;
@@ -42,7 +42,7 @@ phaseout(2).dynamics  = [altdot2', londot2', latdot2', vdot2', gammadot2', azido
 % total_acceleration2
 phaseout(2).path = [q2,total_acceleration2'];
 % phaseout(2).integrand = heating_rate2;
-phaseout(2).integrand = total_acceleration2';
+phaseout(2).integrand = q2/1e5;
 %% 3
 Alphadot3  = input.phase(3).control(:,1)';
 time3 = input.phase(3).time;
@@ -51,7 +51,7 @@ throttle3 = 0.812;
 phaseout(3).dynamics  = [altdot3', londot3', latdot3', vdot3', gammadot3', azidot3', -Fueldt3, Alphadot3'];
 phaseout(3).path = [q3,total_acceleration3'];
 % phaseout(3).integrand = heating_rate3;
-phaseout(3).integrand = total_acceleration3';
+phaseout(3).integrand = q3/1e4;
 %% 4
 Alphadot4  = input.phase(4).control(:,1)';
 time4 = input.phase(4).time;
@@ -60,7 +60,7 @@ throttle4 = .7333;
 phaseout(4).dynamics  = [altdot4', londot4', latdot4', vdot4', gammadot4', azidot4', -Fueldt4, Alphadot4'];
 phaseout(4).path = [q4,total_acceleration4'];
 % phaseout(4).integrand = heating_rate4;
-phaseout(4).integrand = total_acceleration4';
+phaseout(4).integrand = q4/1e5;
 %% 5
 Alphadot5  = input.phase(5).control(:,1)';
 time5 = input.phase(5).time;
@@ -69,7 +69,7 @@ throttle5 = .6545;
 phaseout(5).dynamics  = [altdot5', londot5', latdot5', vdot5', gammadot5', azidot5', -Fueldt5, Alphadot5'];
 phaseout(5).path = [q5,total_acceleration5'];
 % phaseout(5).integrand = heating_rate5;
-phaseout(5).integrand = total_acceleration5';
+phaseout(5).integrand = q5/1e5;
 %% 6
 Alphadot6  = input.phase(6).control(:,1)';
 time6 = input.phase(6).time;
@@ -78,7 +78,7 @@ throttle6 = .5757;
 phaseout(6).dynamics  = [altdot6', londot6', latdot6', vdot6', gammadot6', azidot6', -Fueldt6, Alphadot6'];
 phaseout(6).path = [q6,total_acceleration6'];
 % phaseout(6).integrand = heating_rate6;
-phaseout(6).integrand = total_acceleration6';
+phaseout(6).integrand = q6/1e5;
 %% 7
 Alphadot7  = input.phase(7).control(:,1)';
 time7 = input.phase(7).time;
@@ -87,7 +87,7 @@ throttle7 = 0.496;
 phaseout(7).dynamics  = [altdot7', londot7', latdot7', vdot7', gammadot7', azidot7', -Fueldt7, Alphadot7'];
 phaseout(7).path = [q7,total_acceleration7'];
 % phaseout(7).integrand = heating_rate7;
-phaseout(7).integrand = total_acceleration7';
+phaseout(7).integrand = q7/1e5;
 %% 8
 Alphadot8  = input.phase(8).control(:,1)';
 time8 = input.phase(8).time;
@@ -96,7 +96,7 @@ throttle8 = 1;
 phaseout(8).dynamics  = [altdot8', londot8', latdot8', vdot8', gammadot8', azidot8', -Fueldt8, Alphadot8'];
 phaseout(8).path = [q8,total_acceleration8'];
 % phaseout(8).integrand = heating_rate8;
-phaseout(8).integrand = total_acceleration8';
+phaseout(8).integrand = q8/1e5;
 end
 
 %======================================================

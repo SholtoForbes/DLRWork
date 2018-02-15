@@ -4,5 +4,7 @@ function output = SpaceLinerEndpoint(input)
 % % 
 % output.objective = timeF;
 
+
+
 output.objective = input.phase.integral;
 end
