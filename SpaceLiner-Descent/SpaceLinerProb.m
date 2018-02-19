@@ -33,9 +33,21 @@ Stage2.mStruct = 134361.1;
 % % Japan-germany
 % Stage2.mFuel = 172586-Stage2.mStruct;
 
-% SLEG / TOSCA
-Stage2.mFuel = 151119.6-Stage2.mStruct;
+ % Japan-germany optimised
+% Stage2.mFuel =1.8030e+05-Stage2.mStruct;
 
+%  % germany-japan optimised
+% Stage2.mFuel =1.7996e+05-Stage2.mStruct;
+
+
+% SLEG / TOSCA
+% Stage2.mFuel = 151119.6-Stage2.mStruct;
+
+%  % NKorea-Japan optimised
+% Stage2.mFuel =1.7994e+05-Stage2.mStruct;
+
+ % NKorea-Japan optimised test
+Stage2.mFuel =1.8606e+05-Stage2.mStruct;
 
 
 
@@ -114,7 +126,12 @@ auxdata.PopInterp = PopInterp;
 %% If initial heading angle is bounded
 
 % zeta0 = deg2rad(70.18);
-zeta0 = 1.208572; %SLEG comparison
+% zeta0 = 1.208572; %SLEG comparison
+
+% zeta0 = 1.3090; %japan-germany optimised
+
+% zeta0 =  0.6458; %NKorea-japan optimised
+zeta0 =  1.0472; %NKorea-japan optimised test
 %%
 
 altMin = 1;
@@ -191,11 +208,20 @@ bankMax =   deg2rad(50);
 % lat0 = deg2rad(35.528217); %South Japan
 % lon0 = deg2rad(133.569646);
 
-% lat0 = deg2rad(45.37); %South Japan after true launch
+% lat0 = deg2rad(45.37); %Japan after TOSCA launch
 % lon0 = deg2rad(137.71);
 
-lat0 = -0.2121191; % SLEG
-lon0 = 2.7096137; % SLEG
+% lat0 = -0.2121191; % SLEG
+% lon0 = 2.7096137; % SLEG
+
+% lat0 = 0.8274; %central Japan after optimised launch
+% lon0 = 2.4508;
+
+% lat0 = 1.0961; %germany after optimised launch
+% lon0 = -0.0022;
+
+lat0 = 0.7953; %NKorea after optimised launch
+lon0 = 2.4215;
 
 
 auxdata.lon0 = lon0;
@@ -209,10 +235,30 @@ auxdata.lon0 = lon0;
 % v0 = 6523;
 % gamma0 = deg2rad(0.128);
 
-%SLEG
-alt0 = 76087.115;
-v0 = 7303.313;
-gamma0 = -0.0000097;
+% %NKorea-germany
+% alt0 = 7.0999e+04;
+% v0 = 6.8000e+03;
+% gamma0 = -0.0175;
+
+%NKorea-germany test
+alt0 = 1.0100e+05;
+v0 = 6.8000e+03;
+gamma0 = -0.0175;
+
+% %germany-japan
+% alt0 = 7.1000e+04;
+% v0 = 6.8000e+03;
+% gamma0 = -0.0175;
+
+% %SLEG aus-germany
+% alt0 = 76087.115;
+% v0 = 7303.313;
+% gamma0 = -0.0000097;
+
+%japan-germany optimised
+% alt0 = 7.0998e+04;
+% v0 = 6.8000e+03;
+% gamma0 = -0.0175;
 
 % End conditions
 altFMin = 100;
@@ -239,6 +285,13 @@ lonF = deg2rad(8.6359);% Germany
 
 % latF = deg2rad(37.533151); % Close to Suzu, middle north Japan
 % lonF = deg2rad(137.276039);
+
+% latF = deg2rad(37.235705); %south korea
+% lonF = deg2rad(129.356220);
+
+% latF = deg2rad(38.745095); %north korea
+% lonF = deg2rad(128.272375);
+
 
 % latF = deg2rad(-32.711986); % Close to cape town 
 % lonF = deg2rad(17.927735);
@@ -267,8 +320,8 @@ bounds.phase(1).finalstate.upper = [altFMax, lonF-lon0+2*pi, latF, 150, deg2rad(
 
 %Starting West heading west
 % for germany-japan
-% bounds.phase(1).finalstate.lower = [altF, lonF-lon0-2*pi, latF, vMin, -0.05, zetaMin, aoaMin, 0];
-% bounds.phase(1).finalstate.upper = [altF, lonF-lon0-2*pi, latF, 50, 0.05, zetaMax, aoaMax, 0];
+% bounds.phase(1).finalstate.lower = [altFMin, lonF-lon0-2*pi, latF, vMin, deg2rad(-20), zetaMin, aoaMin, 0];
+% bounds.phase(1).finalstate.upper = [altFMax, lonF-lon0-2*pi, latF, 150, deg2rad(20), zetaMax, aoaMax, 0];
 
 % If not going outside of degree bounds
 % for japan-florida, florida-japan
@@ -302,18 +355,22 @@ bounds.phase.integral.upper = 1e9;
 % bounds.phase(1).path.lower = [0, 0, -2.5];
 % bounds.phase(1).path.upper = [60000, 2e6, 2.5];
 
-% bounds.phase(1).path.lower = [0, 0, -2.5]; 
-% bounds.phase(1).path.upper = [60000, 1.5e6, 2.5];
+bounds.phase(1).path.lower = [0, 0, -2.5]; 
+bounds.phase(1).path.upper = [60000, 2e6, 2.5];
 
-bounds.phase(1).path.lower = [0, 0, -1]; 
-bounds.phase(1).path.upper = [40000, 1.5e6, 1];
+% bounds.phase(1).path.lower = [0, 0, -1]; 
+% bounds.phase(1).path.upper = [30000, 1.5e6, 1];
+
+% bounds.phase(1).path.lower = [0, 0, -1]; 
+% bounds.phase(1).path.upper = [7000, 1.3e6, 1];
 
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
 % solution, even for a well defined problem. 
 guess.phase(1).state(:,1)   = [alt0;alt0];
-guess.phase(1).state(:,2)   = [0;lonF-lon0+2*pi]; 
-% guess.phase(1).state(:,2)   = [0;lonF-lon0-2*pi];
+guess.phase(1).state(:,2)   = [0;lonF-lon0+2*pi]; %East
+% guess.phase(1).state(:,2)   = [0;lonF-lon0-2*pi]; %West
+
 % guess.phase(1).state(:,2)   = [0;lonF-lon0];
 guess.phase(1).state(:,3)   = [lat0;latF];
 % guess.phase(1).state(:,3)   = [lat0;latF-0.5];
@@ -330,13 +387,16 @@ guess.phase(1).state(:,5)   = [0;0]; %
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(270)]; %Japan-Florida
 % guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(270)]; %Aus-Canaveral west test
 % guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-80)];%Canaveral-Japan
-% guess.phase(1).state(:,6)   = [deg2rad(100);deg2rad(180)]; % Germany-Japan
+
 % guess.phase(1).state(:,6)   = [deg2rad(-10);deg2rad(-10)]; %Canaveral - cape town
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(110)]; %cape town-canaveral
 % guess.phase(1).state(:,6)   = [deg2rad(-90);deg2rad(100)]; % Aus-Brazil
 % guess.phase(1).state(:,6)   = [deg2rad(80);deg2rad(-60)]; % Korea-Germany
-guess.phase(1).state(:,6)   = [deg2rad(70);deg2rad(-60)]; % japan-Germany actual
 
+% guess.phase(1).state(:,6)   = [deg2rad(79);deg2rad(-60)]; % japan-Germany opt
+% guess.phase(1).state(:,6)   = [deg2rad(100);deg2rad(240)]; % Germany-Japan
+% guess.phase(1).state(:,6)   = [deg2rad(100);deg2rad(230)]; % Germany-NKorea
+guess.phase(1).state(:,6)   = [deg2rad(75);deg2rad(-60)]; % NKorea-Germany opt
 
  guess.phase(1).state(:,7)   = [10*pi/180; 10*pi/180];
 guess.phase(1).state(:,8)   = [0;0];
@@ -436,14 +496,14 @@ figure(201)
 subplot(5,2,1)
 hold on
 plot(time,alt)
-xlabel('time')
-ylabel('altitude')
+xlabel('time (s)')
+ylabel('Altitude (km)')
 
 subplot(5,2,2)
 hold on
-plot(v,alt)
-xlabel('velocity')
-ylabel('altitude')
+plot(v,alt/1000)
+xlabel('Velocity (m/s)')
+ylabel('Altitude (km)')
 
 
 subplot(5,2,3)
@@ -451,39 +511,41 @@ hold on
 plot(time,rad2deg(Alpha))
 plot(time,rad2deg(gamma))
 plot(time,rad2deg(eta))
-xlabel('time')
+xlabel('time (s)')
+ylabel('(deg)');
 legend('Angle of Attack' ,'Trajectory Angle', 'Bank Angle')
 
 subplot(5,2,4)
 hold on
-plot(time,D)
-plot(time,L)
+plot(time,D/1000)
+plot(time,L/1000)
 legend('Drag', 'Lift')
-xlabel('time')
+xlabel('time (s)')
+ylabel('(kN)');
 
 subplot(5,2,5)
 hold on
 plot(time,abs(total_acceleration))
-xlabel('time')
+xlabel('time (s)')
 ylabel('Acceleration (g)')
 
 subplot(5,2,6)
 hold on
 plot(time,heating_rate/1e6)
-xlabel('time')
+xlabel('time (s)')
 ylabel('Heating Rate (MW/m^2')
 
 
 subplot(5,2,7)
 hold on
 plot(time,M)
-xlabel('time')
+xlabel('time (s)')
 ylabel('Mach no.')
 
 subplot(5,2,8)
 hold on
 plot(time,q)
-xlabel('time')
+xlabel('time (s)')
 ylabel('Dynamic Pressure (kPa)')
 
 figure(230)

@@ -223,7 +223,7 @@ bounds.phase(4) = bounds.phase(2);
 bounds.phase(5) = bounds.phase(2);
 bounds.phase(6) = bounds.phase(2);
 bounds.phase(7) = bounds.phase(2);
-
+bounds.phase(7) = bounds.phase(2);
 
 
 
@@ -258,8 +258,8 @@ bounds.phase(8).control = bounds.phase(2).control;
 % bounds.phase(8).finalstate.upper = [71000, lonMax, latMax, 7200, deg2rad(1), deg2rad(120),1.6038e+06, aoaMax];
 
 % korea-Germany 
-bounds.phase(8).finalstate.lower = [99000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
-bounds.phase(8).finalstate.upper = [101000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
+bounds.phase(9).finalstate.lower = [99000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
+bounds.phase(9).finalstate.upper = [101000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
 
 %% Event bounds
 bounds.eventgroup(1).lower = zeros(1,9);
@@ -283,8 +283,11 @@ bounds.eventgroup(6).upper = zeros(1,9);
 bounds.eventgroup(7).lower = zeros(1,9);
 bounds.eventgroup(7).upper = zeros(1,9);
 
-bounds.eventgroup(8).lower = ones(1,8);
-bounds.eventgroup(8).upper = 1000*ones(1,8);
+bounds.eventgroup(8).lower = zeros(1,9);
+bounds.eventgroup(8).upper = zeros(1,9);
+
+bounds.eventgroup(9).lower = ones(1,9);
+bounds.eventgroup(9).upper = 1000*ones(1,9);
 
 %%  Guess =================================================================
 % Set the initial guess. This can have a significant effect on the final
@@ -329,6 +332,8 @@ guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000
 guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(9).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+
 
 guess.phase(2).control = guess.phase(1).control;
 guess.phase(3).control = guess.phase(2).control;
@@ -337,6 +342,7 @@ guess.phase(5).control = guess.phase(4).control;
 guess.phase(6).control = guess.phase(5).control;
 guess.phase(7).control = guess.phase(6).control;
 guess.phase(8).control = guess.phase(7).control;
+guess.phase(9).control = guess.phase(7).control;
 
 guess.phase(2).time = guess.phase(1).time + 5; 
 guess.phase(3).time = guess.phase(2).time + 5;
@@ -345,6 +351,7 @@ guess.phase(5).time = guess.phase(4).time + 5;
 guess.phase(6).time = guess.phase(5).time + 5;
 guess.phase(7).time = guess.phase(6).time + 5;
 guess.phase(8).time = guess.phase(7).time + 5;
+guess.phase(9).time = guess.phase(7).time + 5;
 
 guess.phase(2).integral = guess.phase(1).integral;
 guess.phase(3).integral = guess.phase(2).integral;
@@ -353,6 +360,7 @@ guess.phase(5).integral = guess.phase(4).integral;
 guess.phase(6).integral = guess.phase(5).integral;
 guess.phase(7).integral = guess.phase(6).integral;
 guess.phase(8).integral = guess.phase(7).integral;
+guess.phase(9).integral = guess.phase(7).integral;
 
 %%
 %-------------------------------------------------------------------------%

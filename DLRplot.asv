@@ -1,6 +1,0 @@
-clear all
-
-SLEG = dlmread('SLEG.txt');
-TOSCA = dlmread('TOSCA');
-
-Hea

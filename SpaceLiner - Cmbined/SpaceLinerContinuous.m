@@ -105,6 +105,16 @@ phaseout(8).dynamics  = [altdot8', londot8', latdot8', vdot8', gammadot8', azido
 phaseout(8).path = [q8,total_acceleration8'];
 % phaseout(8).integrand = heating_rate8;
 phaseout(8).integrand = q8/1e5;
+%% 9
+Alphadot9  = input.phase(9).control(:,1)';
+time9 = input.phase(9).time;
+throttle9 = 0;
+[altdot9,londot9,latdot9,gammadot9,vdot9,azidot9, q9, M9, Fd9, rho9,L9,Fueldt9,T9,Isp9,Isp9,m9,heating_rate9,total_acceleration9] = SpaceLinerVehicleModel(time9,input.phase(9),throttle9,auxdata,2);
+phaseout(9).dynamics  = [altdot9', londot9', latdot9', vdot9', gammadot9', azidot9', -Fueldt9, Alphadot9'];
+% phaseout(9).path = [q9,heating_rate9,total_acceleration9'];
+phaseout(9).path = [q9,total_acceleration9'];
+% phaseout(9).integrand = heating_rate9;
+phaseout(9).integrand = q9/1e5;
 end
 
 %======================================================
