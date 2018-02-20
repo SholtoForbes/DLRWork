@@ -11,6 +11,7 @@ gamma   = phase.state(:,5);
 zeta    = phase.state(:,6);
 mFuel   = phase.state(:,7);
 Alpha = phase.state(:,8);
+eta = phase.state(:,9);
 
 interp = auxdata.interp;
 
@@ -129,8 +130,8 @@ end
     T = T1 + T2;
 
 %Motion in Geodetic Rotational Coordinates =================================================
-eta = 0;
-[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta);
+% eta = 0;
+[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta');
 
 % Aero Data =============================================================
 

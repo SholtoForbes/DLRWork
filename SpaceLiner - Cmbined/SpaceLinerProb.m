@@ -124,7 +124,7 @@ auxdata.interp.Stage2.Cd_spline = griddedInterpolant(Stage2_MGrid',Stage2_aoaGri
 
 
 %% Import Bounds %%========================================================
-lonMin = -pi;         lonMax = -lonMin;
+lonMin = -2*pi;         lonMax = -lonMin;
 
 % latMin = -70*pi/180;  latMax = -latMin; %for japan launch
 
@@ -152,11 +152,13 @@ lonF = deg2rad(8.6359);% Germany
 
 
 aoaMin = 0;  aoaMax = 20*pi/180;
-% bankMin1 = -50*pi/180; bankMax1 =   50*pi/180;
+
+bankMin_ascent = -10*pi/180; bankMax_ascent =   10*pi/180;
+bankMin_descent = -50*pi/180; bankMax_descent =   50*pi/180;
 
 % Primal Bounds
-bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
-bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin, bankMin_ascent];
+bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax, bankMax_ascent];
 
 % Initial States
 % bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.5038e+06, aoaMin] ;
@@ -167,8 +169,11 @@ bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(85), 1.32e+06, aoaMax];
 
 %NKorea-Germany
-bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(-10), 1.28e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(10), 1.32e+06, aoaMax];
+% bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(60), 1.28e+06, aoaMin, bankMin] ;
+% bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(85), 1.32e+06, aoaMax, bankMax];
+
+bounds.phase(1).initialstate.lower = [1000,0, lat0, 100, deg2rad(80), deg2rad(30), 1.28e+06, aoaMin, bankMin_ascent] ;
+bounds.phase(1).initialstate.upper = [1200,0, lat0, 120, deg2rad(85), deg2rad(85), 1.32e+06, aoaMax, bankMax_ascent];
 
 
 %Germany-Japan
@@ -184,14 +189,14 @@ bounds.phase(2).initialstate.lower = bounds.phase(1).state.lower;
 bounds.phase(2).initialstate.upper = bounds.phase(1).state.upper;
 
 % Control Bounds
-bounds.phase(1).control.lower = [deg2rad(-1)];
-bounds.phase(1).control.upper = [deg2rad(1)];
+bounds.phase(1).control.lower = [deg2rad(-1), deg2rad(-5)];
+bounds.phase(1).control.upper = [deg2rad(1), deg2rad(5)];
 
 % Time Bounds
 bounds.phase(1).initialtime.lower = 0;
 bounds.phase(1).initialtime.upper = 0;
 bounds.phase(1).finaltime.lower = 50;
-bounds.phase(1).finaltime.upper = 5000;
+bounds.phase(1).finaltime.upper = 1000;
 
 %% Define Path Constraints
 % Path bounds, defined in Continuous function.
@@ -213,7 +218,7 @@ bounds.phase(2).state = bounds.phase(1).state;
 bounds.phase(2).finalstate = bounds.phase(1).finalstate;
 
 bounds.phase(2).initialtime.lower = 0;
-bounds.phase(2).initialtime.upper = 5000;
+bounds.phase(2).initialtime.upper = 1000;
 
 bounds.phase(2).finaltime = bounds.phase(1).finaltime;
 
@@ -241,11 +246,17 @@ bounds.phase(8).integral = bounds.phase(2).integral;
 bounds.phase(8).initialstate.upper(7) = 213213; %set max propellant of orbiter at separation 
 bounds.phase(8).finalstate = bounds.phase(2).finalstate;
 
+bounds.phase(8).finalstate.lower(1) = 80000;
+bounds.phase(8).finalstate.upper(1) = 80000;
+
 bounds.phase(8).control = bounds.phase(2).control;
 
 
 bounds.phase(9) = bounds.phase(8);
-
+bounds.phase(9).state.lower(9) = bankMin_descent;
+bounds.phase(9).state.upper(9) = bankMax_descent;
+bounds.phase(9).initialtime.upper = 1000;
+bounds.phase(9).finaltime.upper = 10000;
 
 
 % End States
@@ -269,33 +280,39 @@ bounds.phase(9) = bounds.phase(8);
 % bounds.phase(8).finalstate.upper = [71000, lonMax, latMax, 7200, deg2rad(1), deg2rad(120),1.6038e+06, aoaMax];
 
 % korea-Germany 
-bounds.phase(9).finalstate.lower = [1000, lon0+1.5, latMin, 100,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
-bounds.phase(9).finalstate.upper = [101000, lon0+1.5, latMax, 1000, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
+% bounds.phase(9).finalstate.lower = [99000, lonMin, latMin, 6800,deg2rad(-30), deg2rad(75), 0, aoaMin, bankMin]; % Japan-Germany
+% bounds.phase(9).finalstate.upper = [101000, lonMax, latMax, 7200, deg2rad(30), deg2rad(75),1.6038e+06, aoaMax, bankMax];
+
+bounds.phase(9).finalstate.lower = [1000, lonMin, latMin, 100,deg2rad(-60), deg2rad(70), 0, aoaMin, bankMin_descent]; % Japan-Germany
+bounds.phase(9).finalstate.upper = [100000, lonMax, latMax, 7200, deg2rad(60), deg2rad(70),1.6038e+06, aoaMax, bankMax_descent];
+
+% bounds.phase(9).finalstate.lower = [1000, lonF-lon0+2*pi, latF, 100,deg2rad(-60), -deg2rad(80), 0, aoaMin, bankMin_descent]; % Japan-Germany
+% bounds.phase(9).finalstate.upper = [10000, lonF-lon0+2*pi, latF, 7200, deg2rad(60), deg2rad(70),1.6038e+06, aoaMax, bankMax_descent];
 
 %% Event bounds
-bounds.eventgroup(1).lower = zeros(1,9);
-bounds.eventgroup(1).upper = zeros(1,9);
+bounds.eventgroup(1).lower = zeros(1,10);
+bounds.eventgroup(1).upper = zeros(1,10);
 
-bounds.eventgroup(2).lower = zeros(1,9);
-bounds.eventgroup(2).upper = zeros(1,9);
+bounds.eventgroup(2).lower = zeros(1,10);
+bounds.eventgroup(2).upper = zeros(1,10);
 
-bounds.eventgroup(3).lower = zeros(1,9);
-bounds.eventgroup(3).upper = zeros(1,9);
+bounds.eventgroup(3).lower = zeros(1,10);
+bounds.eventgroup(3).upper = zeros(1,10);
 
-bounds.eventgroup(4).lower = zeros(1,9);
-bounds.eventgroup(4).upper = zeros(1,9);
+bounds.eventgroup(4).lower = zeros(1,10);
+bounds.eventgroup(4).upper = zeros(1,10);
 
-bounds.eventgroup(5).lower = zeros(1,9);
-bounds.eventgroup(5).upper = zeros(1,9);
+bounds.eventgroup(5).lower = zeros(1,10);
+bounds.eventgroup(5).upper = zeros(1,10);
 
-bounds.eventgroup(6).lower = zeros(1,9);
-bounds.eventgroup(6).upper = zeros(1,9);
+bounds.eventgroup(6).lower = zeros(1,10);
+bounds.eventgroup(6).upper = zeros(1,10);
 
-bounds.eventgroup(7).lower = zeros(1,9);
-bounds.eventgroup(7).upper = zeros(1,9);
+bounds.eventgroup(7).lower = zeros(1,10);
+bounds.eventgroup(7).upper = zeros(1,10);
 
-bounds.eventgroup(8).lower = zeros(1,9);
-bounds.eventgroup(8).upper = zeros(1,9);
+bounds.eventgroup(8).lower = zeros(1,10);
+bounds.eventgroup(8).upper = zeros(1,10);
 
 bounds.eventgroup(9).lower = ones(1,9);
 bounds.eventgroup(9).upper = 1000*ones(1,9);
@@ -308,7 +325,8 @@ guess.phase(1).state(:,1)   = [2000;7000];
 % guess.phase(1).state(:,2)   = [2.5;2.55];
 % guess.phase(1).state(:,3)   = [0.7;.75]; %japan - germany
 
-guess.phase(1).state(:,2)   = [2.238;2.3];
+% guess.phase(1).state(:,2)   = [2.238;2.3];
+guess.phase(1).state(:,2)   = [0;0.1];
 guess.phase(1).state(:,3)   = [0.67;.75]; %japan - germany
 
 % guess.phase(1).state(:,2)   = [0.15;0.1]; %germany-japan
@@ -321,14 +339,14 @@ guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
 % guess.phase(1).state(:,6)   = [deg2rad(75),deg2rad(80)]; %Japan-germany
 % guess.phase(1).state(:,6)   = [deg2rad(117),deg2rad(120)]; %Germany-Japan
 % guess.phase(1).state(:,6)   = [deg2rad(71),deg2rad(80)]; %korea-germany
-guess.phase(1).state(:,6)   = [deg2rad(1),deg2rad(1)]; %korea-germany
+guess.phase(1).state(:,6)   = [deg2rad(70),deg2rad(70)]; %korea-germany
 
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
-% guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
+guess.phase(1).state(:,9)   = [deg2rad(0);deg2rad(0)];
 
 
-guess.phase(1).control      = [[0;0]];
+guess.phase(1).control      = [[0;0],[0;0]];
 guess.phase(1).time          = [0;50];
 
 
@@ -337,14 +355,14 @@ guess.phase(1).integral = 0;
 % bounds.eventgroup(1).lower = [zeros(1,10)];
 % bounds.eventgroup(1).upper = [zeros(1,10)]; 
 
-guess.phase(2).state = guess.phase(1).state + [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(3).state = guess.phase(2).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(4).state = guess.phase(3).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(9).state = guess.phase(7).state+ [5000 -50000; 0.05 0.05;.05 .05; 1000 -2000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(2).state = guess.phase(1).state + [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(3).state = guess.phase(2).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(4).state = guess.phase(3).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(5).state = guess.phase(4).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(6).state = guess.phase(5).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(7).state = guess.phase(6).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(8).state = guess.phase(7).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0;0 0]';
+guess.phase(9).state = guess.phase(8).state+ [10000 -10000; 0.05 .05;.05 .05; 1000 -1000; -deg2rad(10) -deg2rad(10);0 0;0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
 
 
 guess.phase(2).control = guess.phase(1).control;
@@ -354,7 +372,7 @@ guess.phase(5).control = guess.phase(4).control;
 guess.phase(6).control = guess.phase(5).control;
 guess.phase(7).control = guess.phase(6).control;
 guess.phase(8).control = guess.phase(7).control;
-guess.phase(9).control = guess.phase(7).control;
+guess.phase(9).control = guess.phase(8).control;
 
 guess.phase(2).time = guess.phase(1).time + 5; 
 guess.phase(3).time = guess.phase(2).time + 5;
@@ -363,7 +381,7 @@ guess.phase(5).time = guess.phase(4).time + 5;
 guess.phase(6).time = guess.phase(5).time + 5;
 guess.phase(7).time = guess.phase(6).time + 5;
 guess.phase(8).time = guess.phase(7).time + 5;
-guess.phase(9).time = guess.phase(7).time + 100;
+guess.phase(9).time = guess.phase(8).time + 30;
 
 guess.phase(2).integral = guess.phase(1).integral;
 guess.phase(3).integral = guess.phase(2).integral;
@@ -372,7 +390,7 @@ guess.phase(5).integral = guess.phase(4).integral;
 guess.phase(6).integral = guess.phase(5).integral;
 guess.phase(7).integral = guess.phase(6).integral;
 guess.phase(8).integral = guess.phase(7).integral;
-guess.phase(9).integral = guess.phase(7).integral;
+guess.phase(9).integral = guess.phase(8).integral;
 
 %%
 %-------------------------------------------------------------------------%
@@ -381,7 +399,7 @@ guess.phase(9).integral = guess.phase(7).integral;
 mesh.method       = 'hp-LiuRao-Legendre';
 mesh.maxiterations = 3;
 mesh.colpointsmin = 2;
-mesh.colpointsmax = 50;
+mesh.colpointsmax = 100;
 mesh.tolerance    = 1e-4;
 
 
@@ -492,6 +510,15 @@ Alpha = [output.result.solution.phase(1).state(:,8).' ...
     output.result.solution.phase(7).state(:,8).' ...
     output.result.solution.phase(8).state(:,8).' ...
     output.result.solution.phase(9).state(:,8).'];
+eta = [output.result.solution.phase(1).state(:,9).' ...
+    output.result.solution.phase(2).state(:,9).' ...
+    output.result.solution.phase(3).state(:,9).' ...
+    output.result.solution.phase(4).state(:,9).' ...
+    output.result.solution.phase(5).state(:,9).' ...
+    output.result.solution.phase(6).state(:,9).' ...
+    output.result.solution.phase(7).state(:,9).' ...
+    output.result.solution.phase(8).state(:,9).' ...
+    output.result.solution.phase(9).state(:,9).'];
 
 % eta = output.result.solution.phase(1).state(:,9).';
 
@@ -557,10 +584,12 @@ time_diff = [1 diff(time)];
 
 time_forward = time;
 Alpha_forward = Alpha;
+eta_forward = eta;
 throttle_forward = throttle;
 
 time_forward(time_diff==0) = [];
 Alpha_forward(time_diff==0) = [];
+eta_forward(time_diff==0) = [];
 throttle_forward(time_diff==0) = [];
 
 % stage = 1; %will be wrong for orbiter
@@ -569,7 +598,7 @@ stage_forward = ones(1,length(time_forward));
 stage_forward(time_forward>=output.result.solution.phase(7).time(end)) = 2;
 
 
-[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time(end),forward0);
+[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,eta_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time(end),forward0);
 % [f_t, f_y] = ode23(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time,Alpha,f_t),ControlInterp(time,throttle,f_t),time(end)),time(1:end),forward0);
 
 
@@ -628,6 +657,7 @@ phase.state(:,5) = gamma;
 phase.state(:,6) = zeta;
 phase.state(:,7) = mFuel;
 phase.state(:,8) = Alpha;
+phase.state(:,9) = eta;
 
 stage = ones(1,length(time));
 stage(time>=output.result.solution.phase(7).time(end)) = 2;
