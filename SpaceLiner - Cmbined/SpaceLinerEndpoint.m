@@ -1,9 +1,9 @@
 function output = SpaceLinerEndpoint(input)
 auxdata = input.auxdata;
 
-% vF = input.phase(8).finalstate(4);
+% lonF = input.phase(9).finalstate(2);
 % 
-% output.objective = -vF;
+% output.objective = -lonF;
 
 
 

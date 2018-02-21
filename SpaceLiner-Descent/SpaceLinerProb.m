@@ -41,13 +41,13 @@ Stage2.mStruct = 134361.1;
 
 
 % SLEG / TOSCA
-% Stage2.mFuel = 151119.6-Stage2.mStruct;
+Stage2.mFuel = 151119.6-Stage2.mStruct;
 
 %  % NKorea-Japan optimised
 % Stage2.mFuel =1.7994e+05-Stage2.mStruct;
 
  % NKorea-Japan optimised test
-Stage2.mFuel =1.8606e+05-Stage2.mStruct;
+% Stage2.mFuel =1.8606e+05-Stage2.mStruct;
 
 
 
@@ -126,16 +126,16 @@ auxdata.PopInterp = PopInterp;
 %% If initial heading angle is bounded
 
 % zeta0 = deg2rad(70.18);
-% zeta0 = 1.208572; %SLEG comparison
+zeta0 = 1.208572; %SLEG comparison
 
 % zeta0 = 1.3090; %japan-germany optimised
 
 % zeta0 =  0.6458; %NKorea-japan optimised
-zeta0 =  1.0472; %NKorea-japan optimised test
+% zeta0 =  1.0472; %NKorea-germany optimised test
 %%
 
 altMin = 1;
-altMax = 90000;
+altMax = 150000;
 
 
 vMin = 1;
@@ -211,8 +211,8 @@ bankMax =   deg2rad(50);
 % lat0 = deg2rad(45.37); %Japan after TOSCA launch
 % lon0 = deg2rad(137.71);
 
-% lat0 = -0.2121191; % SLEG
-% lon0 = 2.7096137; % SLEG
+lat0 = -0.2121191; % SLEG
+lon0 = 2.7096137; % SLEG
 
 % lat0 = 0.8274; %central Japan after optimised launch
 % lon0 = 2.4508;
@@ -220,8 +220,8 @@ bankMax =   deg2rad(50);
 % lat0 = 1.0961; %germany after optimised launch
 % lon0 = -0.0022;
 
-lat0 = 0.7953; %NKorea after optimised launch
-lon0 = 2.4215;
+% lat0 = 0.8285; %NKorea after optimised launch
+% lon0 = 2.3460;
 
 
 auxdata.lon0 = lon0;
@@ -241,9 +241,10 @@ auxdata.lon0 = lon0;
 % gamma0 = -0.0175;
 
 %NKorea-germany test
-alt0 = 1.0100e+05;
-v0 = 6.8000e+03;
-gamma0 = -0.0175;
+% alt0 = 1.2000e+05;
+% alt0 = 8e+04;
+% v0 = 6800;
+% gamma0 = -0.0175;
 
 % %germany-japan
 % alt0 = 7.1000e+04;
@@ -251,9 +252,9 @@ gamma0 = -0.0175;
 % gamma0 = -0.0175;
 
 % %SLEG aus-germany
-% alt0 = 76087.115;
-% v0 = 7303.313;
-% gamma0 = -0.0000097;
+alt0 = 76087.115;
+v0 = 7303.313;
+gamma0 = -0.0000097;
 
 %japan-germany optimised
 % alt0 = 7.0998e+04;
@@ -352,11 +353,11 @@ bounds.phase.integral.upper = 1e9;
 % bounds.phase(1).path.lower = [0, -1];
 % bounds.phase(1).path.upper = [60000, 100];
 
-% bounds.phase(1).path.lower = [0, 0, -2.5];
-% bounds.phase(1).path.upper = [60000, 2e6, 2.5];
-
-bounds.phase(1).path.lower = [0, 0, -2.5]; 
+bounds.phase(1).path.lower = [0, 0, -2.5];
 bounds.phase(1).path.upper = [60000, 2e6, 2.5];
+
+% bounds.phase(1).path.lower = [0, 0, -1.5]; 
+% bounds.phase(1).path.upper = [30000, 1.3e6, 1.5];
 
 % bounds.phase(1).path.lower = [0, 0, -1]; 
 % bounds.phase(1).path.upper = [30000, 1.5e6, 1];
@@ -381,7 +382,7 @@ guess.phase(1).state(:,5)   = [0;0]; %
 
 % guess.phase(1).state(:,6)   = [deg2rad(180);deg2rad(180)];
 % guess.phase(1).state(:,6)   = [0;0]; % For eastward
-% guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(-45)]; % Aus-Germany
+guess.phase(1).state(:,6)   = [deg2rad(90);deg2rad(-45)]; % Aus-Germany
 % guess.phase(1).state(:,6)   = [deg2rad(60);deg2rad(-40)]; % Japan-Germany
 % guess.phase(1).state(:,6)   = [deg2rad(-10);deg2rad(90)]; %Aus-Canaveral
 % guess.phase(1).state(:,6)   = [deg2rad(110);deg2rad(270)]; %Japan-Florida
@@ -396,7 +397,7 @@ guess.phase(1).state(:,5)   = [0;0]; %
 % guess.phase(1).state(:,6)   = [deg2rad(79);deg2rad(-60)]; % japan-Germany opt
 % guess.phase(1).state(:,6)   = [deg2rad(100);deg2rad(240)]; % Germany-Japan
 % guess.phase(1).state(:,6)   = [deg2rad(100);deg2rad(230)]; % Germany-NKorea
-guess.phase(1).state(:,6)   = [deg2rad(75);deg2rad(-60)]; % NKorea-Germany opt
+% guess.phase(1).state(:,6)   = [deg2rad(75);deg2rad(-60)]; % NKorea-Germany opt
 
  guess.phase(1).state(:,7)   = [10*pi/180; 10*pi/180];
 guess.phase(1).state(:,8)   = [0;0];

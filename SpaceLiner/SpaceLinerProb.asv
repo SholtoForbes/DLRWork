@@ -263,7 +263,7 @@ bounds.phase(8).control = bounds.phase(2).control;
 % bounds.phase(8).finalstate.upper = [71000, lonMax, latMax, 7200, deg2rad(1), deg2rad(120),1.6038e+06, aoaMax];
 
 % korea-Germany 
-bounds.phase(8).finalstate.lower = [119000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
+bounds.phase(8).finalstate.lower = [99000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
 bounds.phase(8).finalstate.upper = [120000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
 
 %% Event bounds

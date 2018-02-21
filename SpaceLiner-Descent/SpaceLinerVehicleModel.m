@@ -12,6 +12,9 @@ zeta = states.zeta;
 aoa = controls.Alpha;
 bank = controls.eta;
 
+% if isnan(alt)
+%    alt = [1000; 60000]; 
+% end
 
 % =======================================================
 % Vehicle Model
@@ -30,17 +33,32 @@ m = auxdata.Stage2.mStruct+auxdata.Stage2.mFuel;
 %======================================================
 
 %% Flow =============================================================
+%% Flow =============================================================
 c = ppval(interp.c_spline,alt); % Calculate speed of sound using atmospheric data
+c(alt>=84000) = ppval(interp.c_spline,84000*ones(1,length(alt(alt>=84000))));
+% c = c';
+
 mach = v./c;
+mach(alt>=84000) = v(alt>=84000)./c(alt>=84000);
+% mach = mach';
+
 rho = ppval(interp.rho_spline,alt); % Calculate density using atmospheric data
+% rho(alt>=84000) = ppval(interp.rho_spline,84000);
+rho(alt>=84000) = ppval(interp.rho_spline,84000).*gaussmf (alt(alt>=84000), [10000 84000]);
+% rho = rho';
 
-q = 0.5 * rho .* (v .^2); % Calculating Dynamic Pressure
+% q = 0.5 * rho .* (v .^2); % Calculating Dynamic Pressure
 
-M = v./c; % Calculating Mach No (Descaled)
+% M = v./c; % Calculating Mach No (Descaled)
+% 
+% T0 = ppval(interp.T0_spline, alt); 
+% 
+% P0 = ppval(interp.P0_spline, alt);
 
-T0 = ppval(interp.T0_spline, alt); 
 
-P0 = ppval(interp.P0_spline, alt);
+% c = ppval(interp.c_spline,alt); % Calculate speed of sound using atmospheric data
+% mach = v./c;
+% rho = ppval(interp.rho_spline,alt); % Calculate density using atmospheric data
 
 %% Aerodynamics
 % interpolate coefficients

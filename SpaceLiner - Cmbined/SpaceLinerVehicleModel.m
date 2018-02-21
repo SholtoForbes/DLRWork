@@ -27,9 +27,9 @@ Stage2 = auxdata.Stage2;
 %    timeF = 1;
 % end
 
-if isnan(alt)
-   alt = [1000; 60000]; 
-end
+% if isnan(alt)
+%    alt = [1000; 60000]; 
+% end
 
 
 % Stage = 1;
@@ -57,20 +57,20 @@ end
 %======================================================
 
 %% Flow =============================================================
-c(alt<84000) = ppval(interp.c_spline,alt(alt<84000)); % Calculate speed of sound using atmospheric data
+c = ppval(interp.c_spline,alt); % Calculate speed of sound using atmospheric data
 c(alt>=84000) = ppval(interp.c_spline,84000*ones(1,length(alt(alt>=84000))));
-c = c';
+% c = c';
 
-mach(alt<84000) = v(alt<84000)./c(alt<84000);
+mach = v./c;
 mach(alt>=84000) = v(alt>=84000)./c(alt>=84000);
-mach = mach';
+% mach = mach';
 
-rho(alt<84000) = ppval(interp.rho_spline,alt(alt<84000)); % Calculate density using atmospheric data
+rho = ppval(interp.rho_spline,alt); % Calculate density using atmospheric data
 % rho(alt>=84000) = ppval(interp.rho_spline,84000);
 rho(alt>=84000) = ppval(interp.rho_spline,84000).*gaussmf (alt(alt>=84000), [10000 84000]);
-rho = rho';
+% rho = rho';
 
-q = 0.5 * rho .* (v .^2); % Calculating Dynamic Pressure
+% q = 0.5 * rho .* (v .^2); % Calculating Dynamic Pressure
 
 % M = v./c; % Calculating Mach No (Descaled)
 
