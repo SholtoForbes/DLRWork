@@ -161,7 +161,7 @@ lon0 = deg2rad(128.272375);
 % latF = deg2rad(53.77); % Germany
 % lonF = deg2rad(8.6359);% Germany
 
-latF = deg2rad(53.9832); % Germany
+latF = deg2rad(53.9832); % Germany over water
 lonF = deg2rad(8.310899);% Germany
 
 
@@ -170,7 +170,7 @@ auxdata.lon0 = lon0;
 aoaMin = 0;  aoaMax = 25*pi/180;
 
 % bankMin_ascent = -10*pi/180; bankMax_ascent =   10*pi/180;
-bankMin_ascent = -50*pi/180; bankMax_ascent =   50*pi/180;
+bankMin_ascent = -20*pi/180; bankMax_ascent =  20*pi/180;
 bankMin_descent = -50*pi/180; bankMax_descent =   50*pi/180;
 
 % Primal Bounds
@@ -215,7 +215,7 @@ bounds.phase(1).control.upper = [deg2rad(1), deg2rad(5)];
 % Time Bounds
 bounds.phase(1).initialtime.lower = 0;
 bounds.phase(1).initialtime.upper = 0;
-bounds.phase(1).finaltime.lower = 50;
+bounds.phase(1).finaltime.lower = 0;
 bounds.phase(1).finaltime.upper = 1000;
 
 %% Define Path Constraints
@@ -236,9 +236,11 @@ bounds.phase(1).finaltime.upper = 1000;
 bounds.phase(1).path.lower = [0, 0, -2.5*9.81]; % if using total acceleration, this might nee dto be in gs
 bounds.phase(1).path.upper = [40000, 1.3e6, 2.5*9.81];
 
+% bounds.phase(1).path.lower = [0, 0, -4*9.81]; % if using total acceleration, this might nee dto be in gs
+% bounds.phase(1).path.upper = [40000, 1.3e6, 4*9.81];
 
 %% Bound integral if necessary
-bounds.phase(1).integral.lower = 0;
+bounds.phase(1).integral.lower = -1e9;
 bounds.phase(1).integral.upper = 1e9;
 
 
@@ -254,6 +256,8 @@ bounds.phase(2).finaltime = bounds.phase(1).finaltime;
 bounds.phase(2).control = bounds.phase(1).control;
 
 bounds.phase(2).path = bounds.phase(1).path;
+% bounds.phase(2).path.lower(4) = -20;
+% bounds.phase(2).path.upper(4) = 0;
 
 bounds.phase(2).integral = bounds.phase(1).integral;
 
@@ -282,6 +286,9 @@ bounds.phase(8).control = bounds.phase(2).control;
 
 
 bounds.phase(9) = bounds.phase(8);
+
+% bounds.phase(9).path = bounds.phase(1).path;
+
 bounds.phase(9).state.lower(9) = bankMin_descent;
 bounds.phase(9).state.upper(9) = bankMax_descent;
 bounds.phase(9).initialtime.upper = 1000;
@@ -312,12 +319,20 @@ bounds.phase(9).finaltime.upper = 10000;
 % bounds.phase(9).finalstate.lower = [99000, lonMin, latMin, 6800,deg2rad(-30), deg2rad(75), 0, aoaMin, bankMin]; % Japan-Germany
 % bounds.phase(9).finalstate.upper = [101000, lonMax, latMax, 7200, deg2rad(30), deg2rad(75),1.6038e+06, aoaMax, bankMax];
 
-% bounds.phase(9).finalstate.lower = [1000, lonMin, latMin, 100,deg2rad(-60), deg2rad(10), 0, aoaMin, bankMin_descent]; % Japan-Germany
-% bounds.phase(9).finalstate.upper = [100000, lonMax, latMax, 7200, deg2rad(60), deg2rad(10),1.6038e+06, aoaMax, bankMax_descent];
+% bounds.phase(9).finalstate.lower = [1000, lonMin, latMin, 100,deg2rad(-89), deg2rad(10), 0, aoaMin, bankMin_descent]; % Japan-Germany
+% bounds.phase(9).finalstate.upper = [100000, lonMax, latMax, 10000, deg2rad(89), deg2rad(10),1.6038e+06, aoaMax, bankMax_descent];
 
 bounds.phase(9).finalstate.lower = [1000, lonF-lon0+2*pi, latF, 100,deg2rad(-20), -deg2rad(90), 0, aoaMin, bankMin_descent]; % Japan-Germany
 bounds.phase(9).finalstate.upper = [5000, lonF-lon0+2*pi, latF, 200, deg2rad(20), deg2rad(90),1.6038e+06, aoaMax, bankMax_descent];
 
+% bounds.phase(9).finalstate.lower = bounds.phase(1).state.lower;
+% bounds.phase(9).finalstate.upper = bounds.phase(1).state.upper;
+
+bounds.phase(9).finalstate.lower(2) =lonF-lon0+2*pi;
+bounds.phase(9).finalstate.upper(2) =lonF-lon0+2*pi;
+
+bounds.phase(9).finalstate.lower(3) =latF;
+bounds.phase(9).finalstate.upper(3) =latF;
 %% Event bounds
 bounds.eventgroup(1).lower = zeros(1,10);
 bounds.eventgroup(1).upper = zeros(1,10);
@@ -705,6 +720,27 @@ for i = 1:length(alt)
 
 end
 
+
+%
+altpop     = alt;
+lonpop     = lon;
+latpop     = lat;
+
+lonpop = lonpop + auxdata.lon0;
+lonpop(lonpop > pi) = lonpop(lonpop > pi) - 2*pi;
+lonpop(lonpop < -pi) = lonpop(lonpop < -pi) + 2*pi;
+
+AltCost1 = (100000-altpop)/10000;
+
+AltCost1(altpop>90000) = gaussmf(altpop(altpop>90000),[10000 90000]);
+
+pop1 = auxdata.PopInterp(rad2deg(lonpop),rad2deg(latpop));
+
+popCost1 = pop1.*AltCost1; % for flights which go over large amounts of
+
+
+
+
 figure(201)
 subplot(5,2,1)
 hold on
@@ -769,6 +805,7 @@ ylabel('Heating Rate (MW/m^2)')
 figure(230)
 hold on
 plot3(lon,lat,alt)
+plot3(lon,lat,popCost1)
 
 
 %%
@@ -779,9 +816,18 @@ hold on
 
 axesm('pcarree','Origin',[0 rad2deg(lon0) 0])
 geoshow('landareas.shp','FaceColor',[0.8 .8 0.8])
+% plotm(rad2deg(lat),rad2deg(lon+lon0))
 plotm(rad2deg(lat),rad2deg(lon+lon0))
     
-    
+    cities = shaperead('worldcities', 'UseGeoCoords', true);
+lats = extractfield(cities,'Lat');
+lons = extractfield(cities,'Lon');
+geoshow(lats, lons,...
+        'DisplayType', 'point',...
+        'Marker', 'o',...
+        'MarkerEdgeColor', 'r',...
+        'MarkerFaceColor', 'r',...
+        'MarkerSize', 2)
 % 
 % % Return Forward
 % forward0 = [alt2(1),gamma2(1),v2(1),zeta2(1),lat2(1),lon2(1), mFuel2(1)];

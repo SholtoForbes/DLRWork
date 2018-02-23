@@ -54,7 +54,7 @@ output.objective = input.phase(1).integral+...
     input.phase(8).integral+...
     input.phase(9).integral;
 
-
+% output.objective = input.phase(8).integral;
 
 % gammaF = input.phase(1).finalstate(5);
 % 

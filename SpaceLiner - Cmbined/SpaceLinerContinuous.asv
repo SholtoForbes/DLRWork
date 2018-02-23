@@ -47,13 +47,13 @@ lon1 = lon1 + auxdata.lon0;
 lon1(lon1 > pi) = lon1(lon1 > pi) - 2*pi;
 lon1(lon1 < -pi) = lon1(lon1 < -pi) + 2*pi;
 
-AltCost1 = (100000-alt1)/100000;
+AltCost1 = (80000-alt1)/10000;
 % AltCost1 = 1/gaussmf(alt1,[10000 90000]);
-AltCost1(alt1>90000) = gaussmf(alt1(alt1>90000),[10000 90000]);
+% AltCost1(alt1>90000) = gaussmf(alt1(alt1>90000),[10000 90000]);
 
 pop1 = auxdata.PopInterp(rad2deg(lon1),rad2deg(lat1));
 
-popCost1 = pop1.*AltCost1'; % for flights which go over large amounts of
+popCost1 = pop1.*AltCost1; % for flights which go over large amounts of
 
 
 phaseout(1).integrand = popCost1 + q1/1e4;
@@ -81,14 +81,17 @@ lon2 = lon2 + auxdata.lon0;
 lon2(lon2 > pi) = lon2(lon2 > pi) - 2*pi;
 lon2(lon2 < -pi) = lon2(lon2 < -pi) + 2*pi;
 
-AltCost2 = (100000-alt2)/100000;
+AltCost2 = (40000-alt2)/10000;
 % AltCost2 = 1/gaussmf(alt2,[10000 90000]);
-AltCost2(alt2>90000) = gaussmf(alt2(alt2>90000),[10000 90000]);
+% AltCost2(alt2>90000) = gaussmf(alt2(alt2>90000),[10000 90000]);
 
 pop2 = auxdata.PopInterp(rad2deg(lon2),rad2deg(lat2));
 
-popCost2 = pop2.*AltCost2'; % for flights which go over large amounts of
+% AltCost2(pop2==0) = 0;
 
+popCost2 = pop2.*AltCost2; % for flights which go over large amounts of
+
+% phaseout(2).path = [q2,heating_rate2,total_acceleration2',AltCost2];
 
 phaseout(2).integrand = popCost2 + q2/1e4;
 %% 3
@@ -114,14 +117,17 @@ lon3 = lon3 + auxdata.lon0;
 lon3(lon3 > pi) = lon3(lon3 > pi) - 2*pi;
 lon3(lon3 < -pi) = lon3(lon3 < -pi) + 2*pi;
 
-AltCost3 = (100000-alt3)/100000;
+AltCost3 = (40000-alt3)/10000;
 % AltCost3 = 1/gaussmf(alt3,[10000 90000]);
-AltCost3(alt3>90000) = gaussmf(alt3(alt3>90000),[10000 90000]);
+% AltCost3(alt3>90000) = gaussmf(alt3(alt3>90000),[10000 90000]);
 
 pop3 = auxdata.PopInterp(rad2deg(lon3),rad2deg(lat3));
 
-popCost3 = pop3.*AltCost3'; % for flights which go over large amounts of
+% AltCost3(pop3==0) = 0;
 
+popCost3 = pop3.*AltCost3; % for flights which go over large amounts of
+
+% phaseout(3).path = [q3,heating_rate3,total_acceleration3',AltCost3];
 
 phaseout(3).integrand = popCost3 + q3/1e4;
 %% 4
@@ -147,14 +153,17 @@ lon4 = lon4 + auxdata.lon0;
 lon4(lon4 > pi) = lon4(lon4 > pi) - 2*pi;
 lon4(lon4 < -pi) = lon4(lon4 < -pi) + 2*pi;
 
-AltCost4 = (100000-alt4)/10000;
+AltCost4 = (40000-alt4)/10000;
 % AltCost4 = 1/gaussmf(alt4,[10000 90000]);
-AltCost4(alt4>90000) = gaussmf(alt4(alt4>90000),[10000 90000]);
+% AltCost4(alt4>90000) = gaussmf(alt4(alt4>90000),[10000 90000]);
 
 pop4 = auxdata.PopInterp(rad2deg(lon4),rad2deg(lat4));
 
-popCost4 = pop4.*AltCost4'; % for flights which go over large amounts of
+% AltCost4(pop4==0) = 0;
 
+popCost4 = pop4.*AltCost4; % for flights which go over large amounts of
+
+% phaseout(4).path = [q4,heating_rate4,total_acceleration4',AltCost4];
 
 phaseout(4).integrand = popCost4 + q4/1e4;
 %% 5
@@ -180,14 +189,17 @@ lon5 = lon5 + auxdata.lon0;
 lon5(lon5 > pi) = lon5(lon5 > pi) - 2*pi;
 lon5(lon5 < -pi) = lon5(lon5 < -pi) + 2*pi;
 
-AltCost5 = (100000-alt5)/10000;
+AltCost5 = (40000-alt5)/10000;
 % AltCost5 = 1/gaussmf(alt5,[10000 90000]);
-AltCost5(alt5>90000) = gaussmf(alt5(alt5>90000),[10000 90000]);
+% AltCost5(alt5>90000) = gaussmf(alt5(alt5>90000),[10000 90000]);
 
 pop5 = auxdata.PopInterp(rad2deg(lon5),rad2deg(lat5));
 
-popCost5 = pop5.*AltCost5'; % for flights which go over large amounts of
+% AltCost5(pop5==0) = 0;
 
+popCost5 = pop5.*AltCost5; % for flights which go over large amounts of
+
+% phaseout(5).path = [q5,heating_rate5,total_acceleration5',AltCost5];
 
 phaseout(5).integrand = popCost5 + q5/1e4;
 %% 6
@@ -213,16 +225,19 @@ lon6 = lon6 + auxdata.lon0;
 lon6(lon6 > pi) = lon6(lon6 > pi) - 2*pi;
 lon6(lon6 < -pi) = lon6(lon6 < -pi) + 2*pi;
 
-AltCost6 = (100000-alt6)/10000;
+AltCost6 = (40000-alt6)/10000;
 % AltCost6 = 1/gaussmf(alt6,[10000 90000]);
-AltCost6(alt6>90000) = gaussmf(alt6(alt6>90000),[10000 90000]);
+% AltCost6(alt6>90000) = gaussmf(alt6(alt6>90000),[10000 90000]);
 
 pop6 = auxdata.PopInterp(rad2deg(lon6),rad2deg(lat6));
 
-popCost6 = pop6.*AltCost6'; % for flights which go over large amounts of
+% AltCost6(pop6==0) = 0;
 
+popCost6 = pop6.*AltCost6; % for flights which go over large amounts of
 
-phaseout(6).integrand = popCost6 + q6/1e4;
+% phaseout(6).path = [q6,heating_rate6,total_acceleration6',AltCost6];
+
+phaseout(6).integrand = popCost6 + heating_rate6/1e4;
 %% 7
 Alphadot7  = input.phase(7).control(:,1)';
 etadot7  = input.phase(7).control(:,2)';
@@ -246,16 +261,19 @@ lon7 = lon7 + auxdata.lon0;
 lon7(lon7 > pi) = lon7(lon7 > pi) - 2*pi;
 lon7(lon7 < -pi) = lon7(lon7 < -pi) + 2*pi;
 
-AltCost7 = (100000-alt7)/10000;
+AltCost7 = (40000-alt7)/10000;
 % AltCost7 = 1/gaussmf(alt7,[10000 90000]);
-AltCost7(alt7>90000) = gaussmf(alt7(alt7>90000),[10000 90000]);
+% AltCost7(alt7>90000) = gaussmf(alt7(alt7>90000),[10000 90000]);
 
 pop7 = auxdata.PopInterp(rad2deg(lon7),rad2deg(lat7));
 
-popCost7 = pop7.*AltCost7'; % for flights which go over large amounts of
+% AltCost7(pop7==0) = 0;
 
+popCost7 = pop7.*AltCost7; % for flights which go over large amounts of
 
-phaseout(7).integrand = popCost7 + q7/1e4;
+% phaseout(7).path = [q7,heating_rate7,total_acceleration7',AltCost7];
+
+phaseout(7).integrand = popCost7 + heating_rate7/1e4;
 %% 8
 Alphadot8  = input.phase(8).control(:,1)';
 etadot8  = input.phase(8).control(:,2)';
@@ -279,16 +297,20 @@ lon8 = lon8 + auxdata.lon0;
 lon8(lon8 > pi) = lon8(lon8 > pi) - 2*pi;
 lon8(lon8 < -pi) = lon8(lon8 < -pi) + 2*pi;
 
-AltCost8 = (100000-alt8)/10000;
+AltCost8 = (40000-alt8)/10000;
+
 % AltCost8 = 1/gaussmf(alt8,[10000 90000]);
-AltCost8(alt8>90000) = gaussmf(alt8(alt8>90000),[10000 90000]);
+% AltCost8(alt8>90000) = gaussmf(alt8(alt8>90000),[10000 90000]);
 
 pop8 = auxdata.PopInterp(rad2deg(lon8),rad2deg(lat8));
 
-popCost8 = pop8.*AltCost8'; % for flights which go over large amounts of
+% AltCost8(pop8==0) = 0;
 
+popCost8 = pop8.*AltCost8; % for flights which go over large amounts of
 
-phaseout(8).integrand = popCost8 + q8/1e4;
+% phaseout(8).path = [q8,heating_rate8,total_acceleration8',AltCost8];
+
+phaseout(8).integrand = popCost8 + heating_rate8/1e4;
 %% 9
 Alphadot9  = input.phase(9).control(:,1)';
 etadot9  = input.phase(9).control(:,2)';
@@ -312,16 +334,16 @@ lon9 = lon9 + auxdata.lon0;
 lon9(lon9 > pi) = lon9(lon9 > pi) - 2*pi;
 lon9(lon9 < -pi) = lon9(lon9 < -pi) + 2*pi;
 
-AltCost9 = (100000-alt9)/10000;
+AltCost9 = (80000-alt9)/10000;
 % AltCost9 = 1/gaussmf(alt9,[10000 90000]);
-AltCost9(alt9>90000) = gaussmf(alt9(alt9>90000),[10000 90000]);
+% AltCost9(alt9>90000) = gaussmf(alt9(alt9>90000),[10000 90000]);
 
 pop9 = auxdata.PopInterp(rad2deg(lon9),rad2deg(lat9));
 
-popCost9 = pop9.*AltCost9'; % for flights which go over large amounts of
+popCost9 = pop9.*AltCost9; % for flights which go over large amounts of
 
 
-phaseout(9).integrand = popCost9 + q9/1e4;
+phaseout(9).integrand = popCost9 + heating_rate9/1e4;
 end
 
 %======================================================
