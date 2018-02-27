@@ -67,7 +67,7 @@ mach(alt>=84000) = v(alt>=84000)./c(alt>=84000);
 
 rho = ppval(interp.rho_spline,alt); % Calculate density using atmospheric data
 % rho(alt>=84000) = ppval(interp.rho_spline,84000);
-rho(alt>=84000) = ppval(interp.rho_spline,84000).*gaussmf (alt(alt>=84000), [10000 84000]);
+rho(alt>=84000) = ppval(interp.rho_spline,84000).*gaussmf (alt(alt>=84000), [1000 84000]);
 % rho = rho';
 
 % q = 0.5 * rho .* (v .^2); % Calculating Dynamic Pressure

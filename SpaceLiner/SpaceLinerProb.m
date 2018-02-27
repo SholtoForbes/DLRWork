@@ -158,12 +158,12 @@ bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 105, deg2rad(89), deg2rad(80), 1.6038e+06, aoaMax];
 
 % %Japan-Germany
-% bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(60), 1.28e+06, aoaMin] ;
-% bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(85), 1.32e+06, aoaMax];
+bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(60), 1.28e+06, aoaMin] ;
+bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(85), 1.32e+06, aoaMax];
 
 %NKorea-Germany
-bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(60), 1.28e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(80), 1.32e+06, aoaMax];
+% bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 100, deg2rad(80), deg2rad(60), 1.28e+06, aoaMin] ;
+% bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(80), 1.32e+06, aoaMax];
 
 
 %Germany-Japan
@@ -200,7 +200,7 @@ bounds.phase(1).finaltime.upper = 5000;
 
 % 
 bounds.phase(1).path.lower = [0, -2.5*9.81]; 
-bounds.phase(1).path.upper = [30000, 2.5*9.81];
+bounds.phase(1).path.upper = [60000, 2.5*9.81];
 
 
 %% Bound integral if necessary
@@ -263,8 +263,12 @@ bounds.phase(8).control = bounds.phase(2).control;
 % bounds.phase(8).finalstate.upper = [71000, lonMax, latMax, 7200, deg2rad(1), deg2rad(120),1.6038e+06, aoaMax];
 
 % korea-Germany 
-bounds.phase(8).finalstate.lower = [119000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
-bounds.phase(8).finalstate.upper = [120000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
+% bounds.phase(8).finalstate.lower = [119000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
+% bounds.phase(8).finalstate.upper = [120000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
+
+%Test
+bounds.phase(8).finalstate.lower = [99000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(60), 0, aoaMin]; % Japan-Germany
+bounds.phase(8).finalstate.upper = [101000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
 
 %% Event bounds
 bounds.eventgroup(1).lower = zeros(1,9);
@@ -309,9 +313,9 @@ guess.phase(1).state(:,3)   = [0.67;.75]; %japan - germany
 guess.phase(1).state(:,4)   = [100,1100];
 guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
 
-% guess.phase(1).state(:,6)   = [deg2rad(75),deg2rad(80)]; %Japan-germany
+guess.phase(1).state(:,6)   = [deg2rad(75),deg2rad(80)]; %Japan-germany
 % guess.phase(1).state(:,6)   = [deg2rad(117),deg2rad(120)]; %Germany-Japan
-guess.phase(1).state(:,6)   = [deg2rad(71),deg2rad(80)]; %korea-germany
+% guess.phase(1).state(:,6)   = [deg2rad(71),deg2rad(80)]; %korea-germany
 
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
