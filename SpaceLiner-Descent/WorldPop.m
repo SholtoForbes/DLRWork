@@ -2,9 +2,9 @@
 % Sholto Forbes-Spyratos 2018
 clear all
 
-[popdata,tiffdata] = geotiffread('pop_lowres');
+% [popdata,tiffdata] = geotiffread('pop_lowres');
 % [popdata,tiffdata] = geotiffread('gpw_v4_population_count_rev10_2020_1_deg');
-% [popdata,tiffdata] = geotiffread('gpw_v4_population_count_rev10_2020_2pt5_min');
+[popdata,tiffdata] = geotiffread('gpw_v4_population_count_rev10_2020_2pt5_min');
 popdata(popdata < 0) = 0;
 
 popdata = flipud(popdata);

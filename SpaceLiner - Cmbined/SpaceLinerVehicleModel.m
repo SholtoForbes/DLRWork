@@ -1,4 +1,4 @@
-function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate,total_acceleration] = SpaceLinerVehicleModel(t,phase,throttle,auxdata,stage)
+function [altdot,xidot,phidot,gammadot,a,zetadot, q, M, D, rho,L,Fueldt,T,Isp1,Isp2,m,heating_rate,total_acceleration,Cl,Cd] = SpaceLinerVehicleModel(t,phase,throttle,auxdata,stage)
 
 % STF = 0.6; %Staging Time Fraction
 
@@ -131,7 +131,7 @@ end
 
 %Motion in Geodetic Rotational Coordinates =================================================
 % eta = 0;
-[altdot,xidot,phidot,gammadot,a,zetadot] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta');
+[altdot,xidot,phidot,gammadot,a,zetadot,total_lift] = RotCoords(alt'+auxdata.Re,lon',lat',gamma',v',zeta',L',D',T',m',Alpha',eta');
 
 % Aero Data =============================================================
 
@@ -153,9 +153,9 @@ R_Nr = 1;
 heating_rate = C*sqrt(rho/rho_r*R_Nr/R_N).*(v/v_r).^3.05*1e4;
 % =========================================================================
 
-% total_acceleration = sqrt(a.^2 + (v'.*gammadot).^2 + (v'.*zetadot).^2)/9.81; % remember that this is in gs
+% total_acceleration = a;
 
-total_acceleration = a;
+total_acceleration = sqrt(a.^2 + (total_lift./m').^2); % Lateral and axial acceleration
 end
 
 
