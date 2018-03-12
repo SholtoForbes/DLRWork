@@ -104,7 +104,7 @@ popCost2 = pop2.*AltCost2; % for flights which go over large amounts of
 % end
 % phaseout(2).path = [q2,heating_rate2,total_acceleration2',AltCost2];
 
-% heating_rate_cost2 = heating_rate2;
+% phaseout(2).integrand = heating_rate2/1e5;
 % heating_rate_cost2(heating_rate2<1.3e6) = 0;
 % phaseout(2).integrand = popCost2 + heating_rate_cost2;
 
@@ -145,7 +145,7 @@ popCost3 = pop3.*AltCost3; % for flights which go over large amounts of
 
 % phaseout(3).path = [q3,heating_rate3,total_acceleration3',AltCost3];
 
-% heating_rate_cost3 = heating_rate3;
+% phaseout(3).integrand = heating_rate3/1e5;
 % heating_rate_cost3(heating_rate3<1.3e6) = 0;
 % phaseout(3).integrand = popCost3 + heating_rate_cost3;
 phaseout(3).integrand = popCost3 + heating_rate3/1e5;
@@ -183,7 +183,7 @@ popCost4 = pop4.*AltCost4; % for flights which go over large amounts of
 
 % phaseout(4).path = [q4,heating_rate4,total_acceleration4',AltCost4];
 
-% heating_rate_cost4 = heating_rate4;
+% phaseout(4).integrand = heating_rate4/1e5;
 % heating_rate_cost4(heating_rate4<1.3e6) = 0;
 % phaseout(4).integrand = popCost4 + heating_rate_cost4;
 phaseout(4).integrand = popCost4 + heating_rate4/1e5;
@@ -221,7 +221,7 @@ popCost5 = pop5.*AltCost5; % for flights which go over large amounts of
 
 % phaseout(5).path = [q5,heating_rate5,total_acceleration5',AltCost5];
 
-% heating_rate_cost5 = heating_rate5;
+% phaseout(5).integrand = heating_rate5/1e6;
 % heating_rate_cost5(heating_rate5<1.3e6) = 0;
 % phaseout(5).integrand = popCost5 + heating_rate_cost5;
 
@@ -259,7 +259,7 @@ pop6(not(isnan(popCost6))) = auxdata.PopInterp(rad2deg(lon6(not(isnan(popCost6))
 popCost6 = pop6.*AltCost6; % for flights which go over large amounts of
 
 % phaseout(6).path = [q6,heating_rate6,total_acceleration6',AltCost6];
-% heating_rate_cost6 = heating_rate6;
+% phaseout(6).integrand = heating_rate6/1e5;
 % heating_rate_cost6(heating_rate6<1.3e6) = 0;
 % phaseout(6).integrand = popCost6 + heating_rate_cost6;
 phaseout(6).integrand = popCost6 + heating_rate6/1e5;
@@ -296,7 +296,7 @@ pop7(not(isnan(popCost7))) = auxdata.PopInterp(rad2deg(lon7(not(isnan(popCost7))
 popCost7 = pop7.*AltCost7; % for flights which go over large amounts of
 
 % phaseout(7).path = [q7,heating_rate7,total_acceleration7',AltCost7];
-% heating_rate_cost7 = heating_rate7;
+% phaseout(7).integrand = heating_rate7/1e5;
 % heating_rate_cost7(heating_rate7<1.3e6) = 0;
 % phaseout(7).integrand = popCost7 + heating_rate_cost7;
 phaseout(7).integrand = popCost7 + heating_rate7/1e5;
@@ -333,7 +333,7 @@ pop8(not(isnan(popCost8))) = auxdata.PopInterp(rad2deg(lon8(not(isnan(popCost8))
 popCost8 = pop8.*AltCost8; % for flights which go over large amounts of
 
 % phaseout(8).path = [q8,heating_rate8,total_acceleration8',AltCost8];
-% heating_rate_cost8 = heating_rate8;
+% phaseout(8).integrand = heating_rate8/1e5;
 % heating_rate_cost8(heating_rate8<1.3e6) = 0;
 % phaseout(8).integrand = popCost8 + heating_rate_cost8;
 phaseout(8).integrand = popCost8 + heating_rate8/1e5;
@@ -369,7 +369,7 @@ pop9 = NaN*ones(length(lon9),1);
 pop9(not(isnan(popCost9))) = auxdata.PopInterp(rad2deg(lon9(not(isnan(popCost9)))),rad2deg(lat9(not(isnan(popCost9)))));
 popCost9 = pop9.*AltCost9; % for flights which go over large amounts of
 
-% heating_rate_cost9 = heating_rate9;
+% phaseout(9).integrand = heating_rate9/1e5;
 % heating_rate_cost9(heating_rate9<1.3e6) = 0;
 % phaseout(9).integrand = popCost9 + heating_rate_cost9;
 phaseout(9).integrand = popCost9 + heating_rate9/1e5;

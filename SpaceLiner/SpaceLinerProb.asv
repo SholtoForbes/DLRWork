@@ -149,15 +149,15 @@ lon0 = deg2rad(-85.614341);
 %  lat0 = deg2rad(37.533151); % Close to Suzu, middle north Japan
 % lon0 = deg2rad(137.276039);
 
-aoaMin = -10*pi/180;  aoaMax = 30*pi/180;
+aoaMin = 0;  aoaMax = 20*pi/180;
 % bankMin1 = -50*pi/180; bankMax1 =   50*pi/180;
 
 % Primal Bounds
 % bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
 % bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax];
 
-bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), pi/2, 0, aoaMin];
-bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), 3/2*pi, 1.6038e+06, aoaMax];
+bounds.phase(1).state.lower = [0, lonMin, latMin, 0, -deg2rad(50), -pi, 0, aoaMin];
+bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), pi, 1.6038e+06, aoaMax];
 
 
 % Initial States
@@ -178,8 +178,8 @@ bounds.phase(1).state.upper = [200000, lonMax, latMax, 15000, deg2rad(85), 3/2*p
 % bounds.phase(1).initialstate.upper = [1200,lon0, lat0, 120, deg2rad(85), deg2rad(130), 1.32e+06, aoaMax];
 
 % %FLorida-aus
-bounds.phase(1).initialstate.lower = [500,lon0, lat0, 50, deg2rad(86), deg2rad(91), 1.36e+06, aoaMin] ;
-bounds.phase(1).initialstate.upper = [550,lon0, lat0, 60, deg2rad(88), deg2rad(269), 1.37e+06, aoaMax];
+bounds.phase(1).initialstate.lower = [500,-0.005, lat0-0.005, 50, deg2rad(87), deg2rad(91), 213213, aoaMin] ;
+bounds.phase(1).initialstate.upper = [550,0.005, lat0+0.005, 60, deg2rad(88), deg2rad(269), 1.37e+06, aoaMax];
 
 
 bounds.phase(1).finalstate.lower = bounds.phase(1).state.lower;
@@ -278,8 +278,8 @@ bounds.phase(8).control = bounds.phase(2).control;
 % bounds.phase(8).finalstate.upper = [120000, lonMax, latMax, 7200, deg2rad(1), deg2rad(60),1.6038e+06, aoaMax];
 
 %Test
-bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(200), 0, aoaMin]; % Florida-aus
-bounds.phase(8).finalstate.upper = [81000, lonMax, latMax, 7200, deg2rad(1), deg2rad(200),1.6038e+06, aoaMax];
+bounds.phase(8).finalstate.lower = [70000, lonMin, latMin, 6800,deg2rad(-1), deg2rad(180), 0, aoaMin]; % Japan-Germany
+bounds.phase(8).finalstate.upper = [71000, lonMax, latMax, 7200, deg2rad(1), deg2rad(180),1.6038e+06, aoaMax];
 
 %% Event bounds
 bounds.eventgroup(1).lower = zeros(1,9);
@@ -314,22 +314,19 @@ guess.phase(1).state(:,1)   = [2000;7000];
 % guess.phase(1).state(:,2)   = [2.5;2.55];
 % guess.phase(1).state(:,3)   = [0.7;.75]; %japan - germany
 
-% guess.phase(1).state(:,2)   = [2.238;2.3];
-% guess.phase(1).state(:,3)   = [0.67;.75]; %japan - germany
+guess.phase(1).state(:,2)   = [2.238;2.3];
+guess.phase(1).state(:,3)   = [0.67;.75]; %japan - germany
 
 % guess.phase(1).state(:,2)   = [0.15;0.1]; %germany-japan
 % guess.phase(1).state(:,3)   = [0.95;.1];
 
-guess.phase(1).state(:,2)   = [lon0;lon0-0.01];
-guess.phase(1).state(:,3)   = [0.;0.]; %
 
 guess.phase(1).state(:,4)   = [100,1100];
 guess.phase(1).state(:,5)   = [deg2rad(80),deg2rad(80)];
 
-% guess.phase(1).state(:,6)   = [deg2rad(75),deg2rad(80)]; %Japan-germany
+guess.phase(1).state(:,6)   = [deg2rad(75),deg2rad(80)]; %Japan-germany
 % guess.phase(1).state(:,6)   = [deg2rad(117),deg2rad(120)]; %Germany-Japan
 % guess.phase(1).state(:,6)   = [deg2rad(71),deg2rad(80)]; %korea-germany
-guess.phase(1).state(:,6)   = [deg2rad(180),deg2rad(180)]; %Florida-aus
 
 guess.phase(1).state(:,7) 	= [1.6038e+06, 1.500e+06];
 guess.phase(1).state(:,8)   = [1*pi/180; 1*pi/180];
@@ -345,22 +342,13 @@ guess.phase(1).integral = 0;
 % bounds.eventgroup(1).lower = [zeros(1,10)];
 % bounds.eventgroup(1).upper = [zeros(1,10)]; 
 
-% guess.phase(2).state = guess.phase(1).state + [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-% guess.phase(3).state = guess.phase(2).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-% guess.phase(4).state = guess.phase(3).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-% guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-% guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-% guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-% guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-
-guess.phase(2).state = guess.phase(1).state + [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(3).state = guess.phase(2).state+ [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(4).state = guess.phase(3).state+ [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(5).state = guess.phase(4).state+ [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(6).state = guess.phase(5).state+ [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(7).state = guess.phase(6).state+ [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-guess.phase(8).state = guess.phase(7).state+ [5000 5000; -0.05 -0.05;.0 .0; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
-
+guess.phase(2).state = guess.phase(1).state + [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(3).state = guess.phase(2).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(4).state = guess.phase(3).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(5).state = guess.phase(4).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(6).state = guess.phase(5).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(7).state = guess.phase(6).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
+guess.phase(8).state = guess.phase(7).state+ [5000 5000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(10) -deg2rad(10);0 0;-100000 -100000;0 0]';
 
 guess.phase(2).control = guess.phase(1).control;
 guess.phase(3).control = guess.phase(2).control;
@@ -570,7 +558,6 @@ stage_forward(time_forward>=output.result.solution.phase(7).time(end)) = 2;
 
 
 [f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time(end),forward0);
-
 % [f_t, f_y] = ode23(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time,Alpha,f_t),ControlInterp(time,throttle,f_t),time(end)),time(1:end),forward0);
 
 
