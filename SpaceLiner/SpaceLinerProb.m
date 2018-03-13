@@ -27,23 +27,39 @@ auxdata.interp.P0_spline = spline( interp.Atmosphere(:,1),  interp.Atmosphere(:,
 Stage1.A = 93.25; %Reference Area in m² 
 Stage1.mStruct = 205245.8;
 
-Stage1.T_SL = 1961*9*1e3; %for mixture ratio 6 with all boosters active
-Stage1.Isp_SL = 389;
 
-Stage1.T_vac = 2206*9*1e3;
-Stage1.Isp_vac = 437;
+% mixture ratio 6
+% Stage1.T_SL = 1961*9*1e3; %for mixture ratio 6 with all boosters active
+% Stage1.Isp_SL = 389;
+% 
+% Stage1.T_vac = 2206*9*1e3;
+% Stage1.Isp_vac = 437;
+
+% mixture ration 6.5
+Stage1.T_SL = 2111*9*1e3; %for mixture ratio 6 with all boosters active
+Stage1.Isp_SL = 390;
+
+Stage1.T_vac = 2356*9*1e3;
+Stage1.Isp_vac = 435;
 
 Stage2.A = 461; %Reference Area in m² 
 Stage2.mStruct = 134361.1;
 
-Stage2.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
-Stage2.Isp_SL = 363;
+% Stage2.T_SL = 1830*2*1e3; %for mixture ratio 6 with all boosters active
+% Stage2.Isp_SL = 363;
+% 
+% Stage2.T_vac = 2268*2*1e3;
+% Stage2.Isp_vac = 449;
 
-Stage2.T_vac = 2268*2*1e3;
-Stage2.Isp_vac = 449;
+Stage2.T_SL = 1986*2*1e3; %for mixture ratio 6 with all boosters active
+Stage2.Isp_SL = 367;
+
+Stage2.T_vac = 2425*2*1e3;
+Stage2.Isp_vac = 448;
 
 auxdata.Stage1 = Stage1;
 auxdata.Stage2 = Stage2;
+
 
 
 %%
