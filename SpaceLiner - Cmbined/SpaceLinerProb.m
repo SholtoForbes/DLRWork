@@ -318,8 +318,8 @@ bounds.phase(1).state.lower = [0, -0.5, lat0-0.5, 0, -deg2rad(89), deg2rad(90), 
 bounds.phase(1).state.upper = [200000, 0.5, lat0+0.5, 10000, deg2rad(89), deg2rad(270), 1.6038e+06, aoaMax, bankMax_ascent];
 end
 if mission ==3 
-bounds.phase(1).state.lower = [0, -0.5, lat0-.5, 0, -deg2rad(89), deg2rad(91), 0, aoaMin, bankMin_ascent];
-bounds.phase(1).state.upper = [200000, 0.5, lat0+.5, 10000, deg2rad(89), deg2rad(269), 1.6038e+06, aoaMax, bankMax_ascent];
+bounds.phase(1).state.lower = [0, -1.5, lat0-1.5, 0, -deg2rad(89), 0, 0, aoaMin, bankMin_ascent];
+bounds.phase(1).state.upper = [200000, 1.5, lat0+1.5, 10000, deg2rad(89), 2*pi, 1.6038e+06, aoaMax, bankMax_ascent];
 end
 % Initial States
 % bounds.phase(1).initialstate.lower = [1000,lon0, lat0, 95, deg2rad(80), deg2rad(70), 1.5038e+06, aoaMin] ;
@@ -358,8 +358,8 @@ bounds.phase(1).initialstate.upper = [550,0.005, lat0+0.005, 60, deg2rad(88), de
 end
 
 if mission ==3 
-bounds.phase(1).initialstate.lower = [500,-0.005, lat0-0.005, 50, deg2rad(87), deg2rad(91), 1.36e+06, aoaMin, bankMin_ascent] ;
-bounds.phase(1).initialstate.upper = [550,0.005, lat0+0.005, 60, deg2rad(88), deg2rad(269), 1.37e+06, aoaMax, bankMax_ascent];
+bounds.phase(1).initialstate.lower = [500,-0.005, lat0-0.005, 50, deg2rad(86), 0, 1.30e+06, aoaMin, bankMin_ascent] ;
+bounds.phase(1).initialstate.upper = [550,0.005, lat0+0.005, 70, deg2rad(88), 2*pi, 1.37e+06, aoaMax, bankMax_ascent];
 
 
 % bounds.phase(1).initialstate.lower = [5900,-0.005, lat0-0.005, 250, deg2rad(63), deg2rad(91), 213213, aoaMin, bankMin_ascent] ;
@@ -721,7 +721,7 @@ guess.phase(5).state = guess.phase(4).state+ [10000 10000; -0.01 -0.01;.0 .0; 10
 guess.phase(6).state = guess.phase(5).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
-guess.phase(9).state = guess.phase(8).state+ [10000 -70000; -0.01 lonF-lon0-2*pi;lat0 latF; 1000 -5000; -deg2rad(5) -deg2rad(30);0 deg2rad(0);0 0;deg2rad(10) deg2rad(10);0 0]';
+guess.phase(9).state = guess.phase(8).state+ [10000 -60000; -0.01 lonF-lon0-2*pi;lat0 latF; 1000 -5000; -deg2rad(5) -deg2rad(30);0 deg2rad(0);0 0;deg2rad(10) deg2rad(10);0 0]';
 end
 
 if mission == 4 
@@ -985,39 +985,52 @@ controls.Alpha = Alpha';
 % correctly in the forward sims
 throttle = ones(length(alt),1);
 throttle_temp = 1;
+
+stage = ones(1,length(time));
+% stage(time>=output.result.solution.phase(7).time(end)) = 2;
+stage_temp = 1;
 for i = 1:length(throttle)
     throttle(i) = throttle_temp;
+    stage(i) = stage_temp;
     
     if time(i) == output.result.solution.phase(1).time(end)
         throttle_temp = 0.891;
+        stage_temp = 1;
     end
     
     if time(i) == output.result.solution.phase(2).time(end)
         throttle_temp = 0.812;
+        stage_temp = 1;
     end
     
     if time(i) == output.result.solution.phase(3).time(end)
         throttle_temp =.7333;
+        stage_temp = 1;
     end
     
     if time(i) == output.result.solution.phase(4).time(end)
         throttle_temp = .6545;
+        stage_temp = 1;
     end
     
     if time(i) == output.result.solution.phase(5).time(end)
         throttle_temp = .5757;
+        stage_temp = 1;
     end
     
     if time(i) == output.result.solution.phase(6).time(end)
         throttle_temp = 0.496;
+        stage_temp = 1;
     end
     
     if time(i) == output.result.solution.phase(7).time(end)
         throttle_temp = 1;
+        stage_temp = 2;
     end
     
     if time(i) == output.result.solution.phase(8).time(end)
         throttle_temp = 0;
+        stage_temp = 2;
     end
     
 
@@ -1109,8 +1122,6 @@ phase.state(:,7) = mFuel;
 phase.state(:,8) = Alpha;
 phase.state(:,9) = eta;
 
-stage = ones(1,length(time));
-stage(time>=output.result.solution.phase(7).time(end)) = 2;
 
 T = [];
 M = [];
