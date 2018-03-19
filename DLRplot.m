@@ -1,6 +1,6 @@
 clear all
 
-
+lon0 = 150.5100; % Rockhampton 
 
 Atmosphere = dlmread('atmosphere.txt');
 interp.Atmosphere = Atmosphere;
@@ -149,17 +149,93 @@ lat_TOSCA_ascent = TOSCA_ascent(:,7);
 lat_TOSCA = TOSCA(:,7);
 lat_HeatMin = out(:,7);
 
+lat_SLEG = rad2deg(SLEG(:,7));
+
 lon_TOSCA_ascent = TOSCA_ascent(:,6);
 lon_TOSCA = TOSCA(:,6);
 lon_HeatMin = out(:,6);
+
+
+lon_SLEG = rad2deg(SLEG(:,6));
+
 
 figure()
 hold on
 % plot(t_TOSCA_ascent,alt_TOSCA_ascent, 'LineWidth', 1, 'color', 'k', 'LineStyle', '-');
 
 plot([lon_TOSCA_ascent' lon_TOSCA'],[lat_TOSCA_ascent' lat_TOSCA'], 'LineWidth', 1, 'color', 'k', 'LineStyle', '--');
-plot(lon_HeatMin,lat_HeatMin, 'LineWidth', 0.8, 'color', 'r', 'LineStyle', '--');
+plot(lon_HeatMin+lon0,lat_HeatMin, 'LineWidth', 0.8, 'color', 'r', 'LineStyle', '--');
 
 xlabel('Longitude');
 ylabel('Latitude')
 legend('TOSCA', 'Optimised');
+
+
+
+%%
+
+    figure(231)
+hold on
+
+axesm('pcarree')
+geoshow('landareas.shp','FaceColor',[0.8 .8 0.8])
+plotm([lat_TOSCA_ascent' lat_TOSCA'],[lon_TOSCA_ascent' lon_TOSCA'], 'LineWidth', 1, 'color', 'k', 'LineStyle', '--')
+plotm([lat_TOSCA_ascent' lat_SLEG'],[lon_TOSCA_ascent' lon_SLEG'])
+plotm(lat_HeatMin,lon_HeatMin, 'LineWidth', 0.8, 'color', 'r', 'LineStyle', '--')
+    cities = shaperead('worldcities', 'UseGeoCoords', true);
+lats = extractfield(cities,'Lat');
+lons = extractfield(cities,'Lon');
+geoshow(lats, lons,...
+        'DisplayType', 'point',...
+        'Marker', 'o',...
+        'MarkerEdgeColor', 'r',...
+        'MarkerFaceColor', 'r',...
+        'MarkerSize', 2)
+% 
+
+%%
+
+
+load PopInterp
+
+auxdata.PopInterp = PopInterp;
+
+%
+altpop     = alt_HeatMin*1000;
+lonpop     = lon_HeatMin;
+latpop     = lat_HeatMin;
+
+% lonpop = lonpop + lon0;
+
+lonpop(lonpop > 180) = lonpop(lonpop > 180) - 360;
+lonpop(lonpop < -180) = lonpop(lonpop < -180) + 360;
+
+AltCost1 = (80000-altpop)/10000;
+AltCost1(alt_HeatMin*1000>80000) = 0;
+% AltCost1(altpop>90000) = gaussmf(altpop(altpop>90000),[10000 90000]);
+
+pop1 = auxdata.PopInterp(lonpop,latpop);
+
+popCost1 = pop1.*AltCost1; % for flights which go over large amounts of
+
+
+
+altpop     = [alt_TOSCA_ascent'*1000 alt_SLEG'];
+lonpop     = [lon_TOSCA_ascent' lon_SLEG'];
+latpop     = [lat_TOSCA_ascent' lat_SLEG'];
+
+lonpop(lonpop > 180) = lonpop(lonpop > 180) - 360;
+lonpop(lonpop < -180) = lonpop(lonpop < -180) + 360;
+
+AltCost2 = (80000-altpop)/10000;
+AltCost2(alt_HeatMin*1000>80000) = 0;
+% AltCost1(altpop>90000) = gaussmf(altpop(altpop>90000),[10000 90000]);
+
+pop2 = auxdata.PopInterp(lonpop,latpop);
+
+popCost2 = pop2.*AltCost2; % for flights which go over large amounts of
+
+figure()
+hold on
+plot(t_HeatMin,popCost1)
+plot([t_TOSCA_ascent' t_SLEG'+t_TOSCA_ascent(end)],popCost2)
