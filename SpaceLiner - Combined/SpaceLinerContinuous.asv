@@ -381,36 +381,36 @@ etadot10  = input.phase(10).control(:,2)';
 time10 = input.phase(10).time;
 throttle10 = 0;
 [altdot10,londot10,latdot10,gammadot10,vdot10,azidot10, q10, M10, Fd10, rho10,L10,Fueldt10,T10,Isp10,Isp10,m10,heating_rate10,total_acceleration10] = SpaceLinerVehicleModel(time10,input.phase(10),throttle10,auxdata,2);
-phaseout(10).dynamics  = [altdot10', londot10', latdot10', vdot10', gammadot10', azidot10', -Fueldt10, Alphadot10',etadot10'];
-% phaseout(10).path = [q10,total_acceleration10'];
-phaseout(10).path = [q10,heating_rate10,total_acceleration10'];
-% phaseout(10).integrand = heating_rate10;
+phaseout(10).dynamics  = [altdot10', londot10', latdot9', vdot9', gammadot9', azidot9', -Fueldt9, Alphadot9',etadot9'];
+% phaseout(9).path = [q9,total_acceleration9'];
+phaseout(9).path = [q9,heating_rate9,total_acceleration9'];
+% phaseout(9).integrand = heating_rate9;
 
 %
-alt10     = input.phase(10).state(:,1);
-lon10     = input.phase(10).state(:,2);
-lat10     = input.phase(10).state(:,3);
+alt9     = input.phase(9).state(:,1);
+lon9     = input.phase(9).state(:,2);
+lat9     = input.phase(9).state(:,3);
 
-% lon10(isnan(lon10)) = 0;
-% lat10(isnan(lat10)) = 0;
-popCost10 = ones(length(lon10),1);
-popCost10(isnan(lon10)) = nan;
-popCost10(isnan(lat10)) = nan;
-lon10 = lon10 + auxdata.lon0;
-lon10(lon10 > pi) = lon10(lon10 > pi) - 2*pi;
-lon10(lon10 < -pi) = lon10(lon10 < -pi) + 2*pi;
+% lon9(isnan(lon9)) = 0;
+% lat9(isnan(lat9)) = 0;
+popCost9 = ones(length(lon9),1);
+popCost9(isnan(lon9)) = nan;
+popCost9(isnan(lat9)) = nan;
+lon9 = lon9 + auxdata.lon0;
+lon9(lon9 > pi) = lon9(lon9 > pi) - 2*pi;
+lon9(lon9 < -pi) = lon9(lon9 < -pi) + 2*pi;
 
-AltCost10 = (80000-alt10)/10000;
-AltCost10(alt10>80000) = 0;
-pop10 = NaN*ones(length(lon10),1);
-pop10(not(isnan(popCost10))) = auxdata.PopInterp(rad2deg(lon10(not(isnan(popCost10)))),rad2deg(lat10(not(isnan(popCost10)))));
-popCost10 = pop10.*AltCost10; % for flights which go over large amounts of
+AltCost9 = (80000-alt9)/10000;
+AltCost9(alt9>80000) = 0;
+pop9 = NaN*ones(length(lon9),1);
+pop9(not(isnan(popCost9))) = auxdata.PopInterp(rad2deg(lon9(not(isnan(popCost9)))),rad2deg(lat9(not(isnan(popCost9)))));
+popCost9 = pop9.*AltCost9; % for flights which go over large amounts of
 
-% phaseout(10).integrand = heating_rate10/1e5;
-% heating_rate_cost10(heating_rate10<1.3e6) = 0;
-% phaseout(10).integrand = popCost10 + heating_rate_cost10;
-phaseout(10).integrand = popCost10 + heating_rate10/1e5;
-% phaseout(10).integrand = -alt10;
+% phaseout(9).integrand = heating_rate9/1e5;
+% heating_rate_cost9(heating_rate9<1.3e6) = 0;
+% phaseout(9).integrand = popCost9 + heating_rate_cost9;
+phaseout(9).integrand = popCost9 + heating_rate9/1e5;
+% phaseout(9).integrand = -alt9;
 end
 
 %======================================================
