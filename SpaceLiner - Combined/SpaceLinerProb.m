@@ -171,7 +171,7 @@ latMax = deg2rad(89.);
 % lon0 = deg2rad(145);
 
 
-mission = 4
+mission =4
 
 
 % lat0 = deg2rad(-23.3791); % Rockhampton
@@ -190,11 +190,14 @@ lon0 = deg2rad(7.763275);% Germany
 end
 
 if mission == 1
-lat0 = deg2rad(38.745095); %north korea
-lon0 = deg2rad(128.272375);
+% lat0 = deg2rad(38.745095); %north korea
+% lon0 = deg2rad(128.272375);
 
 % lat0 = deg2rad(36.065504); %south korea
 % lon0 = deg2rad(129.665407);
+
+ lat0 = deg2rad(37.533151); % Close to Suzu, middle north Japan
+lon0 = deg2rad(137.276039);
 end
 
 if mission == 3
@@ -290,8 +293,8 @@ if mission == 3
 %    latF = deg2rad(-23.3791); % Rockhampton
 % lonF = deg2rad(150.5100); % Rockhampton 
 
-   lat0 = deg2rad(-23.2330); % Rockhampton
-lon0 = deg2rad(150.6097); % Rockhampton 
+   latF = deg2rad(-23.2330); % Rockhampton
+lonF = deg2rad(150.6097); % Rockhampton 
 end
 
 if mission == 5
@@ -403,8 +406,8 @@ bounds.phase(2).initialstate.lower = bounds.phase(1).state.lower;
 bounds.phase(2).initialstate.upper = bounds.phase(1).state.upper;
 
 % Control Bounds
-bounds.phase(1).control.lower = [deg2rad(-1), deg2rad(-2)];
-bounds.phase(1).control.upper = [deg2rad(1), deg2rad(2)];
+bounds.phase(1).control.lower = [deg2rad(-.5), deg2rad(-1)];
+bounds.phase(1).control.upper = [deg2rad(.5), deg2rad(1)];
 
 % Time Bounds
 bounds.phase(1).initialtime.lower = 0;
@@ -520,15 +523,18 @@ bounds.phase(9) = bounds.phase(8);
 % bounds.phase(9).state.lower(7) = 0;
 % bounds.phase(9).state.upper(7) = 0;
 
-
-% bounds.phase(9).path.lower = [0, 0, 0]; % if using total acceleration, this might nee dto be in gs
-% bounds.phase(9).path.upper = [40000, 1.3e6, 2.5*9.81];
+% bounds.phase(8).path.lower = [0, 0, 0]; % if using total acceleration, this might nee dto be in gs
+% bounds.phase(8).path.upper = [40000, 1.3e6, 3*9.81];
+bounds.phase(9).path.lower = [0, 0, 0]; % if using total acceleration, this might nee dto be in gs
+bounds.phase(9).path.upper = [40000, 1.3e6, 3*9.81];
 
 % bounds.phase(9).path = bounds.phase(1).path;
 
 
 bounds.phase(10) = bounds.phase(9);
 
+bounds.phase(10).path.lower = [0, 0, -2.5*9.81]; % if using total acceleration, this might nee dto be in gs
+bounds.phase(10).path.upper = [40000, 1.3e6, 2.5*9.81];
 
 bounds.phase(10).state.lower(9) = bankMin_descent;
 bounds.phase(10).state.upper(9) = bankMax_descent;
@@ -550,8 +556,9 @@ bounds.phase(10).initialstate.upper(3) = latMax;
 bounds.phase(10).state.upper(7) = 213213; %set max propellant at end of burn
 % bounds.phase(9).initialstate.upper(7) = 213213;
 
-% bounds.phase(8).path.lower = [0, 0, -3*9.81]; % if using total acceleration, this might nee dto be in gs
-% bounds.phase(8).path.upper = [40000, 1.3e6, 3*9.81];
+
+
+
 
 if mission == 1|| mission == 4 || mission == 6
 
@@ -698,7 +705,12 @@ guess.phase(5).state = guess.phase(4).state+ [10000 10000; 0.05 0.05;.05 .05; 10
 guess.phase(6).state = guess.phase(5).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
-guess.phase(9).state = guess.phase(8).state+ [10000 -60000; 0.05 lonF-lon0+2*pi;.35 .05; 1000 -5000; -deg2rad(0) -deg2rad(60);0 -deg2rad(150);0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
+guess.phase(9).state = guess.phase(7).state+ [10000 10000; 0.05 0.05;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
+
+
+guess.phase(10).state = guess.phase(8).state+ [10000 -60000; 0.05 lonF-lon0+2*pi;.35 .05; 1000 -5000; -deg2rad(0) -deg2rad(60);0 -deg2rad(150);0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
+
+guess.phase(10).state(:,7) = [0;0];
 end
 
 if mission == 2
@@ -709,7 +721,12 @@ guess.phase(5).state = guess.phase(4).state+ [10000 10000; -0.0 -0.;.0 .0; 1000 
 guess.phase(6).state = guess.phase(5).state+ [10000 10000; -0.0 -0.0;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; -0.0 -0.0;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; -0.0 -0.0;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-200000 -200000;0 0;0 0]';
-guess.phase(9).state = guess.phase(8).state+ [10000 -70000; -0.0 lonF-lon0-2*pi;0 -.7; 1000 -5000; -deg2rad(5) -deg2rad(30);0 deg2rad(70);0 0;deg2rad(10) deg2rad(10);deg2rad(-30) deg2rad(-30)]';
+guess.phase(9).state = guess.phase(7).state+ [10000 10000; -0.0 -0.0;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-200000 -200000;0 0;0 0]';
+
+
+guess.phase(10).state = guess.phase(8).state+ [10000 -70000; -0.0 lonF-lon0-2*pi;0 -.7; 1000 -5000; -deg2rad(5) -deg2rad(30);0 deg2rad(70);0 0;deg2rad(10) deg2rad(10);deg2rad(-30) deg2rad(-30)]';
+
+guess.phase(10).state(:,7) = [0;0];
 end
 
 if mission == 3
@@ -720,7 +737,13 @@ guess.phase(5).state = guess.phase(4).state+ [10000 10000; -0.01 -0.01;.0 .0; 10
 guess.phase(6).state = guess.phase(5).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
-guess.phase(9).state = guess.phase(8).state+ [10000 -60000; -0.01 lonF-lon0-2*pi;lat0 latF; 1000 -5000; -deg2rad(5) -deg2rad(30);0 deg2rad(0);0 0;deg2rad(10) deg2rad(10);0 0]';
+guess.phase(9).state = guess.phase(7).state+ [10000 10000; -0.01 -0.01;.0 .0; 1000 1000; -deg2rad(5) -deg2rad(5);0 0;-100000 -100000;0 0;0 0]';
+
+
+guess.phase(10).state = guess.phase(8).state+ [10000 -60000; -0.01 lonF-lon0-2*pi;lat0 latF; 1000 -5000; -deg2rad(5) -deg2rad(30);0 deg2rad(0);0 0;deg2rad(10) deg2rad(10);0 0]';
+
+
+guess.phase(10).state(:,7) = [0;0];
 end
 
 if mission == 4 
@@ -732,9 +755,9 @@ guess.phase(6).state = guess.phase(5).state+ [10000 10000; 0.0 0.0;.05 .05; 1000
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; 0.0 0.0;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; 0.0 0.0;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(9).state = guess.phase(8).state+ [0 0; 0.0 0;.05 .05; 0 0; -deg2rad(0) -deg2rad(0);0 -deg2rad(0);0 0;deg2rad(0) deg2rad(0);deg2rad(0) deg2rad(0)]';
-guess.phase(10).state = guess.phase(9).state+ [10000 -60000; 0.0 lonF-lon0+2*pi;1.5 latF; 1000 -5000; -deg2rad(0) -deg2rad(60);0 -deg2rad(150);0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
+guess.phase(10).state = guess.phase(9).state+ [10000 -40000; 0.0 lonF-lon0+2*pi;1.5 latF; 1000 -5000; -deg2rad(0) -deg2rad(60);0 -deg2rad(150);0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
 
-guess.phase(9).state(:,7) = [0;0];
+guess.phase(10).state(:,7) = [0;0];
 end
 
 if mission == 5 
@@ -745,7 +768,11 @@ guess.phase(5).state = guess.phase(4).state+ [10000 10000; 0.05 0.05;.0 .0; 1000
 guess.phase(6).state = guess.phase(5).state+ [10000 10000; 0.05 0.05;.0 .0; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; 0.05 0.05;.0 .0; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; 0.05 0.05;.0 .0; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
-guess.phase(9).state = guess.phase(8).state+ [10000 -60000; 0.05 lonF-lon0+2*pi;1.5 1.5; 1000 -5000; -deg2rad(0) -deg2rad(60);0 deg2rad(0);0 0;deg2rad(10) deg2rad(10);deg2rad(0) deg2rad(0)]';
+guess.phase(9).state = guess.phase(7).state+ [10000 10000; 0.05 0.05;.0 .0; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
+
+
+guess.phase(10).state = guess.phase(8).state+ [10000 -60000; 0.05 lonF-lon0+2*pi;1.5 1.5; 1000 -5000; -deg2rad(0) -deg2rad(60);0 deg2rad(0);0 0;deg2rad(10) deg2rad(10);deg2rad(0) deg2rad(0)]';
+guess.phase(10).state(:,7) = [0;0];
 end
 
 if mission == 6 
@@ -756,8 +783,12 @@ guess.phase(5).state = guess.phase(4).state+ [15000 15000; -0.05 -0.05;-.05 -.05
 guess.phase(6).state = guess.phase(5).state+ [15000 15000; -0.05 -0.05;-.05 -.05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(7).state = guess.phase(6).state+ [15000 15000; -0.05 -0.05;-.05 -.05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [15000 15000; -0.05 -0.05;-.05 -.05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
-guess.phase(9).state = guess.phase(8).state+ [15000 -70000; -0.05 lonF-lon0+2*pi;-1.35 -1.05; 1000 -5000; -deg2rad(0) -deg2rad(60);0 deg2rad(70);0 0;deg2rad(10) deg2rad(10);deg2rad(-30) deg2rad(-30)]';
+guess.phase(9).state = guess.phase(7).state+ [15000 15000; -0.05 -0.05;-.05 -.05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 
+
+guess.phase(10).state = guess.phase(8).state+ [15000 -70000; -0.05 lonF-lon0+2*pi;-1.35 -1.05; 1000 -5000; -deg2rad(0) -deg2rad(60);0 deg2rad(70);0 0;deg2rad(10) deg2rad(10);deg2rad(-30) deg2rad(-30)]';
+
+guess.phase(10).state(:,7) = [0;0];
 end
 
 guess.phase(2).control = guess.phase(1).control;
@@ -770,16 +801,7 @@ guess.phase(8).control = guess.phase(7).control;
 guess.phase(9).control = guess.phase(8).control;
 guess.phase(10).control = guess.phase(9).control;
 
-if mission ==3
-guess.phase(2).time = guess.phase(1).time + 10; 
-guess.phase(3).time = guess.phase(2).time + 10;
-guess.phase(4).time = guess.phase(3).time + 10;
-guess.phase(5).time = guess.phase(4).time + 10;
-guess.phase(6).time = guess.phase(5).time + 10;
-guess.phase(7).time = guess.phase(6).time + 10;
-guess.phase(8).time = guess.phase(7).time + 200;
-guess.phase(9).time = guess.phase(8).time + 4000;
-else
+
     guess.phase(2).time = guess.phase(1).time + 10; 
 guess.phase(3).time = guess.phase(2).time + 10;
 guess.phase(4).time = guess.phase(3).time + 10;
@@ -789,7 +811,7 @@ guess.phase(7).time = guess.phase(6).time + 10;
 guess.phase(8).time = guess.phase(7).time + 100;
 guess.phase(9).time = guess.phase(8).time + 100;
 guess.phase(10).time = guess.phase(9).time + 4000;
-end
+
 
 guess.phase(2).integral = guess.phase(1).integral;
 guess.phase(3).integral = guess.phase(2).integral;
@@ -1086,28 +1108,13 @@ throttle_forward(time_diff==0) = [];
 
 % stage = 1; %will be wrong for orbiter
 
-stage_forward = ones(1,length(time_forward));
-stage_forward(time_forward>=output.result.solution.phase(7).time(end)) = 2;
+% stage_forward = ones(1,length(time_forward));
+% stage_forward(time_forward>=output.result.solution.phase(7).time(end)) = 2;
 
+stage_forward = stage;
+stage_forward(time_diff==0) = [];
 
-[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,eta_forward,f_t),ControlInterp(time_forward,throttle_forward,f_t),ControlInterp(time_forward,stage_forward,f_t)),0:time(end),forward0);
-
-
-% [f_t, f_y] = ode23(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time,Alpha,f_t),ControlInterp(time,throttle,f_t),time(end)),time(1:end),forward0);
-
-
-% dt = 1;
-% f_y = forward0;
-% temp = 1;
-% for t_temp = 0:dt:time(end)
-%     
-%     df_y = VehicleModel_forward(t_temp, f_y(temp,:),auxdata,ControlInterp(time,Alpha,t_temp),ControlInterp(time,throttle,t_temp),time(end));
-%   
-%     
-%     f_y(temp+1,:) = f_y(temp,:) + dt*df_y';  
-%     temp = temp+1;
-% end
-% f_t = 0:dt:time(end);
+[f_t, f_y] = ode45(@(f_t,f_y) VehicleModel_forward(f_t, f_y,auxdata,ControlInterp(time_forward,Alpha_forward,f_t),ControlInterp(time_forward,eta_forward,f_t),ControlInterp2(time_forward,throttle_forward,f_t),ControlInterp2(time_forward,stage_forward,f_t)),0:.01:time(end),forward0);
 
 
 figure(212)
@@ -1142,7 +1149,7 @@ hold on
 plot(f_y(:,6),f_y(:,5));
 plot(lon,lat);
 
-
+phase = [];
 phase.state(:,1) = alt;
 phase.state(:,2) = lon;
 phase.state(:,3) = lat;
@@ -1160,12 +1167,16 @@ Fd = [];
 L = [];
 q1 = [];
 m = [];
+aldto = [];
+londot = [];
+latdot = [];
 gammadot = [];
 azidot = [];
+Fueldt = [];
 for i = 1:length(alt)
     phase_temp.state = phase.state(i,:);
 
-[altdot,londot,latdot,gammadot(i),vdot(i),azidot(i), q(i), M(i), Fd(i), rho,L(i),Fueldt1,T(i),Isp1,Isp2,m(i),heating_rate(i),total_acceleration(i),Cl(i),Cd(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
+[altdot(i),londot(i),latdot(i),gammadot(i),vdot(i),azidot(i), q(i), M(i), Fd(i), rho,L(i),Fueldt(i),T(i),Isp1,Isp2,m(i),heating_rate(i),total_acceleration(i),Cl(i),Cd(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
 
 end
 
@@ -1305,5 +1316,66 @@ end
     
 dlmwrite('out', result, '-append','delimiter', '\t','roffset',1);
     
+
+%%
+
+alt_forward = alt(1);
+v_forward = v(1);
+gamma_forward = gamma(1);
+lat_forward = lat(1);
+lon_forward = lon(1);
+zeta_forward = zeta(1);
+mFuel_forward = mFuel(1);
+
+for i = 2:length(time)
+    alt_forward(i) = alt_forward(i-1) + altdot(i-1)*(time(i) - time(i-1));
+    v_forward(i) = v_forward(i-1) + vdot(i-1)*(time(i) - time(i-1));
+    gamma_forward(i) = gamma_forward(i-1) + gammadot(i-1)*(time(i) - time(i-1));
+    lon_forward(i) = lon_forward(i-1) + londot(i-1)*(time(i) - time(i-1));
+    lat_forward(i) = lat_forward(i-1) + latdot(i-1)*(time(i) - time(i-1));
+    zeta_forward(i) = zeta_forward(i-1) + azidot(i-1)*(time(i) - time(i-1));
+    mFuel_forward(i) = mFuel_forward(i-1) - Fueldt(i-1)*(time(i) - time(i-1));
+    
+    
+    
+    
+end
+
+
+
+
+figure(213)
+subplot(7,1,[1 2])
+hold on
+plot(time,alt_forward);
+plot(time,alt);
+
+subplot(7,1,3)
+hold on
+plot(time,gamma_forward);
+plot(time,gamma);
+
+
+subplot(7,1,4)
+hold on
+plot(time,v_forward);
+plot(time,v);
+
+subplot(7,1,6)
+hold on
+plot(time,zeta_forward);
+plot(time,zeta);
+
+subplot(7,1,7)
+hold on
+plot(time,mFuel_forward);
+plot(time,mFuel);
+
+figure()
+hold on
+plot(lon_forward,lat_forward);
+plot(lon,lat);
+
+
 
     
