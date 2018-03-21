@@ -533,8 +533,8 @@ bounds.phase(9).path.upper = [40000, 1.3e6, 3*9.81];
 
 bounds.phase(10) = bounds.phase(9);
 
-bounds.phase(10).path.lower = [0, 0, -2.*9.81, ]; % if using total acceleration, this might nee dto be in gs
-bounds.phase(10).path.upper = [40000, 1.3e6, 2.*9.81, ];
+bounds.phase(10).path.lower = [0, 0, -1.5*9.81]; % if using total acceleration, this might nee dto be in gs
+bounds.phase(10).path.upper = [40000, 1.3e6, 1.5*9.81];
 
 bounds.phase(10).state.lower(9) = bankMin_descent;
 bounds.phase(10).state.upper(9) = bankMax_descent;
@@ -755,7 +755,7 @@ guess.phase(6).state = guess.phase(5).state+ [10000 10000; 0.0 0.0;.05 .05; 1000
 guess.phase(7).state = guess.phase(6).state+ [10000 10000; 0.0 0.0;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(8).state = guess.phase(7).state+ [10000 10000; 0.0 0.0;.05 .05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-100000 -100000;0 0;0 0]';
 guess.phase(9).state = guess.phase(8).state+ [0 0; 0.0 0;.05 .05; 0 0; -deg2rad(0) -deg2rad(0);0 -deg2rad(0);0 0;deg2rad(0) deg2rad(0);deg2rad(0) deg2rad(0)]';
-guess.phase(10).state = guess.phase(9).state+ [10000 -30000; 0.0 lonF-lon0+2*pi;1.5 latF; 1000 -5000; -deg2rad(0) -deg2rad(60);0 -deg2rad(150);0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
+guess.phase(10).state = guess.phase(9).state+ [10000 -50000; 0.0 lonF-lon0+2*pi;1.5 latF; 1000 -5000; -deg2rad(0) -deg2rad(60);0 -deg2rad(150);0 0;deg2rad(10) deg2rad(10);deg2rad(30) deg2rad(30)]';
 
 guess.phase(10).state(:,7) = [0;0];
 end
