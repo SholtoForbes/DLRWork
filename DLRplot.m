@@ -103,13 +103,26 @@ xlabel('time (s)');
 ylabel('Heating Rate (MW/m^2)')
 legend('SLEG','TOSCA', 'Optimised');
 
+Q_SLEG = cumtrapz([t_TOSCA_ascent' t_SLEG'+t_TOSCA_ascent(end)],[heat_TOSCA_ascent' heat_SLEG']);
+Q_HeatMin = cumtrapz(t_HeatMin,heat_HeatMin);
 
+figure()
+hold on
+plot([t_TOSCA_ascent' t_SLEG'+t_TOSCA_ascent(end)],Q_SLEG);
+plot(t_HeatMin,Q_HeatMin);
+
+
+disp(['Integrated Heat Load Decreased By ' num2str((1-Q_HeatMin(end)/Q_SLEG(end))*100) '%'])
 
 %%
 accel_TOSCA_ascent = TOSCA_ascent(:,12);
 
 accel_TOSCA = TOSCA(:,12);
 accel_HeatMin = out(:,12);
+
+
+
+
 
 figure()
 hold on

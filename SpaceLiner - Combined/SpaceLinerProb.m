@@ -171,7 +171,7 @@ latMax = deg2rad(89.);
 % lon0 = deg2rad(145);
 
 
-mission =4
+mission =5
 
 
 % lat0 = deg2rad(-23.3791); % Rockhampton
@@ -204,8 +204,12 @@ if mission == 3
 %     lat0 = deg2rad(27.219594); %just west of florida
 % lon0 = deg2rad(-82.742209);
 
-    lat0 = deg2rad(29.56043); %just west of florida (north)
-lon0 = deg2rad(-85.614341);
+%     lat0 = deg2rad(29.56043); %just west of florida (very north)
+% lon0 = deg2rad(-85.614341);
+
+    lat0 = deg2rad(29.164); %just west of florida (north)
+lon0 = deg2rad(-83.159933);
+
 
 %     lat0 = deg2rad(24.429926); %just west of florida (south)
 % lon0 = deg2rad(-82.292144);
@@ -247,8 +251,12 @@ lon0 = deg2rad(150.6097); % Rockhampton
 end
 
 if mission == 6
-   lat0 = deg2rad(-37.341524); % near mt gambier
-lon0 = deg2rad(139.766669); % 
+%    lat0 = deg2rad(-37.341524); % near mt gambier
+% lon0 = deg2rad(139.766669); % 
+
+   lat0 = deg2rad(-23.032); % Brazil
+lon0 = deg2rad(-41.91469); % 
+
 end
 
 % lat0 = deg2rad(-23.3791); % Rockhampton
@@ -273,8 +281,8 @@ if mission == 2
 %  latF = deg2rad(29.823758); % china
 % lonF = deg2rad(124.779639);
 
-latF = deg2rad(38.745095); %north korea
-lonF = deg2rad(128.272375);
+% latF = deg2rad(38.745095); %north korea
+% lonF = deg2rad(128.272375);
 
 %    latF = deg2rad(-23.3791); % Rockhampton test
 % lonF = deg2rad(150.5100); % Rockhampton 
@@ -286,6 +294,11 @@ lonF = deg2rad(128.272375);
 %    latF = deg2rad(43.439108); % eastern tip of sapporo
 % lonF = deg2rad(146.187017); % 
 
+   latF = deg2rad(42.384); % Sea of japan
+lonF = deg2rad(137.126125); % 
+
+%    latF = deg2rad(41.722); % East of japan
+% lonF = deg2rad(144.567); % 
 
 end
 
@@ -306,14 +319,18 @@ if mission == 5
     latF = deg2rad(28.904330); %just west of florida
 lonF = deg2rad(-87.102361);
 
+
 end
 
 if mission ==6 
 %     latF = deg2rad(38.428333); %lisbon
 % lonF = deg2rad(-9.706724);
 
-    latF = deg2rad(-4.973436); %atlantic
-lonF = deg2rad(-18.291222);
+%     latF = deg2rad(-4.973436); %atlantic
+% lonF = deg2rad(-18.291222);
+
+ latF = deg2rad(4.5018); %India
+lonF = deg2rad( 74.898289);
 
 end
 
@@ -525,6 +542,7 @@ bounds.phase(9) = bounds.phase(8);
 
 % bounds.phase(8).path.lower = [0, 0, 0]; % if using total acceleration, this might nee dto be in gs
 % bounds.phase(8).path.upper = [40000, 1.3e6, 3*9.81];
+
 bounds.phase(9).path.lower = [0, 0, 0]; % if using total acceleration, this might nee dto be in gs
 bounds.phase(9).path.upper = [40000, 1.3e6, 3*9.81];
 
@@ -533,8 +551,8 @@ bounds.phase(9).path.upper = [40000, 1.3e6, 3*9.81];
 
 bounds.phase(10) = bounds.phase(9);
 
-bounds.phase(10).path.lower = [0, 0, -2.*9.81, ]; % if using total acceleration, this might nee dto be in gs
-bounds.phase(10).path.upper = [40000, 1.3e6, 2.*9.81, ];
+bounds.phase(10).path.lower = [0, 0, -2.5*9.81, ]; % if using total acceleration, this might nee dto be in gs
+bounds.phase(10).path.upper = [40000, 1.3e6, 2.5*9.81, ];
 
 bounds.phase(10).state.lower(9) = bankMin_descent;
 bounds.phase(10).state.upper(9) = bankMax_descent;
@@ -557,10 +575,10 @@ bounds.phase(10).state.upper(7) = 213213; %set max propellant at end of burn
 % bounds.phase(9).initialstate.upper(7) = 213213;
 
 
+bounds.phase(10).state.upper(5) = deg2rad(0)   % remove oscillations by limiting gammaMax to 0 during descent
 
 
-
-if mission == 1|| mission == 4 || mission == 6
+if mission == 1|| mission == 4 
 
 bounds.phase(10).finalstate.lower = [15000, lonF-lon0+2*pi-0.005, latF-0.005, 250,deg2rad(-40), -pi, 0, aoaMin, bankMin_descent]; % Japan-Germany
 bounds.phase(10).finalstate.upper = [20000, lonF-lon0+2*pi+0.005, latF+0.005, 350, deg2rad(40), pi,1.37e+06, aoaMax, bankMax_descent];
@@ -586,6 +604,12 @@ bounds.phase(10).finalstate.lower = [15000, lonF-lon0+2*pi-0.005, latF-0.005, 25
 bounds.phase(10).finalstate.upper = [20000, lonF-lon0+2*pi+0.005, latF+0.005, 350, deg2rad(40), deg2rad(90),213213, aoaMax, bankMax_descent];
 end
 
+if mission == 6
+
+bounds.phase(10).finalstate.lower = [15000, lonF-lon0-0.005, latF-0.005, 250,deg2rad(-40), -pi, 0, aoaMin, bankMin_descent]; % Japan-Germany
+bounds.phase(10).finalstate.upper = [20000, lonF-lon0+0.005, latF+0.005, 350, deg2rad(40), pi,1.37e+06, aoaMax, bankMax_descent];
+
+end
 
 %% Event bounds
 bounds.eventgroup(1).lower = zeros(1,10);
@@ -606,10 +630,10 @@ bounds.eventgroup(5).upper = zeros(1,10);
 bounds.eventgroup(6).lower = zeros(1,10);
 bounds.eventgroup(6).upper = zeros(1,10);
 
-bounds.eventgroup(7).lower = zeros(1,9);
-bounds.eventgroup(7).upper = zeros(1,9);
-% bounds.eventgroup(7).lower = zeros(1,10);
-% bounds.eventgroup(7).upper = zeros(1,10);
+% bounds.eventgroup(7).lower = zeros(1,9);
+% bounds.eventgroup(7).upper = zeros(1,9);
+bounds.eventgroup(7).lower = zeros(1,10);
+bounds.eventgroup(7).upper = zeros(1,10);
 
 
 bounds.eventgroup(8).lower = zeros(1,10);
@@ -786,7 +810,7 @@ guess.phase(8).state = guess.phase(7).state+ [15000 15000; -0.05 -0.05;-.05 -.05
 guess.phase(9).state = guess.phase(7).state+ [15000 15000; -0.05 -0.05;-.05 -.05; 1000 1000; -deg2rad(0) -deg2rad(0);0 0;-200000 -200000;0 0;0 0]';
 
 
-guess.phase(10).state = guess.phase(8).state+ [15000 -70000; -0.05 lonF-lon0+2*pi;-1.35 -1.05; 1000 -5000; -deg2rad(0) -deg2rad(60);0 deg2rad(70);0 0;deg2rad(10) deg2rad(10);deg2rad(-30) deg2rad(-30)]';
+guess.phase(10).state = guess.phase(8).state+ [15000 -70000; -0.05 lonF-lon0;-1.35 -1.05; 1000 -5000; -deg2rad(0) -deg2rad(60);0 deg2rad(70);0 0;deg2rad(10) deg2rad(10);deg2rad(-30) deg2rad(-30)]';
 
 guess.phase(10).state(:,7) = [0;0];
 end
@@ -847,11 +871,23 @@ setup.displaylevel                   = 2;
 setup.nlp.solver                     = 'ipopt';
 setup.nlp.ipoptoptions.linear_solver = 'ma57';
 
-if mission == 1 || mission == 4
-setup.nlp.ipoptoptions.maxiterations = 1200; % this can make most of the difference
-else
-   setup.nlp.ipoptoptions.maxiterations = 1500; % this can make most of the difference
- 
+if mission == 4
+setup.nlp.ipoptoptions.maxiterations = 1100; % this can make most of the difference
+elseif mission == 3
+   setup.nlp.ipoptoptions.maxiterations = 900; % this can make most of the difference
+% elseif mission == 1 %NKorea
+%     setup.nlp.ipoptoptions.maxiterations = 1100;
+elseif mission == 1 %Japan
+    setup.nlp.ipoptoptions.maxiterations = 1200;
+%     setup.nlp.ipoptoptions.maxiterations = 1200;
+% elseif mission == 2 %Nkorea
+%     setup.nlp.ipoptoptions.maxiterations = 1100;
+elseif mission == 2% Sea of Japan
+    setup.nlp.ipoptoptions.maxiterations = 1200;
+elseif mission == 5
+    setup.nlp.ipoptoptions.maxiterations = 1200;
+    elseif mission == 6
+    setup.nlp.ipoptoptions.maxiterations = 1100;
 end
 
 
@@ -1173,10 +1209,11 @@ latdot = [];
 gammadot = [];
 azidot = [];
 Fueldt = [];
+az = [];
 for i = 1:length(alt)
     phase_temp.state = phase.state(i,:);
 
-[altdot(i),londot(i),latdot(i),gammadot(i),vdot(i),azidot(i), q(i), M(i), Fd(i), rho,L(i),Fueldt(i),T(i),Isp1,Isp2,m(i),heating_rate(i),total_acceleration(i),Cl(i),Cd(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
+[altdot(i),londot(i),latdot(i),gammadot(i),vdot(i),azidot(i), q(i), M(i), Fd(i), rho,L(i),Fueldt(i),T(i),Isp1,Isp2,m(i),heating_rate(i),total_acceleration(i),Cl(i),Cd(i),az(i)] = SpaceLinerVehicleModel(time(i),phase_temp,throttle(i),auxdata,stage(i));
 
 end
 
@@ -1202,64 +1239,70 @@ popCost1 = pop1.*AltCost1; % for flights which go over large amounts of
 
 
 figure(201)
-subplot(5,2,1)
+subplot(2,2,1)
 hold on
-plot(time,alt/1000)
+plot(time,alt/1000,'k')
 xlabel('time (s)')
 ylabel('altitude (km)')
 
-subplot(5,2,2)
+subplot(2,2,2)
 hold on
-plot(v,alt/1000)
+plot(v,alt/1000,'k')
 xlabel('velocity (m/s)')
 ylabel('altitude (km)')
 
 
-subplot(5,2,3)
+subplot(2,2,3)
 hold on
-plot(time,rad2deg(Alpha))
+plot(time,rad2deg(Alpha),'k')
 plot(time,rad2deg(gamma))
 plot(time,rad2deg(eta))
 legend('Angle of Attack','Trajectory Angle', 'Bank Angle')
 xlabel('Time (s)')
 ylabel('(deg)')
 
-subplot(5,2,4)
+subplot(2,2,4)
 hold on
-plot(time,T/1000)
+plot(time,T/1000,'k')
 plot(time,Fd/1000)
 plot(time,L/1000)
 xlabel('time (s)')
 ylabel('kN')
 legend('Thrust','Drag','Lift')
 
-subplot(5,2,5)
+figure(202)
+
+subplot(2,2,1)
 hold on
-plot(time,total_acceleration/9.81)
+plot(time,total_acceleration/9.81,'k')
+plot(time,az/9.81)
+plot(time,vdot/9.81)
 xlabel('time (s)')
 ylabel('acceleration (g)')
+legend('a','nz', 'nx')
 
-subplot(5,2,6)
+subplot(2,2,2)
 hold on
-plot(time,m)
+plot(time,m,'k')
 xlabel('time (s)')
 ylabel('Mass (kg)')
 
-subplot(5,2,7)
+subplot(2,2,3)
 hold on
-plot(time,M)
+plot(time,M,'k')
 xlabel('time (s)')
 ylabel('Mach no.')
 
-subplot(5,2,8)
+subplot(2,2,4)
 hold on
-plot(time,q)
+plot(time,q,'k')
 xlabel('time (s)')
 ylabel('Dynamic Pressure (kPa)')
 
-subplot(5,2,9)
+figure(203)
+% subplot(5,2,9)
 hold on
-plot(time,heating_rate/1e6)
+plot(time,heating_rate/1e6,'k')
 xlabel('time (s)')
 ylabel('Heating Rate (MW/m^2)')
 
@@ -1275,10 +1318,10 @@ plot3(lon,lat,popCost1)
     figure(231)
 hold on
 
-axesm('pcarree','Origin',[0 rad2deg(lon0) 0])
+axesm('pcarree','Origin',[0 rad2deg(lon0)+100 0])
 geoshow('landareas.shp','FaceColor',[0.8 .8 0.8])
 % plotm(rad2deg(lat),rad2deg(lon+lon0))
-plotm(rad2deg(lat),rad2deg(lon+lon0))
+plotm(rad2deg(lat),rad2deg(lon+lon0),'k')
     
     cities = shaperead('worldcities', 'UseGeoCoords', true);
 lats = extractfield(cities,'Lat');

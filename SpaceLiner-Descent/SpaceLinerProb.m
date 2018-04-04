@@ -142,7 +142,8 @@ vMin = 1;
 vMax = 10000;
 
 gammaMin = -deg2rad(80);
-gammaMax = deg2rad(80);
+% gammaMax = deg2rad(80);
+gammaMax = 0;
 
 zetaMin = -2*pi;
 % zetaMin = 0;
@@ -262,8 +263,11 @@ gamma0 = -0.0000097;
 % gamma0 = -0.0175;
 
 % End conditions
-altFMin = 100;
-altFMax = 1000;
+% altFMin = 100;
+% altFMax = 1000;
+
+altFMin = 10000;
+altFMax = 36000;
 
 latF = deg2rad(53.77); % Germany
 lonF = deg2rad(8.6359);% Germany
@@ -354,7 +358,7 @@ bounds.phase.integral.upper = 1e9;
 % bounds.phase(1).path.upper = [60000, 100];
 
 bounds.phase(1).path.lower = [0, 0, -2.5];
-bounds.phase(1).path.upper = [60000, 2e6, 2.5];
+bounds.phase(1).path.upper = [60000, 1.3e6, 2.5];
 
 % bounds.phase(1).path.lower = [0, 0, -1.5]; 
 % bounds.phase(1).path.upper = [30000, 1.3e6, 1.5];
