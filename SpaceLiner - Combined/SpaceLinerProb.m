@@ -171,7 +171,7 @@ latMax = deg2rad(89.);
 % lon0 = deg2rad(145);
 
 
-mission =5
+mission =4
 
 
 % lat0 = deg2rad(-23.3791); % Rockhampton
@@ -588,8 +588,8 @@ end
 
 if mission == 2
 
-bounds.phase(10).finalstate.lower = [15000, lonF-lon0-2*pi, latF, 250,deg2rad(-40), deg2rad(90), 0, aoaMin, bankMin_descent]; % Japan-Germany
-bounds.phase(10).finalstate.upper = [20000, lonF-lon0-2*pi, latF, 350, deg2rad(40), deg2rad(270),213213, aoaMax, bankMax_descent];
+bounds.phase(10).finalstate.lower = [15000, lonF-lon0-2*pi-deg2rad(1), latF-deg2rad(1), 250,deg2rad(-40), deg2rad(90), 0, aoaMin, bankMin_descent]; % Japan-Germany
+bounds.phase(10).finalstate.upper = [20000, lonF-lon0-2*pi+deg2rad(1), latF+deg2rad(1), 350, deg2rad(40), deg2rad(270),213213, aoaMax, bankMax_descent];
 end
 
 if mission == 3 
@@ -883,7 +883,8 @@ elseif mission == 1 %Japan
 % elseif mission == 2 %Nkorea
 %     setup.nlp.ipoptoptions.maxiterations = 1100;
 elseif mission == 2% Sea of Japan
-    setup.nlp.ipoptoptions.maxiterations = 1200;
+
+    setup.nlp.ipoptoptions.maxiterations = 1000;
 elseif mission == 5
     setup.nlp.ipoptoptions.maxiterations = 1200;
     elseif mission == 6

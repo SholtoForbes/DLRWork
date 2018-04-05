@@ -190,11 +190,11 @@ legend('TOSCA', 'Optimised');
     figure(231)
 hold on
 
-axesm('pcarree')
+axesm('pcarree','Origin',[0 rad2deg(lon0)-100 0])
 geoshow('landareas.shp','FaceColor',[0.8 .8 0.8])
-plotm([lat_TOSCA_ascent' lat_TOSCA'],[lon_TOSCA_ascent' lon_TOSCA'], 'LineWidth', 1, 'color', 'k', 'LineStyle', '--')
-plotm([lat_TOSCA_ascent' lat_SLEG'],[lon_TOSCA_ascent' lon_SLEG'])
-plotm(lat_HeatMin,lon_HeatMin, 'LineWidth', 0.8, 'color', 'r', 'LineStyle', '--')
+plotm([lat_TOSCA_ascent' lat_TOSCA'],[lon_TOSCA_ascent' lon_TOSCA'], 'LineWidth', 2, 'color', 'k', 'LineStyle', '--')
+plotm([lat_TOSCA_ascent' lat_SLEG'],[lon_TOSCA_ascent' lon_SLEG'], 'LineWidth', 2)
+plotm(lat_HeatMin,lon_HeatMin, 'LineWidth', 0.8, 'color', 'r', 'LineStyle', '--', 'LineWidth', 2)
     cities = shaperead('worldcities', 'UseGeoCoords', true);
 lats = extractfield(cities,'Lat');
 lons = extractfield(cities,'Lon');
@@ -204,7 +204,10 @@ geoshow(lats, lons,...
         'MarkerEdgeColor', 'r',...
         'MarkerFaceColor', 'r',...
         'MarkerSize', 2)
+legend('TOSCA','SLEG', 'Optimised');
 % 
+
+
 
 %%
 
