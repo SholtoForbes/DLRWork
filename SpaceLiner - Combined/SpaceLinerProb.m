@@ -171,7 +171,7 @@ latMax = deg2rad(89.);
 % lon0 = deg2rad(145);
 
 
-mission =4
+mission =1
 
 
 % lat0 = deg2rad(-23.3791); % Rockhampton
@@ -306,8 +306,11 @@ if mission == 3
 %    latF = deg2rad(-23.3791); % Rockhampton
 % lonF = deg2rad(150.5100); % Rockhampton 
 
-   latF = deg2rad(-23.2330); % Rockhampton
-lonF = deg2rad(150.6097); % Rockhampton 
+%    latF = deg2rad(-23.2330); % Rockhampton
+% lonF = deg2rad(150.6097); % Rockhampton 
+
+   latF = deg2rad(-21.410); % Rockhampton
+lonF = deg2rad(153.599); % Rockhampton 
 end
 
 if mission == 5
@@ -874,7 +877,7 @@ setup.nlp.ipoptoptions.linear_solver = 'ma57';
 if mission == 4
 setup.nlp.ipoptoptions.maxiterations = 1100; % this can make most of the difference
 elseif mission == 3
-   setup.nlp.ipoptoptions.maxiterations = 900; % this can make most of the difference
+setup.nlp.ipoptoptions.maxiterations = 850;
 % elseif mission == 1 %NKorea
 %     setup.nlp.ipoptoptions.maxiterations = 1100;
 elseif mission == 1 %Japan
@@ -1319,7 +1322,7 @@ plot3(lon,lat,popCost1)
     figure(231)
 hold on
 
-axesm('pcarree','Origin',[0 rad2deg(lon0)+100 0])
+axesm('pcarree','Origin',[0 rad2deg(lon0)-100 0])
 geoshow('landareas.shp','FaceColor',[0.8 .8 0.8])
 % plotm(rad2deg(lat),rad2deg(lon+lon0))
 plotm(rad2deg(lat),rad2deg(lon+lon0),'k')
