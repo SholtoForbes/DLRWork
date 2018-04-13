@@ -132,7 +132,7 @@ bankMax =   deg2rad(80);
 
 
 %% Initial Conditions
-mission = 1;
+mission = 5
 
 if mission == 4
 %aus-germany
@@ -609,7 +609,7 @@ geoshow(lats, lons,...
 contents = {'time', 'v', 'gamma', 'zeta', 'alt', 'lon', 'lat', 'q', 'heating_rate', 'L', 'D', 'M', 'Alpha' ,'eta'};
 units = {'s', 'm/s', 'rad', 'rad', 'm', 'rad', 'rad', 'pa', 'W/m^2', 'N', 'N', 'Mach', 'rad', 'rad'};
 
-result = [time' v' gamma' zeta' alt' lon' lat' total_acceleration q heating_rate L D M Alpha' eta' ];
+result = [time' v' gamma' zeta' alt' lon'+lon0 lat' total_acceleration q heating_rate L D M Alpha' eta' ];
     delete('out')
     
 fid=fopen('out','wt');

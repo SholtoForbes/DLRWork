@@ -1,0 +1,227 @@
+stsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsm 1.32(C)1999 - 2015 DLR-SART
+
+Spaceliner 7-3 Reference Mission SLP-variant Metallic TPS L.E.,top              
+
+                    ;dataset and analysis prepared by: ;jascha      ; on ;11.01.2017          
+
+               ;;Mass [kg];CoG-x [m];CoG-y [m];CoG-z [m];Jpitch [kgm**2];Dry Mass Ratio [%]
+Stage #  1 ; Booster of Spaceliner 7-3 SLB update 2015  PMP-crossfeed including LSAP structur
+ 1. 1 ;Structure group:                  
+ 1. 1. 1 ;Nose (LSAP 20.3.2015                   ;   1957.175;  6.436;  0.000;  0.000;  16568.83; 1.125 ; **
+ 1. 1. 1. 1 ;Shell_Skin  							Mass given [kg]     ;   1030.510;  7.166;  0.000;  0.000;  7087.575; 0.592 ; **
+ 1. 1. 1. 2 ;Stringer								Mass given [kg],       ;    592.016;  5.000;  0.000;  0.000;  4071.729; 0.340 ; **
+ 1. 1. 1. 3 ;Frames									Mass_given [kg],  c     ;    136.930;  6.633;  0.000;  0.000;  1383.363; 0.079 ; **
+ 1. 1. 1. 4 ;Stringer/Frame/SkinConnectionEleme     ;    136.930;  6.633;  0.000;  0.000;  1383.363; 0.079 ; **
+ 1. 1. 1. 5 ;SegmentConnectionElements				Mass      ;     60.789;  7.166;  0.000;  0.000;   829.824; 0.035 ; **
+ 1. 1. 2 ;Hypersonic Vehicle Body (HASA)         ;   3673.371; 75.000;  0.000;  0.000;      0.00;  2.111
+ 1. 1. 3 ;Bodyflap (Protected Structure)         ;    251.856; 81.500;  0.000; -3.955;      0.00;  0.145
+ 1. 1. 4 ;B_LOX_Tank (LSAP 20.                   ;  13237.510; 16.651;  0.000;  0.000; 286742.82; 7.608 ; **
+ 1. 1. 4. 1 ;Shell_Skin  							Mass given [kg]     ;   3413.227; 16.427;  0.000;  0.000; 61941.870; 1.962 ; **
+ 1. 1. 4. 2 ;Stringer								Mass given [kg],       ;   6248.258; 16.427;  0.000;  0.000;113390.890; 3.591 ; **
+ 1. 1. 4. 3 ;Frames									Mass_given [kg],  c     ;    805.484; 16.427;  0.000;  0.000; 14754.173; 0.463 ; **
+ 1. 1. 4. 4 ;UpperDome								Mass_given [kg],      ;    209.317;  8.402;  0.000;  0.000;  2532.396; 0.120 ; **
+ 1. 1. 4. 5 ;LowerDome								Mass_given [kg],      ;    505.809; 23.906;  0.000;  0.000;  5324.040; 0.291 ; **
+ 1. 1. 4. 6 ;SegmentConnectionElements				Mass      ;   1803.918; 16.427;  0.000;  0.000; 32736.784; 1.037 ; **
+ 1. 1. 4. 7 ;UpperDomeConnectionElements				Mas     ;     58.962; 10.000;  0.000;  0.000;  1070.027; 0.034 ; **
+ 1. 1. 4. 8 ;LowerDomeConnectionElements				Mas     ;    192.535; 22.854;  0.000;  0.000;  3494.047; 0.111 ; **
+ 1. 1. 5 ;Intertank (LSAP 20.4                   ;   7169.583; 26.295;  0.000;  0.000; 140924.63; 4.120 ; **
+ 1. 1. 5. 1 ;Shell_Skin      Mass given [kg],       ;   2585.300; 26.295;  0.000;  0.000; 46916.991; 1.486 ; **
+ 1. 1. 5. 2 ;Stringer        Mass given [kg],       ;   1169.029; 26.295;  0.000;  0.000; 21215.079; 0.672 ; **
+ 1. 1. 5. 3 ;Frames          Mass_given [kg],       ;   1847.042; 26.295;  0.000;  0.000; 34416.270; 1.062 ; **
+ 1. 1. 5. 4 ;Stringer/Frame/SkinConnectionEleme     ;   1350.000; 26.295;  0.000;  0.000; 34416.270; 0.776 ; **
+ 1. 1. 5. 5 ;SegmentConnectionElements   Mass g     ;    218.212; 26.295;  0.000;  0.000;  3960.016; 0.125 ; **
+ 1. 1. 6 ;B_LH2_Tank (LSAP 20.                   ;  44498.699; 51.200;  0.000;  0.000;1484580.89;25.574 ; **
+ 1. 1. 6. 1 ;Shell_Skin  							Mass given [kg]     ;  14704.361; 51.164;  0.000;  0.000;266848.854; 8.451 ; **
+ 1. 1. 6. 2 ;Stringer								Mass given [kg],       ;  17882.460; 51.164;  0.000;  0.000;324523.724;10.277 ; **
+ 1. 1. 6. 3 ;Frames									Mass_given [kg],  c     ;   8672.815; 51.164;  0.000;  0.000;159743.181; 4.984 ; **
+ 1. 1. 6. 4 ;UpperDome								Mass_given [kg],      ;    465.422; 28.954;  0.000;  0.000;  4615.844; 0.267 ; **
+ 1. 1. 6. 5 ;LowerDome								Mass_given [kg],      ;    516.289; 73.374;  0.000;  0.000;  5120.321; 0.297 ; **
+ 1. 1. 6. 6 ;SegmentConnectionElements				Mass      ;   1824.911; 51.164;  0.000;  0.000; 33117.747; 1.049 ; **
+ 1. 1. 6. 7 ;UpperDomeConnectionElements				Mas     ;    205.017; 29.736;  0.000;  0.000;  3720.572; 0.118 ; **
+ 1. 1. 6. 8 ;LowerDomeConnectionElements				Mas     ;    227.424; 72.592;  0.000;  0.000;  4127.203; 0.131 ; **
+ 1. 1. 7 ;Landing Wing Structure                 ;  20855.709; 63.700;  0.000; -2.700;      0.00; 11.986
+ 1. 1. 8 ;Fins / Vertical Stabilizer             ;   1166.260; 75.860; 18.000; -0.260;      0.00;  0.670
+ 1. 1. 9 ;Fins / Vertical Stabilizer             ;   1166.260; 75.860;-18.000; -0.260;      0.00;  0.670
+ 1. 1.10 ;Wing Control Flaps                     ;   2352.022; 77.000;  0.000; -3.300;      0.00;  1.352
+ 1. 1.11 ;Thrustframe (LSAP 20                   ;   8953.456; 76.599;  0.000;  0.000; 136625.86; 5.146 ; **
+ 1. 1.11. 1 ;Shell_Skin         Mass given [kg]     ;   2918.626; 75.808;  0.000;  0.000; 39258.151; 1.677 ; **
+ 1. 1.11. 2 ;Stringer           Mass given [kg]     ;   1208.093; 76.103;  0.000;  0.000; 16249.939; 0.694 ; **
+ 1. 1.11. 3 ;Frames              Mass_given [kg     ;   1531.994; 76.319;  0.000;  0.000; 21859.030; 0.880 ; **
+ 1. 1.11. 4 ;Stringer/Frame/SkinConnectionEleme     ;   1531.994; 76.319;  0.000;  0.000; 21859.030; 0.880 ; **
+ 1. 1.11. 5 ;SegmentConnectionElements     Mass     ;    262.749; 75.808;  0.000;  0.000;  3480.057; 0.151 ; **
+ 1. 1.11. 6 ;Base_Flange_guess        Mass give     ;   1500.000; 79.250;  0.000;  0.000; 20850.000; 0.862 ; **
+ 1. 1.12 ;FwdStage Attachment                    ;   1400.000; 28.700;  0.000;  4.700;      0.00;  0.805 ; *
+ 1. 1.13 ;AftStage Attachment                    ;   1100.000; 74.000;  0.000;  4.700;      0.00;  0.632 ; *
+ 1. 1.14 ;Fwd Crossfeed Fairin                   ;    250.000; 35.500;  0.000;  4.600;      0.00;  0.144 ; *
+ 1. 1.15 ;Aft Crossfeed Fairin                   ;    250.000; 75.600;  0.000;  4.600;      0.00;  0.144 ; *
+; Mass Structure group:        w/o margins;      108281.901
+; Mass Structure group:        including 14.0 % margins;      123441.367;;;;; 62.232
+
+ 1. 2 ;Subsystem group:                  
+ 1. 2. 1 ;Engine Equipment                       ;   1698.143; 78.000;  0.000;  0.000;      0.00;  0.976
+ 1. 2. 2 ;LOXtank-press-system                   ;    580.000; 49.151;  0.000;  3.330;      0.00;  0.333 ; *
+ 1. 2. 3 ;LH2tank-press-system                   ;    450.000; 58.349;  0.000;  3.238;      0.00;  0.259 ; *
+ 1. 2. 4 ;Undercarriage / Landing Gear           ;   6950.848; 56.000;  0.000; -3.300;      0.00;  3.995
+ 1. 2. 5 ;Electrics                              ;   3073.782; 19.600;  0.000;  0.000;      0.00;  1.767
+ 1. 2. 6 ;Avionics                               ;    300.000;  4.000;  0.000;  0.000;      0.00;  0.172 ; *
+ 1. 2. 7 ;Hydraulics                             ;    400.000; 49.600;  0.000; -3.000;      0.00;  0.230 ; *
+ 1. 2. 8 ;ECS                                    ;    200.000;  4.000;  0.000;  0.000;      0.00;  0.115 ; *
+ 1. 2. 9 ;Primary Power                          ;    400.000;  4.000;  0.000;  0.000;      0.00;  0.230 ; *
+ 1. 2.10 ;Separation System                      ;   2534.045; 53.300;  0.000;  3.300;      0.00;  1.456
+; Mass Subsystem group:        w/o margins;       16586.818
+; Mass Subsystem group:        including 14.0 % margins;       18908.972;;;;;  9.533
+
+ 1. 3 ;Propulsion group:                 
+ 1. 3. 1 ;Rocket Main Engines                    ;  27864.000; 80.600;  0.000;  0.000;      0.00; 15.733 ; *
+ 1. 3. 2 ;LOX-main feedline                      ;   2295.000; 60.218;  0.000;  2.519;      0.00;  1.296 ; *
+ 1. 3. 3 ;LOX-manifold     pmp                   ;    450.000; 78.821;  0.000; -0.820;      0.00;  0.254 ; *
+ 1. 3. 4 ;LH2-main feedline pm                   ;    195.000; 76.205;  0.000;  0.020;      0.00;  0.110 ; *
+ 1. 3. 5 ;LH2-star  8 eng.   p                   ;    525.000; 77.998;  0.113;  0.020;      0.00;  0.296 ; *
+ 1. 3. 6 ;LH2-center eng.   pm                   ;     52.000; 78.022;  0.000;  0.264;      0.00;  0.029 ; *
+ 1. 3. 7 ;LOX-crossfeed     pm                   ;    483.534; 38.158;  0.000;  4.430;      0.00;  0.273 ; *
+ 1. 3. 8 ;LH2-crossfeed     pm                   ;    286.750; 75.913;  0.000;  3.535;      0.00;  0.162 ; *
+ 1. 3. 9 ;LOX-Fill-Drain-Dump-                   ;     95.000; 72.777;  2.009;  3.382;      0.00;  0.054 ; *
+ 1. 3.10 ;LH2-Fill-Drain-Dump-                   ;    117.800; 77.697; -0.407;  3.957;      0.00;  0.067 ; *
+ 1. 3.11 ;RCS Engines                            ;    584.000; 16.300;  0.000;  1.573;      0.00;  0.330 ; *
+; Mass Propulsion group:       w/o margins;       32948.084
+; Mass Propulsion group:       including 12.0 % margins;       36901.854;;;;; 18.604
+
+ 1. 4 ;Thermalprotection group:          
+ 1. 4. 1 ;TPS FRSI 401-500K                      ;   2571.260; 50.270;  0.000;  1.704;      0.00;  1.478 ; *
+ 1. 4. 2 ;TPS FRSI 501-600K                      ;   1254.410; 53.293;  0.000; -0.633;      0.00;  0.721 ; *
+ 1. 4. 3 ;TPS AFRSI 601-700K                     ;   1196.660; 59.220;  0.000; -0.380;      0.00;  0.688 ; *
+ 1. 4. 4 ;TPS AFRSI 701-800K                     ;    912.670; 59.581;  0.000; -1.532;      0.00;  0.525 ; *
+ 1. 4. 5 ;TPS AFRSI 801-900K                     ;    803.860; 55.423;  0.000; -2.267;      0.00;  0.462 ; *
+ 1. 4. 6 ;TPS TABI 901-1000K                     ;   1118.130; 51.300;  0.000; -3.454;      0.00;  0.643 ; *
+ 1. 4. 7 ;TPS TABI 1001-1100K                    ;   1625.020; 34.593;  0.000; -3.799;      0.00;  0.934 ; *
+ 1. 4. 8 ;TPS TABI 1101-1200K                    ;    319.310;  7.643;  0.000; -2.779;      0.00;  0.184 ; *
+ 1. 4. 9 ;TPS TABI 1201-1300K                    ;   1141.120; 65.159;  0.000; -3.524;      0.00;  0.656 ; *
+ 1. 4.10 ;TPS TABI 1301-1400K                    ;    722.130; 65.775;  0.000; -3.241;      0.00;  0.415 ; *
+ 1. 4.11 ;TPS TABI 1401-1500K                    ;    292.440; 62.028;  0.000; -3.299;      0.00;  0.168 ; *
+ 1. 4.12 ;TPS TABI 1501-1600K                    ;    116.310; 60.457;  0.000; -3.126;      0.00;  0.067 ; *
+ 1. 4.13 ;TPS CMC 1601-1700K                     ;   1797.380; 42.170;  0.000; -2.716;      0.00;  1.033 ; *
+ 1. 4.14 ;TPS CMC 1701-1850K                     ;      7.600; 65.060;  0.000; -3.145;      0.00;  0.004 ; *
+ 1. 4.15 ;Cryogenic Insulation                   ;    450.000; 16.980;  0.000;  0.020;      0.00;  0.259 ; *
+ 1. 4.16 ;Cryogenic Insulation                   ;   2430.930; 51.100;  0.000;  0.020;      0.00;  1.397 ; *
+; Mass Thermalprotection group:w/o margins;       16759.230
+; Mass Thermalprotection group:including 14.0 % margins;       19105.522;;;;;  9.632
+
+
+; Stage Mass empty: (stage coordinates); 174576.033;     55.535;      0.001;     -0.443;  74283091.
+; Stage Mass empty incl.marg.: (global coordinates); 198357.716;     37.996;      0.001;     -9.243;;100.00
+; Stage Structural Index:;;0.1564
+
+; Orbit/De-orbit propellant: ;    500.000
+; Residual propellant: ;   9515.000
+; Reserve propellant: ;   4246.256
+
+; Stage Mass @ burn out: ; 212618.972
+; Difference to MECO Mass from Trajectory Analysis: ; -32618.972
+
+; RCS propell. /inert flow mass: ;      0.000
+; Ascent propellant: ;1254154.600
+
+; GLOW Stage Mass: ;1466773.572
+________________________________________________________________________________
+Stage #  2 ; Passenger Stage Spaceliner 7-3  SLP variant Metallic TPS L.E.,top subs.capsule (
+ 2. 1 ;Structure group:                  
+ 2. 1. 1 ;Hypersonic Vehicle Body (HASA)         ;  14487.361; 34.500;  0.000; -1.250;      0.00; 12.324
+ 2. 1. 2 ;LOX tank (WAATS)                       ;   3282.740; 30.673;  0.000; -0.210;      0.00;  2.793
+ 2. 1. 3 ;Tank                                   ;   4418.600; 46.583;  0.000; -0.257;      0.00;  3.759
+ 2. 1. 4 ;Landing Wing Structure                 ;  18335.891; 36.200;  0.000; -2.400;      0.00; 15.598
+ 2. 1. 5 ;Fins / Vertical Stabilizer             ;   3988.980; 52.500;  0.000;  4.300;      0.00;  3.393
+ 2. 1. 6 ;Wing Control Flaps                     ;   1814.297; 53.700;  0.000; -2.500;      0.00;  1.543
+ 2. 1. 7 ;Bodyflap (Protected Structure)         ;    304.326; 63.500;  0.000; -2.900;      0.00;  0.259
+ 2. 1. 8 ;Thrustframe Rocket Engines             ;   1007.757; 61.000;  0.000;  0.000;      0.00;  0.857
+ 2. 1. 9 ;Launch Table Support                   ;    870.000; 60.000;  0.000;  0.000;      0.00;  0.740 ; *
+; Mass Structure group:        w/o margins;       48509.950
+; Mass Structure group:        including 14.0 % margins;       55301.344;;;;; 41.266
+
+ 2. 2 ;Subsystem group:                  
+ 2. 2. 1 ;Engine Equipment                       ;    443.450; 61.000;  0.000;  0.000;      0.00;  0.377
+ 2. 2. 2 ;LOXtank-press-system                   ;    195.000; 45.690; -1.478; -2.059;      0.00;  0.166 ; *
+ 2. 2. 3 ;LH2tank-press-system                   ;    155.000; 50.900; -1.469; -1.619;      0.00;  0.132 ; *
+ 2. 2. 4 ;Electrics                              ;   2216.390; 50.000;  0.000;  0.000;      0.00;  1.885
+ 2. 2. 5 ;Hydraulics                             ;    300.000; 49.000;  0.000; -1.700;      0.00;  0.255 ; *
+ 2. 2. 6 ;Primary Power                          ;    400.000; 54.000;  0.000;  0.000;      0.00;  0.340 ; *
+ 2. 2. 7 ;Main Gear                              ;   3300.000; 36.426;  0.000; -1.750;      0.00;  2.807 ; *
+ 2. 2. 8 ;Nose Gear                              ;    585.000;  6.700;  0.000; -1.500;      0.00;  0.498 ; *
+ 2. 2. 9 ;Cabin incl. Passenge                   ;  29868.150; 18.022;  0.000; -0.923; 265266.00; 25.408 ; *
+ 2. 2.10 ;Separation Motor gra                   ;   3070.100; 25.100;  0.000;  0.200;      0.00;  2.612 ; *
+ 2. 2.11 ;Nose WaterTank+Cooli                   ;    140.000;  2.500;  0.000; -2.200;      0.00;  0.119 ; *
+ 2. 2.12 ;Left wing WaterTank+                   ;    160.000; 36.000;-10.000; -2.400;      0.00;  0.136 ; *
+ 2. 2.13 ;Right wing WaterTank                   ;    160.000; 36.000; 10.000; -2.400;      0.00;  0.136 ; *
+; Mass Subsystem group:        w/o margins;       40993.090
+; Mass Subsystem group:        including 14.0 % margins;       46732.122;;;;; 34.872
+
+ 2. 3 ;Propulsion group:                 
+ 2. 3. 1 ;Rocket Main Engines                    ;   6750.000; 62.600;  0.000;  0.000;      0.00;  5.641 ; *
+ 2. 3. 2 ;LOX-crossfeed line (                   ;    285.000; 27.317;  0.000; -2.177;      0.00;  0.238 ; *
+ 2. 3. 3 ;LOX-main feedline  p                   ;    510.000; 47.800;  1.522; -1.755;      0.00;  0.426 ; *
+ 2. 3. 4 ;LOX-manifold     pmp                   ;    120.000; 60.921;  0.000; -1.100;      0.00;  0.100 ; *
+ 2. 3. 5 ;LH2-main feedline                      ;    176.900; 59.446;  0.000; -0.210;      0.00;  0.148 ; *
+ 2. 3. 6 ;LH2-manifold     pmp                   ;    105.000; 60.933;  0.000; -0.210;      0.00;  0.088 ; *
+ 2. 3. 7 ;LH2-crossfeed     pm                   ;    265.000; 58.675;  0.000; -2.609;      0.00;  0.221 ; *
+ 2. 3. 8 ;LOX-Fill-Drain-Dump-                   ;     75.000; 57.200;  2.100; -2.000;      0.00;  0.063 ; *
+ 2. 3. 9 ;LH2-Fill-Drain-Dump-                   ;     75.800; 60.030;  0.095; -0.083;      0.00;  0.063 ; *
+ 2. 3.10 ;RCS Engines                            ;    275.000; 60.500;  0.000;  2.400;      0.00;  0.230 ; *
+; Mass Propulsion group:       w/o margins;        8637.700
+; Mass Propulsion group:       including 12.0 % margins;        9674.224;;;;;  7.219
+
+ 2. 4 ;Thermalprotection group:          
+ 2. 4. 1 ;Cryogenic Insulation                   ;    583.500; 46.583;  0.000; -0.257;      0.00;  0.496 ; *
+ 2. 4. 2 ;Cryogenic Insulation                   ;    235.000; 30.673;  0.000; -0.210;      0.00;  0.200 ; *
+ 2. 4. 3 ;Metallic TPS L.E.,to                   ;  17790.160; 36.977;  0.000; -1.829;1412708.31;15.134 ; **
+ 2. 4. 3. 1 ;FRSI(530K TOP+estimation) T<=600K      ;    715.550; 37.796;  0.000; -0.367;     0.000; 0.609 ; **
+ 2. 4. 3. 2 ;AFRSI(530K) 601K<=T<=700K Wing/Bod     ;    956.500; 39.612;  0.000;  1.288;     0.000; 0.814 ; **
+ 2. 4. 3. 3 ;AFRSI(530K) 601K<=T<=700K Fin          ;    190.320; 60.427;  0.000;  4.444;     0.000; 0.162 ; **
+ 2. 4. 3. 4 ;AFRSI(530K) 701K<=T<=800K Wing/Bod     ;   1594.030; 42.844;  0.000; -0.695;     0.000; 1.356 ; **
+ 2. 4. 3. 5 ;AFRSI(530K) 701K<=T<=800K Fin          ;    564.030; 54.346;  0.000;  4.936;     0.000; 0.480 ; **
+ 2. 4. 3. 6 ;AFRSI(530K) 801K<=T<=900K  Wing/Bo     ;    510.630; 21.847;  0.000; -1.483;     0.000; 0.434 ; **
+ 2. 4. 3. 7 ;AFRSI(530K) 801K<=T<=900K  Fin         ;    122.480; 50.868;  0.000;  5.838;     0.000; 0.104 ; **
+ 2. 4. 3. 8 ;Haynes 230 (530K) 901K<=T<=1000K       ;   1030.080; 24.104;  0.000; -2.125;     0.000; 0.876 ; **
+ 2. 4. 3. 9 ;Haynes 230 (530K) 901K<=T<=1000K       ;     18.860; 49.266;  0.000;  5.692;     0.000; 0.016 ; **
+ 2. 4. 3.10 ;Haynes 230 (530K) 1001K<=T<=1100K      ;    530.790; 18.434;  0.000; -2.821;     0.000; 0.452 ; **
+ 2. 4. 3.11 ;Haynes 230 (530K) 1001K<=T<=1100K      ;     25.310; 47.709;  0.000;  5.352;     0.000; 0.022 ; **
+ 2. 4. 3.12 ;Haynes 230 (530K) 1101K<=T<=1200K      ;   1593.850; 49.091;  0.000; -2.821;     0.000; 1.356 ; **
+ 2. 4. 3.13 ;Haynes 230 (530K) 1101K<=T<=1200K      ;      1.870; 57.434;  0.000;  7.600;     0.000; 0.002 ; **
+ 2. 4. 3.14 ;TABI(530K) 1201K<=T<=1300K    Mass     ;   1303.400; 32.596;  0.000; -3.395;     0.000; 1.109 ; **
+ 2. 4. 3.15 ;TABI(530K) 1301K<=T<=1400K    Mass     ;   4526.690; 40.453;  0.000; -2.886;     0.000; 3.851 ; **
+ 2. 4. 3.16 ;AETB-12(530K) 1401K<=T<=1500K    M     ;   2721.340; 30.677;  0.000; -2.645;     0.000; 2.315 ; **
+ 2. 4. 3.17 ;AETB-12(530K) 1501K<=T<=1600K          ;    836.800; 30.355;  0.000; -2.475;     0.000; 0.712 ; **
+ 2. 4. 3.18 ;CMC(530K) 1601K<=T<=1700K     Mass     ;    342.200; 31.019;  0.000; -2.413;     0.000; 0.291 ; **
+ 2. 4. 3.19 ;CMC(530K) 1701K<=T<=1850K    Mass      ;    205.430; 23.666;  0.000; -2.362;     0.000; 0.175 ; **
+ 2. 4. 4 ;active TPS leading e                   ;    680.000; 20.000;  0.000; -2.000;      0.00;  0.578 ; *
+ 2. 4. 5 ;active TPS nose                        ;     25.000;  0.125;  0.000; -2.380;      0.00;  0.021 ; *
+ 2. 4. 6 ;active TPS margin, u                   ;    250.000; 19.310;  0.000; -2.251;      0.00;  0.213 ; *
+; Mass Thermalprotection group:w/o margins;       19563.660
+; Mass Thermalprotection group:including 14.0 % margins;       22302.572;;;;; 16.642
+
+
+; Stage Mass empty: (stage coordinates); 117704.400;     34.687;      0.004;     -1.059;  22780664.
+; Stage Mass empty incl.marg.: (global coordinates); 134010.262;     34.687;      0.004;     -1.059;;100.00
+; Stage Structural Index:;;0.5791
+
+; Orbit/De-orbit propellant: ;  12800.000
+; Residual propellant: ;   3203.000
+; Reserve propellant: ;   1191.290
+
+; Stage Mass @ burn out: ; 151204.552
+; Difference to MECO Mass from Trajectory Analysis: ; -23879.576
+
+; RCS propell. /inert flow mass: ;      0.000
+; Ascent propellant: ; 214201.000
+
+; GLOW Stage Mass: ; 365405.552
+________________________________________________________________________________
+
+          ;Spaceliner 7-3 Reference Mission SLP-variant Metallic TPS L.E.,top              
+
+; Total Vehicle Mass empty:; 292280.433;      36.664;       0.002;      -5.947;  102541512.
+; Vehicle Mass empty incl. margins:; 332367.978
+; Total Lift-off Mass:;1832179.124
+; Gross Lift-Off Mass:;1832179.124
+
+;          * = user provided mass input
+;         ** = stsm supercomponent data set
+stsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmstsmeof
